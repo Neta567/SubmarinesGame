@@ -130,35 +130,34 @@ public class BoardGame extends View {
             {
                 if(boardPlayer1[i][j].didUserTouchMe(x,y))
                 {
+                    System.out.println("i: "+ i + "j: " + j);
                     updateSubmarineLocation(submarine, boardPlayer1[i][j].x, boardPlayer1[i][j].y);
                     // TODO: Check if square is occupied already
 
-//                    boardPlayer1[i][j].setOccupied(true);
-//
-//                    int size = submarine.getSize();
-//                    int num = size/squareSize;
-//                    if(submarine.isVertical())
-//                    {
-//
-//                        for(int k=i; i<num; k++) {
-//                            boardPlayer1[k][j].setOccupied(true);
-//                        }
-//                        // TODO: Mark surrounding relevant board square as occupied
-//                    }
-//                    else
-//                    {
-//                        for(int k=i; j<num; k++) {
-//                            boardPlayer1[i][k].setOccupied(true);
-//                        }
-//                        // TODO: Mark surrounding relevant board square as occupied
-//                    }
+                    //boardPlayer1[i][j].setOccupied(true);
+                }
+            }
+        }
+        updateOccupiedSquares(submarine);
+    }
+
+    private void updateOccupiedSquares(Submarine submarine) {
+        for (int i = 0; i < boardPlayer1.length; i++)
+        {
+            for (int j = 0; j < boardPlayer1.length; j++)
+            {
+                if(submarine.intersectsWith(boardPlayer1[i][j])) {
+                    boardPlayer1[i][j].setOccupied(submarine);
+                } else {
+                    if(boardPlayer1[i][j].getOccupiedSubmarine() == submarine)
+                        boardPlayer1[i][j].setOccupied(null);
                 }
             }
         }
     }
 
 
-//    @Override
+    //    @Override
 //    public void onDraw(@NonNull Canvas canvas) {
 //        super.onDraw(canvas);
 //        initBoards(canvas);
@@ -358,13 +357,10 @@ public class BoardGame extends View {
         {
             initSubmarines(canvas);
             firstTimeSubmarine = false;
-
         }
         for (int i = 0; i < submarineArrayList.size(); i++) {
-
+        //for (int i = 0; i < 1; i++) {
             submarineArrayList.get(i).draw(canvas);
-
         }
-
     }
 }

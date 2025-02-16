@@ -5,16 +5,16 @@ import android.graphics.Color;
 import android.graphics.Paint;
 
 public class Square extends Shape {
-    protected int w, h;  // w = width h = high
+    protected int color;
     private Paint p;
     private int alfa;
+    private Submarine submarine;
 
     private boolean isOccupied = false;
 
     public Square(int x, int y, int w, int h, int color) {
-        super(x, y, color);
-        this.w = w;
-        this.h = h;
+        super(x, y, w, h);
+        this.color = color;
         alfa = 100;
 
         p = new Paint();
@@ -35,8 +35,7 @@ public class Square extends Shape {
         setP(alfa);
         p.setStyle(Paint.Style.FILL);
 
-
-        canvas.drawRect(x, y, x + w, y + h, p);
+        canvas.drawRect(x, y, x + width, y + height, p);
         setP(255);
         p.setStyle(Paint.Style.STROKE);
         p.setStrokeWidth(10);
@@ -44,28 +43,34 @@ public class Square extends Shape {
         if(isOccupied) {
             p.setColor(Color.RED);
         }
-        canvas.drawRect(x, y, x + w, y + h, p);
+        canvas.drawRect(x, y, x + width, y + height, p);
     }
     public boolean didUserTouchMe(int xu, int yu)
     {
-        if (xu>=x && xu<=x+w && yu>=y && yu<=y+h)
+        if (xu>=x && xu<=x+ width &&
+                yu>=y && yu<=y+ height) {
             return true;
+        }
         return false;
     }
     public void draw2 (Canvas canvas)
     {
         p.setColor(color);
         p.setStyle(Paint.Style.FILL);
-        canvas.drawRect(x, y, x + w, y + h, p);
-
+        canvas.drawRect(x, y, x + width, y + height, p);
     }
 
     public boolean isOccupied() {
         return isOccupied;
     }
 
-    public void setOccupied(boolean occupied) {
-        isOccupied = occupied;
+    public void setOccupied(Submarine submarine) {
+        isOccupied = submarine != null;
+        this.submarine = submarine;
+    }
+
+    public Submarine getOccupiedSubmarine() {
+        return this.submarine;
     }
 }
 

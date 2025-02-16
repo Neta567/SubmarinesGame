@@ -21,7 +21,7 @@ public class RotationButton extends Square {
 
     public boolean didUserTouchMe(int xu, int yu)
     {
-        if (xu>=x && xu<=x+w && yu>=y && yu<=y+h)
+        if (xu>=x && xu<=x+ width && yu>=y && yu<=y+ height)
             return true;
         return false;
     }

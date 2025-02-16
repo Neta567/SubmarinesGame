@@ -1,11 +1,12 @@
 package com.example.submarines;
 
-public class Shape {
-    protected int x,y, color;
+public class Shape extends Location {
+    protected int width;
+    protected int height;  // w = width h = high
 
-    public Shape(int x, int y, int color) {
-        this.x = x;
-        this.y = y;
-        this.color = color;
+    public Shape(int x, int y, int width, int height) {
+        super(x,y);
+        this.width = width;
+        this.height = height;
     }
 }
