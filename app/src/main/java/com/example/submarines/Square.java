@@ -29,11 +29,8 @@ public class Square extends Shape {
 
     public boolean didUserTouchMe(int xu, int yu)
     {
-        if (xu>=x && xu<=x+ width &&
-                yu>=y && yu<=y+ height) {
-            return true;
-        }
-        return false;
+        return xu >= x && xu <= x + width &&
+                yu >= y && yu <= y + height;
     }
 
     public void draw(Canvas canvas) {

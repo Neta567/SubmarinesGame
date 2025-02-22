@@ -8,11 +8,12 @@ import android.graphics.Color;
 import android.graphics.Paint;
 
 public class Submarine extends Shape {
-    private Bitmap vertBitmap, horizBitmap;
+    private final Bitmap vertBitmap;
+    private final Bitmap horizBitmap;
     private boolean isVertical = true;
     private Bitmap bitmap;
 
-    private int squareSize = 140;
+    private final int squareSize = 140;
 
     public Submarine(int x, int y, Resources resources, int width, int height) {
         super(x, y, width, height);
@@ -45,6 +46,7 @@ public class Submarine extends Shape {
     {
         canvas.drawBitmap(bitmap,x,y,null);
 
+        // draw rectangle around submarine
         if(false) {
             Paint p = new Paint();
             p.setAlpha(255);
@@ -57,10 +59,8 @@ public class Submarine extends Shape {
     }
     public boolean didUserTouchedMe (int xu, int yu)
     {
-        if(xu >= x && xu < x + bitmap.getWidth() &&
-                yu >=y && yu < y+bitmap.getHeight())
-            return true;
-        return false;
+        return xu >= x && xu < x + bitmap.getWidth() &&
+                yu >= y && yu < y + bitmap.getHeight();
     }
 
     public boolean isVertical() {
@@ -72,10 +72,7 @@ public class Submarine extends Shape {
     }
 
     public boolean intersectsWith(Square square) {
-        if(square.getX() >= this.x - squareSize && square.getX() < this.x + width + squareSize
-                && square.getY() >= this.y - squareSize && square.getY() < this.y + height + squareSize)
-            return true;
-        else
-            return false;
+        return square.getX() >= this.x - squareSize && square.getX() < this.x + width + squareSize
+                && square.getY() >= this.y - squareSize && square.getY() < this.y + height + squareSize;
     }
 }

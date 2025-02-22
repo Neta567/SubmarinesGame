@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.LinearLayout;
 
+import com.example.submarines.boards.MyBoard;
+
 public class MyBoardGameActivity extends AppCompatActivity {
 
     @Override
