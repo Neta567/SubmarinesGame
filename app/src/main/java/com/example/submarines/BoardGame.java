@@ -5,10 +5,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 
@@ -18,21 +16,18 @@ public class BoardGame extends View {
     protected Square [][] boardPlayer1, boardPlayer2;
     protected Square square;
     protected Square [] ships;
-    protected Bitmap submarine1,submarine2,submarine3,submarine4,rotate,erasue;
+    protected Bitmap rotateBitmap, erasueBitmap;
 
     protected ArrayList<Submarine> submarineArrayList;
     protected int squareSize;
     protected RotationButton rotationButton;
     protected ErasureButton erasureButton;
 
-
-    private Context context;
     private final int NUM_OF_SQUARES = 6;
-    private boolean firstTimeboard = true,firstTimeSubmarine = true,erasure_button=false;
-    private Paint p;
-    private LinearLayout linearLayout;
-    private boolean userTouchS1,userTouchS2,userTouchS3,userTouchS4;
-    private Submarine s1,s2,s3,s4;
+    private boolean firstTimeBoard = true;
+    private boolean firstTimeSubmarine = true;
+    private boolean userTouchS1, userTouchS2, userTouchS3, userTouchS4;
+    private Submarine s1, s2, s3, s4;
     protected boolean isTwoPlayers = false;
     private boolean firstTime = true;
 
@@ -44,7 +39,7 @@ public class BoardGame extends View {
         boardPlayer2 = new Square[NUM_OF_SQUARES][NUM_OF_SQUARES];
         //ships = new Square[4];
 
-        submarineArrayList = new ArrayList<Submarine>();
+        submarineArrayList = new ArrayList<>();
     }
 
     @Override
@@ -52,72 +47,83 @@ public class BoardGame extends View {
         int x = (int) event.getX();
         int y = (int) event.getY();
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            if (s1.didUserTouchedMe(x, y)) {
-                userTouchS1 = true;
-                userTouchS2 = userTouchS3 = userTouchS4 = false;
-            }
-            if (s2.didUserTouchedMe(x, y)) {
-                userTouchS2 = true;
-                userTouchS1 = userTouchS3 = userTouchS4 = false;
-            }
-            if (s3.didUserTouchedMe(x, y)) {
-                userTouchS3 = true;
-                userTouchS1 = userTouchS2 = userTouchS4 = false;
-            }
-            if (s4.didUserTouchedMe(x, y)) {
-                userTouchS4 = true;
-                userTouchS1 = userTouchS2 = userTouchS3 = false;
-            }
-            if (rotationButton.didUserTouchMe(x, y)) {
-                if (userTouchS1) {
-                    s1.rotateBitmap();
-                } else if (userTouchS2) {
-                    s2.rotateBitmap();
-                } else if (userTouchS3) {
-                    s3.rotateBitmap();
-                } else if (userTouchS4) {
-                    s4.rotateBitmap();
-                }
-            }
-            if (square.didUserTouchMe(x,y))
-            {
-                isTwoPlayers = true;
-
-            }
+            handleActionDownEvent(x, y);
         }
         if (event.getAction() == MotionEvent.ACTION_MOVE) {
-            if (userTouchS1) {
-                updateSubmarineLocation(s1, x, y);
-            }
-            if (userTouchS2) {
-                updateSubmarineLocation(s2, x, y);
-            }
-            if (userTouchS3) {
-                updateSubmarineLocation(s3, x, y);
-            }
-            if (userTouchS4) {
-                updateSubmarineLocation(s4, x, y);
-            }
-            invalidate();
+            handleActionMoveEvent(x, y);
         }
         if (event.getAction() == MotionEvent.ACTION_UP) {
-            if (userTouchS1) {
-                updateSubmarineAndBoard(s1, x, y);
-            }
-            if (userTouchS2) {
-                updateSubmarineAndBoard(s2, x, y);
-            }
-            if (userTouchS3) {
-                updateSubmarineAndBoard(s3, x, y);
-            }
-            if (userTouchS4) {
-                updateSubmarineAndBoard(s4, x, y);
-            }
-            invalidate();
+            handleActionUpEvent(x, y);
         }
-        //return super.onTouchEvent(event);
         return true;
     }
+
+    private void handleActionUpEvent(int x, int y) {
+        if (userTouchS1) {
+            updateSubmarineAndBoard(s1, x, y);
+        }
+        if (userTouchS2) {
+            updateSubmarineAndBoard(s2, x, y);
+        }
+        if (userTouchS3) {
+            updateSubmarineAndBoard(s3, x, y);
+        }
+        if (userTouchS4) {
+            updateSubmarineAndBoard(s4, x, y);
+        }
+        invalidate();
+    }
+
+    private void handleActionMoveEvent(int x, int y) {
+        if (userTouchS1) {
+            updateSubmarineLocation(s1, x, y);
+        }
+        if (userTouchS2) {
+            updateSubmarineLocation(s2, x, y);
+        }
+        if (userTouchS3) {
+            updateSubmarineLocation(s3, x, y);
+        }
+        if (userTouchS4) {
+            updateSubmarineLocation(s4, x, y);
+        }
+        invalidate();
+    }
+
+    private void handleActionDownEvent(int x, int y) {
+        if (s1.didUserTouchedMe(x, y)) {
+            userTouchS1 = true;
+            userTouchS2 = userTouchS3 = userTouchS4 = false;
+        }
+        if (s2.didUserTouchedMe(x, y)) {
+            userTouchS2 = true;
+            userTouchS1 = userTouchS3 = userTouchS4 = false;
+        }
+        if (s3.didUserTouchedMe(x, y)) {
+            userTouchS3 = true;
+            userTouchS1 = userTouchS2 = userTouchS4 = false;
+        }
+        if (s4.didUserTouchedMe(x, y)) {
+            userTouchS4 = true;
+            userTouchS1 = userTouchS2 = userTouchS3 = false;
+        }
+        if (rotationButton.didUserTouchMe(x, y)) {
+            if (userTouchS1) {
+                s1.rotateBitmap();
+            } else if (userTouchS2) {
+                s2.rotateBitmap();
+            } else if (userTouchS3) {
+                s3.rotateBitmap();
+            } else if (userTouchS4) {
+                s4.rotateBitmap();
+            }
+        }
+        if (square.didUserTouchMe(x, y))
+        {
+            isTwoPlayers = true;
+        }
+    }
+
     private void updateSubmarineLocation(Submarine submarine, int x, int y) {
         submarine.setX(x);
         submarine.setY(y);
@@ -177,26 +183,21 @@ public class BoardGame extends View {
         int w = squareSize;
         int h = w;
         int color = Color.WHITE;
-        rotate = BitmapFactory.decodeResource(getResources(),R.drawable.rotation_button);
+        rotateBitmap = BitmapFactory.decodeResource(getResources(),R.drawable.rotation_button);
 
-        rotationButton = new RotationButton(x,y,w,h,color,rotate);
-        //rotationSubmarine.p.setAlpha(300);
-        rotationButton.draw1(canvas);
-
+        rotationButton = new RotationButton(x,y,w,h,color, rotateBitmap);
+        rotationButton.draw(canvas);
     }
     protected void drawErasureButton(Canvas canvas)
     {
         int x = boardPlayer1[5][1].x + squareSize*3;
         int y = boardPlayer1[5][5].y + squareSize*6;
         int w = squareSize;
-        int h = w;
         int color = Color.WHITE;
-        erasue = BitmapFactory.decodeResource(getResources(),R.drawable.trash_can);
+        erasueBitmap = BitmapFactory.decodeResource(getResources(),R.drawable.trash_can);
 
-        erasureButton = new ErasureButton(x,y,w,h,color,erasue);
-        //rotationSubmarine.p.setAlpha(300);
-        erasureButton.draw1(canvas);
-
+        erasureButton = new ErasureButton(x,y,w, w,color, erasueBitmap);
+        erasureButton.draw(canvas);
     }
     protected void drawMoveButton(Canvas canvas)
     {
@@ -205,9 +206,8 @@ public class BoardGame extends View {
             int x = boardPlayer1[5][1].x + squareSize*3+4;
             int y = boardPlayer1[5][5].y + squareSize*6;
             int w = squareSize;
-            int h = w;
             int color = Color.WHITE;
-            square = new Square(x,y,w,h,color);
+            square = new Square(x, y, w, w, color);
             firstTime = false;
         }
 
@@ -259,22 +259,16 @@ public class BoardGame extends View {
                 x1 = x1 + squareSize + ((boardPlayer1[5][0].x + boardPlayer1[5][5].x)/9);
             }
             count++;
-
-
         }
-
-
-
     }
 
-
     protected void initBoards(@NonNull Canvas canvas) {
-        if(firstTimeboard)
+        if(firstTimeBoard)
         {
             initBoard1(canvas);
             initBoard2(canvas);
 
-            firstTimeboard = false;
+            firstTimeBoard = false;
         }
     }
 
@@ -284,7 +278,7 @@ public class BoardGame extends View {
         {
             for (int j = 0; j < boardPlayer1.length; j++)
             {
-                boardPlayer1[i][j].draw1(canvas);
+                boardPlayer1[i][j].draw(canvas);
             }
         }
 
@@ -295,7 +289,7 @@ public class BoardGame extends View {
         {
             for (int j = 0; j < boardPlayer2.length; j++)
             {
-                boardPlayer2[i][j].draw1(canvas);
+                boardPlayer2[i][j].draw(canvas);
             }
         }
     }

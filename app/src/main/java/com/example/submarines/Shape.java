@@ -2,7 +2,7 @@ package com.example.submarines;
 
 public class Shape extends Location {
     protected int width;
-    protected int height;  // w = width h = high
+    protected int height;
 
     public Shape(int x, int y, int width, int height) {
         super(x,y);

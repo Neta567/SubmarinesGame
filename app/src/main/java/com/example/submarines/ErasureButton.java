@@ -11,7 +11,7 @@ public class ErasureButton extends Square{
     public ErasureButton(int x, int y, int w, int h, int color, Bitmap erasue) {
         super(x, y, w, h, color);
         this.bitmap = Bitmap.createScaledBitmap(bitmap,w,h,true);
-        setP(255);
+        setPaintAlphaColor(255);
     }
     public boolean didUserTouchMe(int xu, int yu)
     {
@@ -20,8 +20,8 @@ public class ErasureButton extends Square{
         return false;
     }
     @Override
-    public void draw1(Canvas canvas) {
-        super.draw1(canvas);
+    public void draw(Canvas canvas) {
+        super.draw(canvas);
         Paint p = new Paint();
         canvas.drawBitmap(bitmap,x,y,p);
     }
