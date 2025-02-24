@@ -4,14 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    tools:context=".Instructions"
     android:orientation="vertical"
     android:background="@drawable/background">
-
-
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Submarines"
+        android:text="Instructions"
         android:textSize="60dp"
         android:layout_marginTop="20dp"
         android:layout_marginLeft="45dp"
@@ -20,23 +19,12 @@
     <Button
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="400dp"
+        android:layout_marginTop="500dp"
         android:backgroundTint="#F8F9FA"
         android:layout_marginLeft="50dp"
-        android:text="Start"
+        android:text="Return"
         android:textColor="#020825"
         android:textSize="40dp"
-        android:id="@+id/btnStart"></Button>
-    <Button
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:backgroundTint="#F8F9FA"
-        android:layout_marginLeft="50dp"
-        android:text="Instructions"
-        android:textColor="#020825"
-        android:textSize="40dp"
-        android:id="@+id/btnInstructions"></Button>
-
+        android:id="@+id/btnReturn"></Button>
 
 </LinearLayout>

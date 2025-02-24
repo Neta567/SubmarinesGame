@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    private Button btnStart;
+    private Button btnStart,btnInstructions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,6 +16,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         btnStart = findViewById(R.id.btnStart);
         btnStart.setOnClickListener(this);
+        btnInstructions= findViewById(R.id.btnInstructions);
+        btnInstructions.setOnClickListener(this);
     }
 
     @Override
@@ -25,5 +27,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Intent i = new Intent(this, MyBoardGameActivity.class);
             startActivity(i);
         }
+        if(v==btnInstructions)
+        {
+            Intent i = new Intent(this, Instructions.class);
+            startActivity(i);
+        }
+
     }
 }

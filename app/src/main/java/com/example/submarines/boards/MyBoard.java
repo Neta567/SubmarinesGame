@@ -12,6 +12,7 @@ import com.example.submarines.R;
 import com.example.submarines.buttons.ErasureButton;
 import com.example.submarines.buttons.GameButton;
 import com.example.submarines.buttons.RotationButton;
+import com.example.submarines.buttons.StartGameButton;
 
 public class MyBoard extends BoardGame {
 
@@ -48,6 +49,11 @@ public class MyBoard extends BoardGame {
             Bitmap erasueBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.trash_can);
             erasureButton = new ErasureButton(squareSize, squareSize, color, erasueBitmap);
             gameButtons.add(erasureButton);
+
+            Bitmap startBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.check_mark1);
+            startGameButton = new StartGameButton(squareSize,squareSize,color,startBitmap);
+            gameButtons.add(startGameButton);
+
             firstTimeButtons = false;
         }
     }
@@ -57,7 +63,7 @@ public class MyBoard extends BoardGame {
         int currentX = boardPlayer1[5][0].getX();
         for (GameButton button: gameButtons) {
             button.setX(currentX);
-            button.setY(boardPlayer1[5][5].getY() + squareSize*9);
+            button.setY(boardPlayer1[5][5].getY() + squareSize*6);
             button.draw(canvas);
 
             currentX += 2*squareSize;

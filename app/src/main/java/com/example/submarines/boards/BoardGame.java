@@ -14,6 +14,7 @@ import com.example.submarines.Submarine;
 import com.example.submarines.buttons.ErasureButton;
 import com.example.submarines.buttons.GameButton;
 import com.example.submarines.buttons.RotationButton;
+import com.example.submarines.buttons.StartGameButton;
 
 import java.util.ArrayList;
 
@@ -25,6 +26,7 @@ public class BoardGame extends View {
     protected int squareSize;
     protected RotationButton rotationButton;
     protected ErasureButton erasureButton;
+    protected StartGameButton startGameButton;
     protected ArrayList<GameButton> gameButtons = new ArrayList<>();
     private final int NUM_OF_SQUARES = 6;
     private boolean firstTimeBoard = true;
