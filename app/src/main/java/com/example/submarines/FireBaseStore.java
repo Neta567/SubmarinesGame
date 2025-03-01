@@ -5,29 +5,24 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.submarines.model.GameModel;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 
 public class FireBaseStore {
 
-    public void saveGame(AppCompatActivity activity) {
+    public static FireBaseStore INSTANCE = new FireBaseStore();
 
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("gameName", "game1");
-        map.put("gameResult", "P1 Wins");
+    public void saveGame(GameModel model) {
+
         try {
-            // games/game_###/player1Board
-            // games/game_###/player2Board
             FirebaseFirestore db = FirebaseFirestore.getInstance();
-            db.collection("games").document("5").set(
-                    map
-            ).addOnSuccessListener(activity,
-                    aVoid -> Toast.makeText(activity, "Saved", Toast.LENGTH_SHORT).show()
-            ).addOnFailureListener(activity,
-                    aVoid -> Toast.makeText(activity, "Failed", Toast.LENGTH_SHORT).show());
+            db.collection("Games")
+                    .document(model.gameId).set(model);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
+
 }

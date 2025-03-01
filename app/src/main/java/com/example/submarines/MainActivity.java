@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    private Button btnStart,btnInstructions, btnSave;
+    private Button btnStart, btnInstructions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,9 +20,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         btnInstructions= findViewById(R.id.btnInstructions);
         btnInstructions.setOnClickListener(this);
-
-        btnSave = findViewById(R.id.btnSave);
-        btnSave.setOnClickListener(this);
     }
 
     @Override
@@ -36,10 +33,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         {
             Intent i = new Intent(this, InstructionsActivity.class);
             startActivity(i);
-        }
-        if(v==btnSave)
-        {
-            new FireBaseStore().saveGame(this);
         }
     }
 }

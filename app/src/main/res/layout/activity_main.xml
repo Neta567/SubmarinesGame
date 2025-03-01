@@ -38,16 +38,4 @@
         android:textColor="#020825"
         android:textSize="40dp" />
 
-    <Button
-        android:id="@+id/btnSave"
-        android:layout_width="298dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="50dp"
-        android:layout_marginTop="10dp"
-        android:backgroundTint="#F8F9FA"
-        android:text="Save"
-        android:textColor="#020825"
-        android:textSize="40dp" />
-
-
 </LinearLayout>
