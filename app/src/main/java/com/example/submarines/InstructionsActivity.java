@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-public class Instructions extends AppCompatActivity implements View.OnClickListener {
+public class InstructionsActivity extends AppCompatActivity implements View.OnClickListener {
     Button btnReturn;
 
     @Override

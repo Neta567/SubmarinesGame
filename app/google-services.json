@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "117059179498",
+    "project_id": "submarinesgame",
+    "storage_bucket": "submarinesgame.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:117059179498:android:700503f93a6fe899c8d893",
+        "android_client_info": {
+          "package_name": "com.example.submarines"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDKlqUVMoklwOlKmWVDO2qmjENNUESTDC4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

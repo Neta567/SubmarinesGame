@@ -63,7 +63,7 @@ public class MyBoard extends BoardGame {
         int currentX = boardPlayer1[5][0].getX();
         for (GameButton button: gameButtons) {
             button.setX(currentX);
-            button.setY(boardPlayer1[5][5].getY() + squareSize*6);
+            button.setY(boardPlayer1[5][5].getY() + squareSize*9);
             button.draw(canvas);
 
             currentX += 2*squareSize;

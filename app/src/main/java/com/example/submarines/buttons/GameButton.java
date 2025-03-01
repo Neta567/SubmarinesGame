@@ -4,7 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
-import com.example.submarines.Square;
+import com.example.submarines.model.Square;
 
 public abstract class GameButton extends Square {
     Bitmap bitmap;

@@ -9,8 +9,8 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 
-import com.example.submarines.Square;
-import com.example.submarines.Submarine;
+import com.example.submarines.model.Square;
+import com.example.submarines.model.Submarine;
 import com.example.submarines.buttons.ErasureButton;
 import com.example.submarines.buttons.GameButton;
 import com.example.submarines.buttons.RotationButton;
