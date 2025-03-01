@@ -8,28 +8,29 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.submarines.databinding.ActivityMainBinding;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    private Button btnStart, btnInstructions;
+    private ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        btnStart = findViewById(R.id.btnStart);
-        btnStart.setOnClickListener(this);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        btnInstructions= findViewById(R.id.btnInstructions);
-        btnInstructions.setOnClickListener(this);
+        binding.btnStart.setOnClickListener(this);
+        binding.btnInstructions.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
-        if(v==btnStart)
+        if(v == binding.btnStart)
         {
             Intent i = new Intent(this, MyBoardGameActivity.class);
             startActivity(i);
         }
-        if(v==btnInstructions)
+        if(v == binding.btnInstructions)
         {
             Intent i = new Intent(this, InstructionsActivity.class);
             startActivity(i);
