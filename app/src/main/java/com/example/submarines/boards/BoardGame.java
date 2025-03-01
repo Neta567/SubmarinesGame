@@ -264,7 +264,7 @@ public class BoardGame extends View {
         squareSize = canvas.getWidth()/3/NUM_OF_SQUARES +80;
 
         int x1 = canvas.getWidth()/9;
-        int y1 = 100;
+        int y1 = 50;
         int w1 = squareSize;
         int color1 = Color.GRAY;
         //int color = Color.BLACK;

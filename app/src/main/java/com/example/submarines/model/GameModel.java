@@ -8,4 +8,8 @@ public class GameModel {
     public String gameResult = "";
     public String player1Name = "Player 1";
     public String player2Name = "Player 2";
+
+    public String getCurrentPlayerName() {
+        return player1Name;
+    }
 }

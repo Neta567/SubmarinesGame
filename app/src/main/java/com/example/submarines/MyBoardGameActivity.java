@@ -19,13 +19,13 @@ public class MyBoardGameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityBoardGameBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        setContentView(binding.rootLayout);
 
         GameModel.INSTANCE.gameId = ((Integer)new Random().nextInt(10000)).toString();
+        binding.setViewModel(GameModel.INSTANCE);
         FireBaseStore.INSTANCE.saveGame(GameModel.INSTANCE);
 
         MyBoard myBoard = new MyBoard(this);
-        LinearLayout ll = findViewById(R.id.ll);
-        ll.addView(myBoard);
+        binding.ll.addView(myBoard);
     }
 }
