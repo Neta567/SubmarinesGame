@@ -9,7 +9,9 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 
+import com.example.submarines.FireBaseStore;
 import com.example.submarines.helpers.SquareDrawer;
+import com.example.submarines.model.GameModel;
 import com.example.submarines.model.Square;
 import com.example.submarines.model.Submarine;
 import com.example.submarines.buttons.ErasureButton;
@@ -20,6 +22,7 @@ import com.example.submarines.buttons.StartGameButton;
 import java.util.ArrayList;
 
 public class BoardGame extends View {
+    protected GameModel model = GameModel.getInstance();
     protected Square[][] boardPlayer1, boardPlayer2;
     protected Square square;
     protected Square [] ships;
@@ -156,16 +159,20 @@ public class BoardGame extends View {
             }
         }
         updateOccupiedSquares(submarine);
+        FireBaseStore.INSTANCE.saveGame(model);
     }
 
     private void updateOccupiedSquares(Submarine submarine) {
-        for (Square[] squares : boardPlayer1) {
+        for (int i = 0; i < boardPlayer1.length; i++) {
             for (int j = 0; j < boardPlayer1.length; j++) {
-                if (submarine.intersectsWith(squares[j])) {
-                    squares[j].setOccupied(submarine);
+                if (submarine.intersectsWith(boardPlayer1[i][j])) {
+                    boardPlayer1[i][j].setOccupied(submarine);
+                    model.setSquareState(i,j, GameModel.SquareState.OCCUPIED_BY_SUBMARINE);
                 } else {
-                    if (squares[j].getOccupiedSubmarine() == submarine)
-                        squares[j].setOccupied(null);
+                    if (boardPlayer1[i][j].getOccupiedSubmarine() == submarine) {
+                        boardPlayer1[i][j].setOccupied(null);
+                        model.setSquareState(i,j, GameModel.SquareState.EMPTY);
+                    }
                 }
             }
         }
@@ -269,10 +276,6 @@ public class BoardGame extends View {
         int x1 = canvas.getWidth()/9;
         int y1 = 50;
         int w1 = squareSize;
-        int color1 = Color.GRAY;
-        //int color = Color.BLACK;
-        //p = new Paint();
-        //p.setColor(color2);
 
 
         for (int i = 0; i < boardPlayer1.length; i++)

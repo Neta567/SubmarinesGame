@@ -3,7 +3,6 @@ package com.example.submarines;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.widget.LinearLayout;
 
 import com.example.submarines.boards.MyBoard;
 import com.example.submarines.databinding.ActivityBoardGameBinding;
@@ -21,9 +20,9 @@ public class MyBoardGameActivity extends AppCompatActivity {
         binding = ActivityBoardGameBinding.inflate(getLayoutInflater());
         setContentView(binding.rootLayout);
 
-        GameModel.INSTANCE.gameId = ((Integer)new Random().nextInt(10000)).toString();
-        binding.setViewModel(GameModel.INSTANCE);
-        FireBaseStore.INSTANCE.saveGame(GameModel.INSTANCE);
+        GameModel.getInstance().setGameId(((Integer)new Random().nextInt(10000)).toString());
+        binding.setViewModel(GameModel.getInstance());
+        FireBaseStore.INSTANCE.saveGame(GameModel.getInstance());
 
         MyBoard myBoard = new MyBoard(this);
         binding.ll.addView(myBoard);
