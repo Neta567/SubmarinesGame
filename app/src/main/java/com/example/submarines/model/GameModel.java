@@ -1,15 +1,25 @@
 package com.example.submarines.model;
 
-public class GameModel {
+import androidx.databinding.BaseObservable;
+import androidx.databinding.Bindable;
+
+import com.example.submarines.BR;
+
+public class GameModel extends BaseObservable {
 
     public static GameModel INSTANCE = new GameModel();
 
     public String gameId = "-1";
     public String gameResult = "";
-    private String player1Name = "Player 1";
-    private String player2Name = "Player 2";
+    private String currentPlayer = "Player 1";
 
+    @Bindable
     public String getCurrentPlayerName() {
-        return player1Name;
+        return currentPlayer;
+    }
+
+    public void setCurrentPlayer(String player) {
+        currentPlayer = player;
+        notifyPropertyChanged(BR.currentPlayerName);
     }
 }
