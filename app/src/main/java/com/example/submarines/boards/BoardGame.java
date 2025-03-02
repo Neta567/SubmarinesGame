@@ -9,6 +9,7 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 
+import com.example.submarines.helpers.SquareDrawer;
 import com.example.submarines.model.Square;
 import com.example.submarines.model.Submarine;
 import com.example.submarines.buttons.ErasureButton;
@@ -178,12 +179,14 @@ public class BoardGame extends View {
             int y = boardPlayer1[5][5].getY() + squareSize*6;
             int w = squareSize;
             int color = Color.WHITE;
-            square = new Square(x, y, w, w, color);
+            square = new Square(x, y, w, w);
             firstTime = false;
         }
 
-        if(!isTwoPlayers)
-            square.draw2(canvas);
+        if(!isTwoPlayers) {
+            SquareDrawer drawer = new SquareDrawer();
+            drawer.draw(square, canvas);
+        }
 
     }
 
@@ -214,19 +217,19 @@ public class BoardGame extends View {
 
             if (count<=1)
             {
-                ships[i] = new Square(x1,y1,w1,h1,color1);
+                ships[i] = new Square(x1, y1, w1, h1);
                 x1 = x1 + squareSize + ((boardPlayer1[5][0].getX() + boardPlayer1[5][5].getX())/9);
             }
             if(count==2)
             {
                 h1= w1*3;
-                ships[i] = new Square(x1,y1,w1,h1,color1);
+                ships[i] = new Square(x1, y1, w1, h1);
                 x1 = x1 + squareSize + ((boardPlayer1[5][0].getX() + boardPlayer1[5][5].getX())/9);
             }
             if (count==3)
             {
                 h1= w1*4;
-                ships[i] = new Square(x1,y1,w1,h1,color1);
+                ships[i] = new Square(x1, y1, w1, h1);
                 x1 = x1 + squareSize + ((boardPlayer1[5][0].getX() + boardPlayer1[5][5].getX())/9);
             }
             count++;
@@ -276,7 +279,7 @@ public class BoardGame extends View {
         {
             for (int j = 0; j < NUM_OF_SQUARES; j++)
             {
-                boardPlayer1[i][j] = new Square(x1, y1, w1, w1,color1);
+                boardPlayer1[i][j] = new Square(x1, y1, w1, w1);
                 //boardPlayer1[i][j].setP(boardPlayer1[i][j].getP(),100);
                 x1 = x1+w1;
             }
@@ -297,7 +300,7 @@ public class BoardGame extends View {
 
         for (int i = 0; i < boardPlayer2.length; i++) {
             for (int j = 0; j < NUM_OF_SQUARES; j++) {
-                boardPlayer2[i][j] = new Square(x2, y2, w2, w2, color2);
+                boardPlayer2[i][j] = new Square(x2, y2, w2, w2);
                 //boardPlayer2[i][j].setP(boardPlayer2[i][j].getP(),100);
 
                 x2 = x2 + w2;

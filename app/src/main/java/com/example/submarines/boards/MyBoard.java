@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 
 import androidx.annotation.NonNull;
 
@@ -41,17 +40,16 @@ public class MyBoard extends BoardGame {
     private void initButtons() {
 
         if(firstTimeButtons) {
-            int color = Color.WHITE;
             Bitmap rotateBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.rotation_button);
-            rotationButton = new RotationButton(squareSize, squareSize, color, rotateBitmap);
+            rotationButton = new RotationButton(squareSize, squareSize, rotateBitmap);
             gameButtons.add(rotationButton);
 
             Bitmap erasueBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.trash_can);
-            erasureButton = new ErasureButton(squareSize, squareSize, color, erasueBitmap);
+            erasureButton = new ErasureButton(squareSize, squareSize, erasueBitmap);
             gameButtons.add(erasureButton);
 
             Bitmap startBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.check_mark1);
-            startGameButton = new StartGameButton(squareSize,squareSize,color,startBitmap);
+            startGameButton = new StartGameButton(squareSize,squareSize,startBitmap);
             gameButtons.add(startGameButton);
 
             firstTimeButtons = false;
