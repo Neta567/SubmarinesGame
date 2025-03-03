@@ -13,14 +13,34 @@
         android:text="Instructions"
         android:textSize="60dp"
         android:layout_marginTop="20dp"
-        android:layout_marginLeft="45dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
         android:textColor="#EDEFF4"
         android:textStyle="bold" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/instructions"
+        android:textColor="#EDEFF4"
+        android:textStyle="bold"
+        android:textSize="30sp"
+        android:textAlignment="center"
+        android:layout_marginTop="40dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"/>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="323dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/battleship_game" />
 
     <Button
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="500dp"
+        android:layout_marginTop="30dp"
         android:backgroundTint="#F8F9FA"
         android:layout_marginLeft="50dp"
         android:text="Return"

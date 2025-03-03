@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -130,15 +131,38 @@ public class BoardGame extends View {
             }
         }
         if (erasureButton.didUserTouchMe(x, y)) {
-            //TODO: Clear the board
+            resetBoard();
         }
-//        if (square.didUserTouchMe(x, y))
-//        {
-//            isTwoPlayers = true;
-//        }
+        if (startGameButton.didUserTouchMe(x, y)) {
+            boolean check = true;
+            for (Submarine submarine : submarineArrayList) {
+                check &= submarine.isPlacedOnBoard();
+            }
+            if(check) {
+                Toast.makeText(getContext(), "Game Started", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getContext(), "Not all submarines are placed", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void resetBoard() {
+        for (int i = 0; i < boardPlayer1.length; i++)
+        {
+            for (int j = 0; j < boardPlayer1.length; j++)
+            {
+                boardPlayer1[i][j].setOccupied(null);
+                model.setSquareState(i,j, GameModel.SquareState.EMPTY);
+            }
+        }
+        for (Submarine submarine : submarineArrayList) {
+            submarine.reset();
+        }
+        FireBaseStore.INSTANCE.saveGame(model);
     }
 
     private void updateSubmarineLocation(Submarine submarine, int x, int y) {
+        //todo: check valid position (inside board and not occupied)
         submarine.setX(x);
         submarine.setY(y);
     }

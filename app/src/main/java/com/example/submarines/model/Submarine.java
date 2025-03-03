@@ -12,6 +12,8 @@ import com.example.submarines.R;
 public class Submarine extends Shape {
     private final Bitmap vertBitmap;
     private final Bitmap horizBitmap;
+    private final int initialX;
+    private final int initialY;
     private boolean isVertical = true;
     private Bitmap bitmap;
 
@@ -19,6 +21,8 @@ public class Submarine extends Shape {
 
     public Submarine(int x, int y, Resources resources, int width, int height) {
         super(x, y, width, height);
+        initialX = x;
+        initialY = y;
 
         Bitmap tempBitmap = BitmapFactory.decodeResource(resources, R.drawable.submarine_vertical);
         this.vertBitmap = Bitmap.createScaledBitmap(tempBitmap, width, height,true);
@@ -92,5 +96,14 @@ public class Submarine extends Shape {
                     && square.getY() + squareSize > this.y && square.getY()  - height < this.y;
         }
         return result;
+    }
+
+    public void reset() {
+        this.x = initialX;
+        this.y = initialY;
+    }
+
+    public boolean isPlacedOnBoard() {
+        return this.x != initialX || this.y != initialY;
     }
 }
