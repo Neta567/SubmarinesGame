@@ -74,7 +74,23 @@ public class Submarine extends Shape {
     }
 
     public boolean intersectsWith(Square square) {
-        return square.getX() >= this.x - squareSize && square.getX() < this.x + width + squareSize
-                && square.getY() >= this.y - squareSize && square.getY() < this.y + height + squareSize;
+        boolean result = square.getX() >= this.x - squareSize && square.getX() <= this.x + width + squareSize
+                && square.getY() >= this.y - squareSize && square.getY() <= this.y + squareSize;
+
+        if(isVertical) {
+            result = square.getX() >= this.x - squareSize && square.getX() <= this.x + squareSize
+                    && square.getY() >= this.y - squareSize && square.getY() < this.y + height + squareSize;
+        }
+        return result;
+    }
+    public boolean strictIntersectsWith(Square square) {
+        boolean result = square.getX() > this.x - squareSize && square.getX() < this.x + squareSize + width
+                && square.getY() > this.y - squareSize && square.getY() < this.y + squareSize;
+
+        if(isVertical) {
+            result = square.getX() + squareSize > this.x && square.getX() - squareSize < this.x
+                    && square.getY() + squareSize > this.y && square.getY()  - height < this.y;
+        }
+        return result;
     }
 }

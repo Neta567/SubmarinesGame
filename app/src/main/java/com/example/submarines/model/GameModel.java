@@ -11,7 +11,8 @@ public class GameModel extends BaseObservable {
 
     public enum SquareState {
         EMPTY(0),
-        OCCUPIED_BY_SUBMARINE(1);
+        OCCUPIED_BY_SUBMARINE(2),
+        OCCUPIED_BY_SUBMARINE_SURROUND(1);
 
         private final int value;
 

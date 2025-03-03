@@ -165,9 +165,13 @@ public class BoardGame extends View {
     private void updateOccupiedSquares(Submarine submarine) {
         for (int i = 0; i < boardPlayer1.length; i++) {
             for (int j = 0; j < boardPlayer1.length; j++) {
-                if (submarine.intersectsWith(boardPlayer1[i][j])) {
+                if (submarine.strictIntersectsWith(boardPlayer1[i][j])) {
+                    //todo: bind board to model
                     boardPlayer1[i][j].setOccupied(submarine);
                     model.setSquareState(i,j, GameModel.SquareState.OCCUPIED_BY_SUBMARINE);
+                } else if (submarine.intersectsWith(boardPlayer1[i][j])) {
+                    boardPlayer1[i][j].setOccupied(submarine);
+                    model.setSquareState(i,j, GameModel.SquareState.OCCUPIED_BY_SUBMARINE_SURROUND);
                 } else {
                     if (boardPlayer1[i][j].getOccupiedSubmarine() == submarine) {
                         boardPlayer1[i][j].setOccupied(null);
