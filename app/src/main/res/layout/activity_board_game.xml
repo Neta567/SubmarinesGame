@@ -3,7 +3,7 @@
     <data>
         <variable name="viewModel" type="com.example.submarines.model.GameModel"/>
     </data>
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -20,11 +20,45 @@
             android:textStyle="bold"/>
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
             android:id="@+id/ll"
-            android:orientation="horizontal" >
-
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10pt"
+            android:layout_marginLeft="15pt">
         </LinearLayout>
-    </LinearLayout>
+        <GridLayout
+            android:id="@+id/boardGameButtons1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:columnCount="4"
+            android:rowCount="1"
+            android:gravity="center_horizontal"
+            android:layout_marginLeft="15pt"
+            android:layout_marginBottom="10pt"
+            android:layout_marginTop="10pt">
+            <ImageButton
+                android:id="@+id/rotationButton2"
+                android:background="@drawable/rotation_button"
+                android:layout_height="60dp"
+                android:layout_width="60dp">
+            </ImageButton>
+            <ImageButton
+                android:id="@+id/erasureButton2"
+                android:background="@drawable/trash_can"
+                android:layout_height="60dp"
+                android:layout_width="60dp"
+                android:layout_marginLeft="20dp">
+            </ImageButton>
+            <ImageButton
+                android:id="@+id/startGameButton2"
+                android:background="@drawable/check_mark1"
+                android:layout_height="60dp"
+                android:layout_width="60dp"
+                android:layout_marginLeft="20dp">
+            </ImageButton>
+        </GridLayout>
+
+    </RelativeLayout>
 </layout>

@@ -24,7 +24,13 @@ public class GameModel extends BaseObservable {
             return value;
         }
 
-    };
+    }
+
+    public enum GameState {
+        NOT_STARTED,
+        STARTED,
+        FINISHED
+    }
 
     private static final GameModel INSTANCE = new GameModel();
 
@@ -33,6 +39,9 @@ public class GameModel extends BaseObservable {
     private String currentPlayer = "Player 1";
     private int[][] boardModel1;
     private final int NUM_OF_SQUARES = 6;
+    private GameState gameState = GameState.NOT_STARTED;
+
+    private Submarine currentSubmarine;
 
     private GameModel() {
 
@@ -49,9 +58,20 @@ public class GameModel extends BaseObservable {
     public void setGameId(String gameId) {
         this.gameId = gameId;
     }
+
+    public void setGameState(GameState gameState) {
+        this.gameState = gameState;
+        if(gameState == GameState.STARTED)
+            notifyPropertyChanged(BR.gameStarted);
+    }
     @Bindable
     public String getGameResult() {
         return gameResult;
+    }
+
+    @Bindable
+    public boolean isGameStarted() {
+        return gameState == GameState.STARTED;
     }
 
     public void setGameResult(String gameResult) {
@@ -63,6 +83,13 @@ public class GameModel extends BaseObservable {
         return currentPlayer;
     }
 
+    public void setCurrentSubmarine(Submarine submarine) {
+        currentSubmarine = submarine;
+    }
+
+    public Submarine getCurrentSubmarine() {
+        return currentSubmarine;
+    }
     public void setCurrentPlayer(String player) {
         currentPlayer = player;
         notifyPropertyChanged(BR.currentPlayerName);

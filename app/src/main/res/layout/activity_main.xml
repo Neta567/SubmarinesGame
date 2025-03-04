@@ -38,4 +38,16 @@
         android:textColor="#020825"
         android:textSize="40dp" />
 
+    <Button
+        android:id="@+id/btnNewGame"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="10dp"
+        android:backgroundTint="#F8F9FA"
+        android:text="New Game"
+        android:textColor="#020825"
+        android:textSize="40dp" />
+
+
 </LinearLayout>
