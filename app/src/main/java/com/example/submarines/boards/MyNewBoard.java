@@ -27,16 +27,16 @@ public class MyNewBoard extends BoardGame {
     @Override
     protected void initSubmarines(Canvas canvas)
     {
-        s1 = new Submarine(boardPlayer1[0][1].getX(),boardPlayer1[0][0].getY(), this.getResources(), squareSize, squareSize*2);
+        s1 = new Submarine(boardPlayer1[0][1].getX(),boardPlayer1[0][0].getY(), this.getResources(), Square.SQUARE_SIZE, Square.SQUARE_SIZE *2);
         submarineArrayList.add(s1);
 
-        s2 = new Submarine(boardPlayer1[0][2].getX(),boardPlayer1[0][0].getY(), this.getResources(), squareSize, squareSize*2);
+        s2 = new Submarine(boardPlayer1[0][2].getX(),boardPlayer1[0][0].getY(), this.getResources(), Square.SQUARE_SIZE, Square.SQUARE_SIZE *2);
         submarineArrayList.add(s2);
 
-        s3 = new Submarine(boardPlayer1[0][3].getX(),boardPlayer1[0][0].getY(), this.getResources(), squareSize, squareSize*3);
+        s3 = new Submarine(boardPlayer1[0][3].getX(),boardPlayer1[0][0].getY(), this.getResources(), Square.SQUARE_SIZE, Square.SQUARE_SIZE *3);
         submarineArrayList.add(s3);
 
-        s4 = new Submarine(boardPlayer1[0][4].getX(),boardPlayer1[0][0].getY(), this.getResources(), squareSize, squareSize*4);
+        s4 = new Submarine(boardPlayer1[0][4].getX(),boardPlayer1[0][0].getY(), this.getResources(), Square.SQUARE_SIZE, Square.SQUARE_SIZE *4);
         submarineArrayList.add(s4);
     }
     public void addPlayerShipsBoard(GridLayout layout) {
@@ -49,10 +49,10 @@ public class MyNewBoard extends BoardGame {
     private void addPlayerBoard(GridLayout layout, Square[][] board, TextView[][] boardTextView) {
 
         //squareSize = layout.getRootView().getWidth() / 3 / NUM_OF_SQUARES + 80;
-        squareSize = 150;
+        Square.SQUARE_SIZE = 150;
         int x1 = 0;
         int y1 = 50;
-        int w1 = squareSize;
+        int w1 = Square.SQUARE_SIZE;
 
         for (int row = 0; row < NUM_OF_SQUARES; row++) {
             for (int col = 0; col < NUM_OF_SQUARES; col++) {
@@ -78,7 +78,7 @@ public class MyNewBoard extends BoardGame {
                 params.columnSpec = GridLayout.spec(col);
                 square.setLayoutParams(params);
                 layout.addView(square);
-                x1 = x1+squareSize;
+                x1 = x1+ Square.SQUARE_SIZE;
             }
             x1 = layout.getWidth()/9;
             y1 = y1 + w1;

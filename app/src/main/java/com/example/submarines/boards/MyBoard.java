@@ -18,15 +18,16 @@ public class MyBoard extends BoardGame {
     public void onDraw(@NonNull Canvas canvas) {
         initBoards(canvas);
         //initShips(canvas);
-        drawBoard1(canvas);
+        drawBoard(boardPlayer1, canvas);
         //drawShips(canvas);
         drawSubmarines(canvas);
 
         if(GameModel.getInstance().isGameStarted())
         {
-            drawBoard2(canvas);
+            drawBoard(boardPlayer2, canvas);
         }
     }
+
 }
 
 

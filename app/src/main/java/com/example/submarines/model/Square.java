@@ -3,6 +3,7 @@ package com.example.submarines.model;
 import com.example.submarines.helpers.SquareDrawer;
 
 public class Square extends Shape {
+    public static int SQUARE_SIZE;
     private Submarine submarine;
     private boolean isOccupied = false;
 
@@ -28,6 +29,10 @@ public class Square extends Shape {
 
     public Submarine getOccupiedSubmarine() {
         return this.submarine;
+    }
+
+    public void setFired() {
+        isOccupied = true;
     }
 }
 
