@@ -1,12 +1,8 @@
 package com.example.submarines.model;
 
-import android.content.Context;
-
-import com.example.submarines.helpers.SquareDrawer;
+import com.example.submarines.helpers.ShapeDrawingStrategy;
 
 public class Square extends Shape {
-
-
 
     public enum SquareState {
         EMPTY(0),
@@ -30,9 +26,8 @@ public class Square extends Shape {
     private Submarine submarine;
     private SquareState state = SquareState.EMPTY;
 
-    public Square(int x, int y, int w, int h, Context context) {
-        super(x, y, w, h);
-        drawingStrategy = new SquareDrawer(context);
+    public Square(int x, int y, int w, int h, ShapeDrawingStrategy drawingStrategy) {
+        super(x, y, w, h, drawingStrategy);
     }
 
     public boolean didUserTouchMe(int xu, int yu)

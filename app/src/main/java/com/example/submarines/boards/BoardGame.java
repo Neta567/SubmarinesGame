@@ -7,27 +7,26 @@ import android.view.MotionEvent;
 import android.view.View;
 import androidx.annotation.NonNull;
 import com.example.submarines.FireBaseStore;
+import com.example.submarines.helpers.ShapeDrawingStrategy;
+import com.example.submarines.helpers.SquareDrawer;
+import com.example.submarines.helpers.SubmarineDrawer;
 import com.example.submarines.model.GameModel;
 import com.example.submarines.model.Square;
 import com.example.submarines.model.Submarine;
 import java.util.ArrayList;
 
 public class BoardGame extends View {
+
     protected GameModel model = GameModel.getInstance();
     protected Square[][] boardPlayer1, boardPlayer2;
     protected ArrayList<Submarine> submarineArrayList;
-    protected final int NUM_OF_SQUARES = 6;
+    public static final int NUM_OF_SQUARES = 6;
     private boolean firstTimeBoard = true;
     private boolean firstTimeSubmarine = true;
     protected Submarine s1, s2, s3, s4;
 
     public BoardGame(Context context) {
         super(context);
-
-        boardPlayer1 = new Square[NUM_OF_SQUARES][NUM_OF_SQUARES];
-        boardPlayer2 = new Square[NUM_OF_SQUARES][NUM_OF_SQUARES];
-
-        submarineArrayList = new ArrayList<>();
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -175,16 +174,23 @@ public class BoardGame extends View {
     }
 
     protected void initSubmarines() {
-        s1 = new Submarine(boardPlayer1[5][1].getX(), boardPlayer1[5][1].getY() + Square.SQUARE_SIZE * 2, Square.SQUARE_SIZE, Square.SQUARE_SIZE * 2, this.getContext());
+        submarineArrayList = GameModel.getInstance().initPlayer1Submarines();
+        ShapeDrawingStrategy drawingStrategy = new SubmarineDrawer(this.getContext());
+
+        s1 = new Submarine(boardPlayer1[5][1].getX(), boardPlayer1[5][1].getY() + Square.SQUARE_SIZE * 2,
+                Square.SQUARE_SIZE, Square.SQUARE_SIZE * 2, drawingStrategy);
         submarineArrayList.add(s1);
 
-        s2 = new Submarine(boardPlayer1[5][2].getX(), boardPlayer1[5][2].getY() + Square.SQUARE_SIZE * 2, Square.SQUARE_SIZE, Square.SQUARE_SIZE * 2, this.getContext());
+        s2 = new Submarine(boardPlayer1[5][2].getX(), boardPlayer1[5][2].getY() + Square.SQUARE_SIZE * 2,
+                Square.SQUARE_SIZE, Square.SQUARE_SIZE * 2, drawingStrategy);
         submarineArrayList.add(s2);
 
-        s3 = new Submarine(boardPlayer1[5][3].getX(), boardPlayer1[5][3].getY() + Square.SQUARE_SIZE * 2, Square.SQUARE_SIZE, Square.SQUARE_SIZE * 3, this.getContext());
+        s3 = new Submarine(boardPlayer1[5][3].getX(), boardPlayer1[5][3].getY() + Square.SQUARE_SIZE * 2,
+                Square.SQUARE_SIZE, Square.SQUARE_SIZE * 3, drawingStrategy);
         submarineArrayList.add(s3);
 
-        s4 = new Submarine(boardPlayer1[5][4].getX(), boardPlayer1[5][4].getY() + Square.SQUARE_SIZE * 2, Square.SQUARE_SIZE, Square.SQUARE_SIZE * 4, this.getContext());
+        s4 = new Submarine(boardPlayer1[5][4].getX(), boardPlayer1[5][4].getY() + Square.SQUARE_SIZE * 2,
+                Square.SQUARE_SIZE, Square.SQUARE_SIZE * 4, drawingStrategy);
         submarineArrayList.add(s4);
     }
 
@@ -205,6 +211,9 @@ public class BoardGame extends View {
     }
 
     public void initBoard1(Canvas canvas) {
+        boardPlayer1 = GameModel.getInstance().initPlayer1SubmarinesBoard();
+        ShapeDrawingStrategy drawingStrategy = new SquareDrawer(this.getContext());
+
         Square.SQUARE_SIZE = canvas.getWidth() / 3 / NUM_OF_SQUARES + 95;
         int x1 = 0;
         int y1 = 0;
@@ -212,7 +221,7 @@ public class BoardGame extends View {
 
         for (int i = 0; i < boardPlayer1.length; i++) {
             for (int j = 0; j < NUM_OF_SQUARES; j++) {
-                boardPlayer1[i][j] = new Square(x1, y1, w1, w1, this.getContext());
+                boardPlayer1[i][j] = new Square(x1, y1, w1, w1, drawingStrategy);
                 x1 = x1 + w1;
             }
             x1 = 0;
@@ -221,13 +230,16 @@ public class BoardGame extends View {
     }
 
     private void initBoard2() {
+        boardPlayer2 = GameModel.getInstance().initPlayer1FireBoard();
+        ShapeDrawingStrategy drawingStrategy = new SquareDrawer(this.getContext());
+
         int x2 = 0;
         int y2 = boardPlayer1[5][5].getY() + 250;
         int w2 = Square.SQUARE_SIZE;
 
         for (int i = 0; i < boardPlayer2.length; i++) {
             for (int j = 0; j < NUM_OF_SQUARES; j++) {
-                boardPlayer2[i][j] = new Square(x2, y2, w2, w2, this.getContext());
+                boardPlayer2[i][j] = new Square(x2, y2, w2, w2, drawingStrategy);
                 x2 = x2 + w2;
             }
             x2 = 0;

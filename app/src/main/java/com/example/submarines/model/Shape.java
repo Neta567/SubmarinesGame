@@ -10,10 +10,11 @@ public class Shape extends Location {
 
     protected ShapeDrawingStrategy drawingStrategy;
 
-    public Shape(int x, int y, int width, int height) {
+    public Shape(int x, int y, int width, int height, ShapeDrawingStrategy drawingStrategy) {
         super(x,y);
         this.width = width;
         this.height = height;
+        this.drawingStrategy = drawingStrategy;
     }
 
     public int getWidth() {

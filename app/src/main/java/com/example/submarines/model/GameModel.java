@@ -1,11 +1,15 @@
 package com.example.submarines.model;
 
+import static com.example.submarines.boards.BoardGame.NUM_OF_SQUARES;
+
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 
 import com.example.submarines.BR;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
+import java.util.ArrayList;
 
 public class GameModel extends BaseObservable {
 
@@ -20,7 +24,10 @@ public class GameModel extends BaseObservable {
     private String gameId = "-1";
     private String gameResult = "";
     private String currentPlayer = "Player 1";
-    private final int[][] boardModel1;
+    private final int[][] player1SubmarineBoardModel;
+    private Square[][] player1SubmarineBoard;
+    private Square[][] player1FireBoard;
+    private ArrayList<Submarine> submarineArrayList;
     private GameState gameState = GameState.NOT_STARTED;
 
     private Submarine currentSubmarine;
@@ -28,7 +35,7 @@ public class GameModel extends BaseObservable {
     private GameModel() {
 
         int NUM_OF_SQUARES = 6;
-        boardModel1 = new int[NUM_OF_SQUARES][NUM_OF_SQUARES];
+        player1SubmarineBoardModel = new int[NUM_OF_SQUARES][NUM_OF_SQUARES];
     }
 
     public static GameModel getInstance() {
@@ -81,14 +88,34 @@ public class GameModel extends BaseObservable {
     }
 
     public void setSquareState(int i, int j, Square.SquareState state) {
-        boardModel1[i][j] = state.getValue();
+        player1SubmarineBoardModel[i][j] = state.getValue();
+    }
+
+    public ArrayList<Submarine> initPlayer1Submarines() {
+        if(submarineArrayList == null){
+            submarineArrayList = new ArrayList<>(4);
+        }
+        return submarineArrayList;
+    }
+    public Square[][] initPlayer1SubmarinesBoard() {
+        return initSquareBoard(player1SubmarineBoard);
+    }
+    public Square[][] initPlayer1FireBoard() {
+        return initSquareBoard(player1FireBoard);
+    }
+
+    private Square[][] initSquareBoard(Square[][] squareBoard) {
+        if(squareBoard == null){
+            squareBoard = new Square[NUM_OF_SQUARES][NUM_OF_SQUARES];
+        }
+        return squareBoard;
     }
 
     public String getPlayer1BoardState() {
         Gson gson = new GsonBuilder()
                 .setPrettyPrinting()
                 .create();
-        return gson.toJson(boardModel1);
+        return gson.toJson(player1SubmarineBoardModel);
     }
 
 }
