@@ -4,6 +4,8 @@ import com.example.submarines.helpers.SquareDrawer;
 
 public class Square extends Shape {
 
+
+
     public enum SquareState {
         EMPTY(0),
         OCCUPIED_BY_SUBMARINE(1),
@@ -27,6 +29,8 @@ public class Square extends Shape {
     public static int SQUARE_SIZE;
     private Submarine submarine;
     private boolean isOccupied = false;
+    private boolean isFired = false;
+    private SquareState state = SquareState.EMPTY;;
 
     public Square(int x, int y, int w, int h) {
         super(x, y, w, h);
@@ -46,6 +50,11 @@ public class Square extends Shape {
     public void setOccupied(Submarine submarine) {
         isOccupied = submarine != null;
         this.submarine = submarine;
+        if(isOccupied) {
+            state = SquareState.OCCUPIED_BY_SUBMARINE;
+        } else {
+            state = SquareState.EMPTY;
+        }
     }
 
     public Submarine getOccupiedSubmarine() {
@@ -53,7 +62,19 @@ public class Square extends Shape {
     }
 
     public void setFired() {
-        isOccupied = true;
+        isFired = true;
+    }
+
+    public boolean isFired() {
+        return isFired;
+    }
+
+    public void setState(SquareState state) {
+        this.state = state;
+    }
+
+    public SquareState getState() {
+        return this.state;
     }
 }
 

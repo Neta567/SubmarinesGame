@@ -130,7 +130,7 @@ public class BoardGame extends View {
             for (Square[] squares : boardPlayer1) {
                 for (int j = 0; j < boardPlayer1.length; j++) {
                     if (squares[j].didUserTouchMe(x, y)) {
-                        if (!squares[j].isOccupied()) {
+                        if (!squares[j].isOccupied() || squares[j].getOccupiedSubmarine() == submarine) {
                             updateSubmarineLocation(submarine, squares[j].getX(), squares[j].getY());
                         } else {
                             submarine.reset();
@@ -161,9 +161,11 @@ public class BoardGame extends View {
                 if (submarine.strictIntersectsWith(boardPlayer1[i][j])) {
                     //todo: bind board to model
                     boardPlayer1[i][j].setOccupied(submarine);
+                    boardPlayer1[i][j].setState(Square.SquareState.OCCUPIED_BY_SUBMARINE);
                     model.setSquareState(i, j, Square.SquareState.OCCUPIED_BY_SUBMARINE);
                 } else if (submarine.intersectsWith(boardPlayer1[i][j])) {
                     boardPlayer1[i][j].setOccupied(submarine);
+                    boardPlayer1[i][j].setState(Square.SquareState.OCCUPIED_BY_SUBMARINE_SURROUND);
                     model.setSquareState(i, j, Square.SquareState.OCCUPIED_BY_SUBMARINE_SURROUND);
                 } else {
                     if (boardPlayer1[i][j].getOccupiedSubmarine() == submarine) {
@@ -176,16 +178,16 @@ public class BoardGame extends View {
     }
 
     protected void initSubmarines() {
-        s1 = new Submarine(boardPlayer1[5][1].getX(), boardPlayer1[5][0].getY() + Square.SQUARE_SIZE * 2, this.getResources(), Square.SQUARE_SIZE, Square.SQUARE_SIZE * 2);
+        s1 = new Submarine(boardPlayer1[5][1].getX(), boardPlayer1[5][1].getY() + Square.SQUARE_SIZE * 2, this.getResources(), Square.SQUARE_SIZE, Square.SQUARE_SIZE * 2);
         submarineArrayList.add(s1);
 
-        s2 = new Submarine(boardPlayer1[5][2].getX(), boardPlayer1[5][0].getY() + Square.SQUARE_SIZE * 2, this.getResources(), Square.SQUARE_SIZE, Square.SQUARE_SIZE * 2);
+        s2 = new Submarine(boardPlayer1[5][2].getX(), boardPlayer1[5][2].getY() + Square.SQUARE_SIZE * 2, this.getResources(), Square.SQUARE_SIZE, Square.SQUARE_SIZE * 2);
         submarineArrayList.add(s2);
 
-        s3 = new Submarine(boardPlayer1[5][3].getX(), boardPlayer1[5][0].getY() + Square.SQUARE_SIZE * 2, this.getResources(), Square.SQUARE_SIZE, Square.SQUARE_SIZE * 3);
+        s3 = new Submarine(boardPlayer1[5][3].getX(), boardPlayer1[5][3].getY() + Square.SQUARE_SIZE * 2, this.getResources(), Square.SQUARE_SIZE, Square.SQUARE_SIZE * 3);
         submarineArrayList.add(s3);
 
-        s4 = new Submarine(boardPlayer1[5][4].getX(), boardPlayer1[5][0].getY() + Square.SQUARE_SIZE * 2, this.getResources(), Square.SQUARE_SIZE, Square.SQUARE_SIZE * 4);
+        s4 = new Submarine(boardPlayer1[5][4].getX(), boardPlayer1[5][4].getY() + Square.SQUARE_SIZE * 2, this.getResources(), Square.SQUARE_SIZE, Square.SQUARE_SIZE * 4);
         submarineArrayList.add(s4);
     }
 
@@ -208,7 +210,7 @@ public class BoardGame extends View {
     public void initBoard1(Canvas canvas) {
         Square.SQUARE_SIZE = canvas.getWidth() / 3 / NUM_OF_SQUARES + 95;
         int x1 = 0;
-        int y1 = 50;
+        int y1 = 0;
         int w1 = Square.SQUARE_SIZE;
 
         for (int i = 0; i < boardPlayer1.length; i++) {

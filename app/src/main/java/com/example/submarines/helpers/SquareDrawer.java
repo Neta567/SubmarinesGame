@@ -1,5 +1,9 @@
 package com.example.submarines.helpers;
 
+import static com.example.submarines.model.Square.SquareState.MISS;
+import static com.example.submarines.model.Square.SquareState.OCCUPIED_BY_SUBMARINE;
+import static com.example.submarines.model.Square.SquareState.OCCUPIED_BY_SUBMARINE_SURROUND;
+
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -21,8 +25,20 @@ public class SquareDrawer implements ShapeDrawingStrategy {
             p.setStyle(Paint.Style.STROKE);
             p.setStrokeWidth(10);
             p.setColor(Color.BLACK);
-            if(((Square)shape).isOccupied()) {
-                p.setColor(Color.RED);
+
+            if(shape instanceof Square) {
+                Square square = (Square) shape;
+                switch (square.getState()) {
+                    case OCCUPIED_BY_SUBMARINE:
+                        p.setColor(Color.RED);
+                        break;
+                    case OCCUPIED_BY_SUBMARINE_SURROUND:
+                        p.setColor(Color.YELLOW);
+                        break;
+                    case MISS:
+                        p.setColor(Color.BLUE);
+                        break;
+                }
             }
             canvas.drawRect(shape.getX(), shape.getY(),
                     shape.getX() + shape.getWidth(), shape.getY() + shape.getHeight(), p);
