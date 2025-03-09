@@ -106,11 +106,10 @@ public class BoardGame extends View {
     public void rotateSubmarine() {
         Submarine submarine = GameModel.getInstance().getCurrentSubmarine();
         if (submarine != null) {
-            submarine.rotateBitmap();
+            submarine.rotateShape();
             updateSubmarineAndBoard(submarine, submarine.getX(), submarine.getY());
             invalidate();
         }
-
     }
 
     private void updateSubmarineAndBoard(Submarine submarine, int x, int y) {
@@ -151,10 +150,8 @@ public class BoardGame extends View {
             for (int j = 0; j < boardPlayer1.length; j++) {
                 if (submarine.strictIntersectsWith(boardPlayer1[i][j])) {
                     boardPlayer1[i][j].setOccupiedSubmarine(submarine);
-                    boardPlayer1[i][j].setState(Square.SquareState.OCCUPIED_BY_SUBMARINE);
                     model.setSquareState(i, j, Square.SquareState.OCCUPIED_BY_SUBMARINE);
                 } else if (submarine.intersectsWith(boardPlayer1[i][j])) {
-                    //boardPlayer1[i][j].setOccupied(submarine);
                     boardPlayer1[i][j].setState(Square.SquareState.OCCUPIED_BY_SUBMARINE_SURROUND);
                     model.setSquareState(i, j, Square.SquareState.OCCUPIED_BY_SUBMARINE_SURROUND);
                 } else {
@@ -265,6 +262,7 @@ public class BoardGame extends View {
                 }
             }
         }
+        FireBaseStore.INSTANCE.saveGame(GameModel.getInstance());
     }
 
     public void setupBoard() {

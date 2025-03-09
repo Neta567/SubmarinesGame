@@ -14,7 +14,7 @@ public class Submarine extends Shape {
         initialY = y;
     }
 
-    public void rotateBitmap()
+    public void rotateShape()
     {
         isVertical = !isVertical;
     }

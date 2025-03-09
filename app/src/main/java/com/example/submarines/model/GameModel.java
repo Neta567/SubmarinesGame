@@ -98,24 +98,37 @@ public class GameModel extends BaseObservable {
         return submarineArrayList;
     }
     public Square[][] initPlayer1SubmarinesBoard() {
-        return initSquareBoard(player1SubmarineBoard);
+        if(player1SubmarineBoard == null) {
+            player1SubmarineBoard = new Square[NUM_OF_SQUARES][NUM_OF_SQUARES];
+        }
+        return player1SubmarineBoard;
     }
     public Square[][] initPlayer1FireBoard() {
-        return initSquareBoard(player1FireBoard);
-    }
-
-    private Square[][] initSquareBoard(Square[][] squareBoard) {
-        if(squareBoard == null){
-            squareBoard = new Square[NUM_OF_SQUARES][NUM_OF_SQUARES];
+        if(player1FireBoard == null) {
+            player1FireBoard = new Square[NUM_OF_SQUARES][NUM_OF_SQUARES];
         }
-        return squareBoard;
+        return player1FireBoard;
     }
-
     public String getPlayer1BoardState() {
         Gson gson = new GsonBuilder()
                 .setPrettyPrinting()
                 .create();
         return gson.toJson(player1SubmarineBoardModel);
     }
+
+//    public String getPlayer1SubmarineBoardState() {
+//        Gson gson = new GsonBuilder()
+//                .setPrettyPrinting()
+//                .create();
+//        return gson.toJson(player1SubmarineBoard);
+//    }
+//
+//    public String getPlayer1FireBoardState() {
+//        Gson gson = new GsonBuilder()
+//                .setPrettyPrinting()
+//                .create();
+//        String json = gson.toJson(player1FireBoard);
+//        return json;
+//    }
 
 }
