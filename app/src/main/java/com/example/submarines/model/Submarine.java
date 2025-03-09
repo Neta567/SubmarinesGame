@@ -1,5 +1,7 @@
 package com.example.submarines.model;
 
+import static com.example.submarines.model.Square.SQUARE_SIZE;
+
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -16,8 +18,6 @@ public class Submarine extends Shape {
     private final int initialY;
     private boolean isVertical = true;
     private Bitmap bitmap;
-
-    private final int squareSize = 140;
 
     public Submarine(int x, int y, Resources resources, int width, int height) {
         super(x, y, width, height);
@@ -59,8 +59,8 @@ public class Submarine extends Shape {
             p.setStyle(Paint.Style.STROKE);
             p.setStrokeWidth(10);
             p.setColor(Color.RED);
-            canvas.drawRect(x - squareSize, y - squareSize,
-                    x + width + squareSize, y + height + squareSize, p);
+            canvas.drawRect(x - SQUARE_SIZE, y - SQUARE_SIZE,
+                    x + width + SQUARE_SIZE, y + height + SQUARE_SIZE, p);
         }
     }
     public boolean didUserTouchedMe (int xu, int yu)
@@ -78,22 +78,22 @@ public class Submarine extends Shape {
     }
 
     public boolean intersectsWith(Square square) {
-        boolean result = square.getX() >= this.x - squareSize && square.getX() <= this.x + width + squareSize
-                && square.getY() >= this.y - squareSize && square.getY() <= this.y + squareSize;
+        boolean result = square.getX() >= this.x - SQUARE_SIZE && square.getX() <= this.x + width + SQUARE_SIZE
+                && square.getY() >= this.y - SQUARE_SIZE && square.getY() <= this.y + SQUARE_SIZE;
 
         if(isVertical) {
-            result = square.getX() >= this.x - squareSize && square.getX() <= this.x + squareSize
-                    && square.getY() >= this.y - squareSize && square.getY() < this.y + height + squareSize;
+            result = square.getX() >= this.x - SQUARE_SIZE && square.getX() <= this.x + SQUARE_SIZE
+                    && square.getY() >= this.y - SQUARE_SIZE && square.getY() < this.y + height + SQUARE_SIZE;
         }
         return result;
     }
     public boolean strictIntersectsWith(Square square) {
-        boolean result = square.getX() > this.x - squareSize && square.getX() < this.x + squareSize + width
-                && square.getY() > this.y - squareSize && square.getY() < this.y + squareSize;
+        boolean result = square.getX() >= this.x - SQUARE_SIZE && square.getX() <= this.x + SQUARE_SIZE + width
+                && square.getY() >= this.y - SQUARE_SIZE && square.getY() <= this.y + SQUARE_SIZE;
 
         if(isVertical) {
-            result = square.getX() + squareSize > this.x && square.getX() - squareSize < this.x
-                    && square.getY() + squareSize > this.y && square.getY()  - height < this.y;
+            result = this.x >= square.getX() && this.x < square.getX() + SQUARE_SIZE
+                    && this.y >= square.getY() && this.y < square.getY() + height;
         }
         return result;
     }
