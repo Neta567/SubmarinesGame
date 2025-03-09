@@ -26,22 +26,22 @@ public class GameActivity extends AppCompatActivity {
         MyBoard myBoard = new MyBoard(this);
         binding.ll.addView(myBoard);
 
-        binding.startGameButton2.setOnClickListener(v -> {
+        binding.startGameButton.setOnClickListener(v -> {
             if(myBoard.validateCanStartTheGame()) {
                 Toast.makeText(myBoard.getContext(), "Game Started", Toast.LENGTH_SHORT).show();
                 GameModel.getInstance().setGameState(GameModel.GameState.STARTED);
-                binding.rotationButton2.setEnabled(false);
-                binding.rotationButton2.setVisibility(View.INVISIBLE);
-                binding.erasureButton2.setEnabled(false);
-                binding.erasureButton2.setVisibility(View.INVISIBLE);
+                binding.rotationButton.setEnabled(false);
+                binding.rotationButton.setVisibility(View.INVISIBLE);
+                binding.erasureButton.setEnabled(false);
+                binding.erasureButton.setVisibility(View.INVISIBLE);
                 FireBaseStore.INSTANCE.saveGame(GameModel.getInstance());
                 myBoard.invalidate();
             } else {
                 Toast.makeText(myBoard.getContext(), "Not all submarines are placed", Toast.LENGTH_SHORT).show();
             }
         });
-        binding.rotationButton2.setOnClickListener(v -> myBoard.rotateSubmarine());
-        binding.erasureButton2.setOnClickListener(v -> myBoard.resetBoard());
+        binding.rotationButton.setOnClickListener(v -> myBoard.rotateSubmarine());
+        binding.erasureButton.setOnClickListener(v -> myBoard.resetBoard());
         binding.setup.setOnClickListener(v -> {
                     myBoard.setupBoard();
                     myBoard.invalidate();
