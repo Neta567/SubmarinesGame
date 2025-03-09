@@ -37,7 +37,7 @@ public class GameModel extends BaseObservable {
     private String gameId = "-1";
     private String gameResult = "";
     private String currentPlayer = "Player 1";
-    private int[][] boardModel1;
+    private final int[][] boardModel1;
     private final int NUM_OF_SQUARES = 6;
     private GameState gameState = GameState.NOT_STARTED;
 
@@ -61,8 +61,10 @@ public class GameModel extends BaseObservable {
 
     public void setGameState(GameState gameState) {
         this.gameState = gameState;
-        if(gameState == GameState.STARTED)
+        if(gameState == GameState.STARTED) {
+            currentSubmarine = null;
             notifyPropertyChanged(BR.gameStarted);
+        }
     }
     @Bindable
     public String getGameResult() {
