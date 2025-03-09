@@ -131,11 +131,11 @@ public class BoardGame extends View {
     private void updateSubmarineAndBoard(Submarine submarine, int x, int y) {
 
         if(isInsideSubmarinesBoard(x,y)) {
-            for (int i = 0; i < boardPlayer1.length; i++) {
+            for (Square[] squares : boardPlayer1) {
                 for (int j = 0; j < boardPlayer1.length; j++) {
-                    if (boardPlayer1[i][j].didUserTouchMe(x, y)) {
-                        if (!boardPlayer1[i][j].isOccupied()) {
-                            updateSubmarineLocation(submarine, boardPlayer1[i][j].getX(), boardPlayer1[i][j].getY());
+                    if (squares[j].didUserTouchMe(x, y)) {
+                        if (!squares[j].isOccupied()) {
+                            updateSubmarineLocation(submarine, squares[j].getX(), squares[j].getY());
                         } else {
                             submarine.reset();
                         }
@@ -179,7 +179,7 @@ public class BoardGame extends View {
         }
     }
 
-    protected void initSubmarines(Canvas canvas) {
+    protected void initSubmarines() {
         s1 = new Submarine(boardPlayer1[5][1].getX(), boardPlayer1[5][0].getY() + Square.SQUARE_SIZE * 2, this.getResources(), Square.SQUARE_SIZE, Square.SQUARE_SIZE * 2);
         submarineArrayList.add(s1);
 
@@ -242,7 +242,7 @@ public class BoardGame extends View {
 
     public void drawSubmarines(Canvas layout) {
         if (firstTimeSubmarine) {
-            initSubmarines(layout);
+            initSubmarines();
             firstTimeSubmarine = false;
         }
         for (int i = 0; i < submarineArrayList.size(); i++) {
@@ -251,12 +251,19 @@ public class BoardGame extends View {
     }
 
     public void markSquare(int x, int y) {
-        for (int i = 0; i < boardPlayer2.length; i++) {
+        for (Square[] squares : boardPlayer2) {
             for (int j = 0; j < boardPlayer2.length; j++) {
-                if (boardPlayer2[i][j].didUserTouchMe(x, y)) {
-                    boardPlayer2[i][j].setFired();
+                if (squares[j].didUserTouchMe(x, y)) {
+                    squares[j].setFired();
                 }
             }
         }
+    }
+
+    public void setupBoard() {
+        updateSubmarineAndBoard(s1, boardPlayer1[0][0].getX(), boardPlayer1[0][0].getY());
+        updateSubmarineAndBoard(s2, boardPlayer1[3][0].getX(), boardPlayer1[3][0].getY());
+        updateSubmarineAndBoard(s3, boardPlayer1[3][3].getX(), boardPlayer1[3][3].getY());
+        updateSubmarineAndBoard(s4, boardPlayer1[0][5].getX(), boardPlayer1[0][5].getY());
     }
 }

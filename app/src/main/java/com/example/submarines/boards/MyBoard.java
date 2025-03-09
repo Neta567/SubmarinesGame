@@ -27,7 +27,6 @@ public class MyBoard extends BoardGame {
             drawBoard(boardPlayer2, canvas);
         }
     }
-
 }
 
 

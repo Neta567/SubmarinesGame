@@ -61,6 +61,14 @@
                 android:layout_marginStart="20dp"
                 android:contentDescription="@string/todo">
             </ImageButton>
+            <ImageButton
+                android:id="@+id/setup"
+                android:background="@drawable/common_google_signin_btn_icon_dark"
+                android:layout_height="60dp"
+                android:layout_width="60dp"
+                android:layout_marginStart="20dp"
+                android:contentDescription="@string/todo">
+            </ImageButton>
         </GridLayout>
 
     </RelativeLayout>

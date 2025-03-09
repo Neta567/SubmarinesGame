@@ -42,5 +42,10 @@ public class GameActivity extends AppCompatActivity {
         });
         binding.rotationButton2.setOnClickListener(v -> myBoard.rotateSubmarine());
         binding.erasureButton2.setOnClickListener(v -> myBoard.resetBoard());
+        binding.setup.setOnClickListener(v -> {
+                    myBoard.setupBoard();
+                    myBoard.invalidate();
+                }
+        );
     }
 }
