@@ -19,7 +19,6 @@ import java.util.ArrayList;
 public class BoardGame extends View {
     protected GameModel model = GameModel.getInstance();
     protected Square[][] boardPlayer1, boardPlayer2;
-    protected TextView[][] boardTextViewPlayer1, boardTextViewPlayer2;
     protected ArrayList<Submarine> submarineArrayList;
     protected final int NUM_OF_SQUARES = 6;
     private boolean firstTimeBoard = true;
@@ -30,10 +29,7 @@ public class BoardGame extends View {
         super(context);
 
         boardPlayer1 = new Square[NUM_OF_SQUARES][NUM_OF_SQUARES];
-        boardTextViewPlayer1 = new TextView[NUM_OF_SQUARES][NUM_OF_SQUARES];
-
         boardPlayer2 = new Square[NUM_OF_SQUARES][NUM_OF_SQUARES];
-        boardTextViewPlayer2 = new TextView[NUM_OF_SQUARES][NUM_OF_SQUARES];
 
         submarineArrayList = new ArrayList<>();
     }
