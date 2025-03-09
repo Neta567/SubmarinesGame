@@ -125,8 +125,9 @@ public class BoardGame extends View {
             for (Square[] squares : boardPlayer1) {
                 for (int j = 0; j < boardPlayer1.length; j++) {
                     if (squares[j].didUserTouchMe(x, y)) {
-                        if (squares[j].getState() != Square.SquareState.OCCUPIED_BY_SUBMARINE
-                                || squares[j].getOccupiedSubmarine() == submarine) {
+                        if (squares[j].getState() == Square.SquareState.EMPTY ||
+                                squares[j].getState() != Square.SquareState.OCCUPIED_BY_SUBMARINE
+                                && squares[j].getOccupiedSubmarine() == submarine) {
                             updateSubmarineLocation(submarine, squares[j].getX(), squares[j].getY());
                         } else {
                             submarine.reset();
@@ -155,7 +156,6 @@ public class BoardGame extends View {
         for (int i = 0; i < boardPlayer1.length; i++) {
             for (int j = 0; j < boardPlayer1.length; j++) {
                 if (submarine.strictIntersectsWith(boardPlayer1[i][j])) {
-                    //todo: bind board to model
                     boardPlayer1[i][j].setOccupiedSubmarine(submarine);
                     boardPlayer1[i][j].setState(Square.SquareState.OCCUPIED_BY_SUBMARINE);
                     model.setSquareState(i, j, Square.SquareState.OCCUPIED_BY_SUBMARINE);
