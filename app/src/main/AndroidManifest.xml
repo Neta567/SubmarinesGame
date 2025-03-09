@@ -16,9 +16,6 @@
             android:name=".InstructionsActivity"
             android:exported="false" />
         <activity
-            android:name=".TwoPlayersActivity"
-            android:exported="false" />
-        <activity
             android:name=".MyBoardGameActivity"
             android:exported="false" />
         <activity
