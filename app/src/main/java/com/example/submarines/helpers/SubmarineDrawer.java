@@ -25,24 +25,24 @@ public class SubmarineDrawer implements ShapeDrawingStrategy {
     public void draw(Shape shape, Canvas canvas) {
         if (shape instanceof Submarine) {
             Submarine submarine = (Submarine) shape;
-            Bitmap submarineBitmap;
+            String key;
+            int resId;
+
             if (submarine.isVertical()) {
-                String key = "submarine_vertical_" + submarine.getHeight();
-                if (((GameActivity) context).getBitmapFromMemCache(key) == null) {
-                    Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.submarine_vertical);
-                    Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, submarine.getWidth(), submarine.getHeight(), true);
-                    ((GameActivity) context).addBitmapToMemoryCache(key, scaledBitmap);
-                }
-                submarineBitmap = ((GameActivity) context).getBitmapFromMemCache(key);
+                key = "submarine_vertical_" + submarine.getHeight();
+                resId = R.drawable.submarine_vertical;
             } else {
-                String key = "submarine_horizontal_" + submarine.getHeight();
-                if (((GameActivity) context).getBitmapFromMemCache(key) == null) {
-                    Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.submarine_horizontal);
-                    Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, submarine.getHeight(), submarine.getWidth(), true);
-                    ((GameActivity) context).addBitmapToMemoryCache(key, scaledBitmap);
-                }
-                submarineBitmap = ((GameActivity) context).getBitmapFromMemCache(key);
+                key = "submarine_horizontal_" + submarine.getHeight();
+                resId = R.drawable.submarine_horizontal;
             }
+
+            if (((GameActivity) context).getBitmapFromMemCache(key) == null) {
+                Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), resId);
+                Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, submarine.getWidth(), submarine.getHeight(), true);
+                ((GameActivity) context).addBitmapToMemoryCache(key, scaledBitmap);
+            }
+
+            Bitmap submarineBitmap = ((GameActivity) context).getBitmapFromMemCache(key);
             canvas.drawBitmap(submarineBitmap, submarine.getX(), submarine.getY(), null);
 
             // draw rectangle around submarine
