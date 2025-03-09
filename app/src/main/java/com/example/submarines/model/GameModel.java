@@ -38,13 +38,13 @@ public class GameModel extends BaseObservable {
     private String gameResult = "";
     private String currentPlayer = "Player 1";
     private final int[][] boardModel1;
-    private final int NUM_OF_SQUARES = 6;
     private GameState gameState = GameState.NOT_STARTED;
 
     private Submarine currentSubmarine;
 
     private GameModel() {
 
+        int NUM_OF_SQUARES = 6;
         boardModel1 = new int[NUM_OF_SQUARES][NUM_OF_SQUARES];
     }
 
