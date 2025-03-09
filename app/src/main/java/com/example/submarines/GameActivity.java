@@ -5,18 +5,18 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 import com.example.submarines.boards.MyBoard;
-import com.example.submarines.databinding.ActivityBoardGameBinding;
+import com.example.submarines.databinding.ActivityGameBinding;
 import com.example.submarines.model.GameModel;
 import java.util.Random;
 
-public class MyBoardGameActivity extends AppCompatActivity {
+public class GameActivity extends AppCompatActivity {
 
-    private ActivityBoardGameBinding binding;
+    private ActivityGameBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityBoardGameBinding.inflate(getLayoutInflater());
+        binding = ActivityGameBinding.inflate(getLayoutInflater());
         setContentView(binding.rootLayout);
 
         GameModel.getInstance().setGameId(((Integer)new Random().nextInt(10000)).toString());
