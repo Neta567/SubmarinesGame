@@ -24,4 +24,9 @@ public class Location {
     public void setY(int y) {
         this.y = y;
     }
+
+    public void updateLocation(int x, int y) {
+        setX(x);
+        setY(y);
+    }
 }

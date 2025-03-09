@@ -57,7 +57,7 @@ public class BoardGame extends View {
     private void handleActionMoveEvent(int x, int y) {
         Submarine submarine = GameModel.getInstance().getCurrentSubmarine();
         if (submarine != null) {
-            updateSubmarineLocation(submarine, x, y);
+            submarine.updateLocation(x, y);
         }
         invalidate();
     }
@@ -113,12 +113,6 @@ public class BoardGame extends View {
 
     }
 
-    private void updateSubmarineLocation(Submarine submarine, int x, int y) {
-        submarine.setX(x);
-        submarine.setY(y);
-    }
-
-
     private void updateSubmarineAndBoard(Submarine submarine, int x, int y) {
 
         if(isInsideSubmarinesBoard(x,y)) {
@@ -128,7 +122,7 @@ public class BoardGame extends View {
                         if (squares[j].getState() == Square.SquareState.EMPTY ||
                                 squares[j].getState() != Square.SquareState.OCCUPIED_BY_SUBMARINE
                                 && squares[j].getOccupiedSubmarine() == submarine) {
-                            updateSubmarineLocation(submarine, squares[j].getX(), squares[j].getY());
+                            submarine.updateLocation(squares[j].getX(), squares[j].getY());
                         } else {
                             submarine.reset();
                         }
