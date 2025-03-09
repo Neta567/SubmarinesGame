@@ -10,6 +10,7 @@ import android.view.View;
 import com.example.submarines.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+
     private ActivityMainBinding binding;
 
     @Override

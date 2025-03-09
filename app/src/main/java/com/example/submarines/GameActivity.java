@@ -1,17 +1,22 @@
 package com.example.submarines;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.LruCache;
 import android.view.View;
 import android.widget.Toast;
 import com.example.submarines.boards.MyBoard;
 import com.example.submarines.databinding.ActivityGameBinding;
 import com.example.submarines.model.GameModel;
+
 import java.util.Random;
 
 public class GameActivity extends AppCompatActivity {
 
     private ActivityGameBinding binding;
+    public LruCache<String, Bitmap> bitmapLruCache = new LruCache<>(100);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,5 +52,15 @@ public class GameActivity extends AppCompatActivity {
                     myBoard.invalidate();
                 }
         );
+    }
+
+    public void addBitmapToMemoryCache(String key, Bitmap bitmap) {
+        if (getBitmapFromMemCache(key) == null) {
+            bitmapLruCache.put(key, bitmap);
+        }
+    }
+
+    public Bitmap getBitmapFromMemCache(String key) {
+        return bitmapLruCache.get(key);
     }
 }
