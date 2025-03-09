@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginTop="10pt"
-            android:layout_marginLeft="15pt">
+            android:layout_marginStart="15pt">
         </LinearLayout>
         <GridLayout
             android:id="@+id/boardGameButtons1"
@@ -35,28 +35,31 @@
             android:columnCount="4"
             android:rowCount="1"
             android:gravity="center_horizontal"
-            android:layout_marginLeft="15pt"
+            android:layout_marginStart="15pt"
             android:layout_marginBottom="10pt"
             android:layout_marginTop="10pt">
             <ImageButton
                 android:id="@+id/rotationButton2"
                 android:background="@drawable/rotation_button"
                 android:layout_height="60dp"
-                android:layout_width="60dp">
+                android:layout_width="60dp"
+                android:contentDescription="@string/todo">
             </ImageButton>
             <ImageButton
                 android:id="@+id/erasureButton2"
                 android:background="@drawable/trash_can"
                 android:layout_height="60dp"
                 android:layout_width="60dp"
-                android:layout_marginLeft="20dp">
+                android:layout_marginStart="20dp"
+                android:contentDescription="@string/todo">
             </ImageButton>
             <ImageButton
                 android:id="@+id/startGameButton2"
                 android:background="@drawable/check_mark1"
                 android:layout_height="60dp"
                 android:layout_width="60dp"
-                android:layout_marginLeft="20dp">
+                android:layout_marginStart="20dp"
+                android:contentDescription="@string/todo">
             </ImageButton>
         </GridLayout>
 
