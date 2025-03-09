@@ -9,23 +9,6 @@ import com.google.gson.GsonBuilder;
 
 public class GameModel extends BaseObservable {
 
-    public enum SquareState {
-        EMPTY(0),
-        OCCUPIED_BY_SUBMARINE(2),
-        OCCUPIED_BY_SUBMARINE_SURROUND(1);
-
-        private final int value;
-
-        SquareState(int value) {
-            this.value = value;
-        }
-
-        public int getValue() {
-            return value;
-        }
-
-    }
-
     public enum GameState {
         NOT_STARTED,
         STARTED,
@@ -97,7 +80,7 @@ public class GameModel extends BaseObservable {
         notifyPropertyChanged(BR.currentPlayerName);
     }
 
-    public void setSquareState(int i, int j, SquareState state) {
+    public void setSquareState(int i, int j, Square.SquareState state) {
         boardModel1[i][j] = state.getValue();
     }
 

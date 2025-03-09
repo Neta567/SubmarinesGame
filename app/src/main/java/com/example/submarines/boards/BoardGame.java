@@ -102,7 +102,7 @@ public class BoardGame extends View {
         for (int i = 0; i < boardPlayer1.length; i++) {
             for (int j = 0; j < boardPlayer1.length; j++) {
                 boardPlayer1[i][j].setOccupied(null);
-                model.setSquareState(i, j, GameModel.SquareState.EMPTY);
+                model.setSquareState(i, j, Square.SquareState.EMPTY);
             }
         }
         for (Submarine submarine : submarineArrayList) {
@@ -165,14 +165,14 @@ public class BoardGame extends View {
                 if (submarine.strictIntersectsWith(boardPlayer1[i][j])) {
                     //todo: bind board to model
                     boardPlayer1[i][j].setOccupied(submarine);
-                    model.setSquareState(i, j, GameModel.SquareState.OCCUPIED_BY_SUBMARINE);
+                    model.setSquareState(i, j, Square.SquareState.OCCUPIED_BY_SUBMARINE);
                 } else if (submarine.intersectsWith(boardPlayer1[i][j])) {
                     boardPlayer1[i][j].setOccupied(submarine);
-                    model.setSquareState(i, j, GameModel.SquareState.OCCUPIED_BY_SUBMARINE_SURROUND);
+                    model.setSquareState(i, j, Square.SquareState.OCCUPIED_BY_SUBMARINE_SURROUND);
                 } else {
                     if (boardPlayer1[i][j].getOccupiedSubmarine() == submarine) {
                         boardPlayer1[i][j].setOccupied(null);
-                        model.setSquareState(i, j, GameModel.SquareState.EMPTY);
+                        model.setSquareState(i, j, Square.SquareState.EMPTY);
                     }
                 }
             }
