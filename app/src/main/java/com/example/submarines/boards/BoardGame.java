@@ -212,7 +212,7 @@ public class BoardGame extends View {
 
         for (int i = 0; i < boardPlayer1.length; i++) {
             for (int j = 0; j < NUM_OF_SQUARES; j++) {
-                boardPlayer1[i][j] = new Square(x1, y1, w1, w1);
+                boardPlayer1[i][j] = new Square(x1, y1, w1, w1, this.getResources());
                 x1 = x1 + w1;
             }
             x1 = 0;
@@ -227,7 +227,7 @@ public class BoardGame extends View {
 
         for (int i = 0; i < boardPlayer2.length; i++) {
             for (int j = 0; j < NUM_OF_SQUARES; j++) {
-                boardPlayer2[i][j] = new Square(x2, y2, w2, w2);
+                boardPlayer2[i][j] = new Square(x2, y2, w2, w2, this.getResources());
                 x2 = x2 + w2;
             }
             x2 = 0;

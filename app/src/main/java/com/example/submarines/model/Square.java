@@ -1,5 +1,7 @@
 package com.example.submarines.model;
 
+import android.content.res.Resources;
+
 import com.example.submarines.helpers.SquareDrawer;
 
 public class Square extends Shape {
@@ -30,9 +32,9 @@ public class Square extends Shape {
     private Submarine submarine;
     private SquareState state = SquareState.EMPTY;
 
-    public Square(int x, int y, int w, int h) {
+    public Square(int x, int y, int w, int h, Resources resources) {
         super(x, y, w, h);
-        drawingStrategy = new SquareDrawer();
+        drawingStrategy = new SquareDrawer(resources);
     }
 
     public boolean didUserTouchMe(int xu, int yu)
