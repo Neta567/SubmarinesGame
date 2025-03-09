@@ -28,9 +28,7 @@ public class Square extends Shape {
 
     public static int SQUARE_SIZE;
     private Submarine submarine;
-    private boolean isOccupied = false;
-    private boolean isFired = false;
-    private SquareState state = SquareState.EMPTY;;
+    private SquareState state = SquareState.EMPTY;
 
     public Square(int x, int y, int w, int h) {
         super(x, y, w, h);
@@ -43,12 +41,8 @@ public class Square extends Shape {
                 yu >= y && yu <= y + height;
     }
 
-    public boolean isOccupied() {
-        return isOccupied;
-    }
-
-    public void setOccupied(Submarine submarine) {
-        isOccupied = submarine != null;
+    public void setOccupiedSubmarine(Submarine submarine) {
+        boolean isOccupied = submarine != null;
         this.submarine = submarine;
         if(isOccupied) {
             state = SquareState.OCCUPIED_BY_SUBMARINE;
@@ -59,14 +53,6 @@ public class Square extends Shape {
 
     public Submarine getOccupiedSubmarine() {
         return this.submarine;
-    }
-
-    public void setFired() {
-        isFired = true;
-    }
-
-    public boolean isFired() {
-        return isFired;
     }
 
     public void setState(SquareState state) {

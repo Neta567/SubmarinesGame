@@ -5,15 +5,11 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.TextView;
-
 import androidx.annotation.NonNull;
-
 import com.example.submarines.FireBaseStore;
 import com.example.submarines.model.GameModel;
 import com.example.submarines.model.Square;
 import com.example.submarines.model.Submarine;
-
 import java.util.ArrayList;
 
 public class BoardGame extends View {
@@ -97,7 +93,7 @@ public class BoardGame extends View {
     public void resetBoard() {
         for (int i = 0; i < boardPlayer1.length; i++) {
             for (int j = 0; j < boardPlayer1.length; j++) {
-                boardPlayer1[i][j].setOccupied(null);
+                boardPlayer1[i][j].setState(Square.SquareState.EMPTY);
                 model.setSquareState(i, j, Square.SquareState.EMPTY);
             }
         }
@@ -130,7 +126,8 @@ public class BoardGame extends View {
             for (Square[] squares : boardPlayer1) {
                 for (int j = 0; j < boardPlayer1.length; j++) {
                     if (squares[j].didUserTouchMe(x, y)) {
-                        if (!squares[j].isOccupied() || squares[j].getOccupiedSubmarine() == submarine) {
+                        if (squares[j].getState() != Square.SquareState.OCCUPIED_BY_SUBMARINE
+                                || squares[j].getOccupiedSubmarine() == submarine) {
                             updateSubmarineLocation(submarine, squares[j].getX(), squares[j].getY());
                         } else {
                             submarine.reset();
@@ -160,16 +157,16 @@ public class BoardGame extends View {
             for (int j = 0; j < boardPlayer1.length; j++) {
                 if (submarine.strictIntersectsWith(boardPlayer1[i][j])) {
                     //todo: bind board to model
-                    boardPlayer1[i][j].setOccupied(submarine);
+                    boardPlayer1[i][j].setOccupiedSubmarine(submarine);
                     boardPlayer1[i][j].setState(Square.SquareState.OCCUPIED_BY_SUBMARINE);
                     model.setSquareState(i, j, Square.SquareState.OCCUPIED_BY_SUBMARINE);
                 } else if (submarine.intersectsWith(boardPlayer1[i][j])) {
-                    boardPlayer1[i][j].setOccupied(submarine);
+                    //boardPlayer1[i][j].setOccupied(submarine);
                     boardPlayer1[i][j].setState(Square.SquareState.OCCUPIED_BY_SUBMARINE_SURROUND);
                     model.setSquareState(i, j, Square.SquareState.OCCUPIED_BY_SUBMARINE_SURROUND);
                 } else {
                     if (boardPlayer1[i][j].getOccupiedSubmarine() == submarine) {
-                        boardPlayer1[i][j].setOccupied(null);
+                        boardPlayer1[i][j].setOccupiedSubmarine(null);
                         model.setSquareState(i, j, Square.SquareState.EMPTY);
                     }
                 }
@@ -249,10 +246,17 @@ public class BoardGame extends View {
     }
 
     public void markSquare(int x, int y) {
-        for (Square[] squares : boardPlayer2) {
+        for (int i = 0; i < boardPlayer2.length; i++) {
             for (int j = 0; j < boardPlayer2.length; j++) {
-                if (squares[j].didUserTouchMe(x, y)) {
-                    squares[j].setFired();
+                if (boardPlayer2[i][j].didUserTouchMe(x, y)) {
+                    if(boardPlayer1[i][j].getState() == Square.SquareState.OCCUPIED_BY_SUBMARINE) {
+                        boardPlayer2[i][j].setState(Square.SquareState.OCCUPIED_BY_SUBMARINE_AND_HIT);
+                        //boardPlayer1[i][j].setState(Square.SquareState.HIT);
+                        //squares[j].setFired();
+                    } else {
+                        boardPlayer2[i][j].setState(Square.SquareState.MISS);
+                        //squares[j].setFired();
+                    }
                 }
             }
         }

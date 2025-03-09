@@ -1,13 +1,8 @@
 package com.example.submarines.helpers;
 
-import static com.example.submarines.model.Square.SquareState.MISS;
-import static com.example.submarines.model.Square.SquareState.OCCUPIED_BY_SUBMARINE;
-import static com.example.submarines.model.Square.SquareState.OCCUPIED_BY_SUBMARINE_SURROUND;
-
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-
 import com.example.submarines.model.Shape;
 import com.example.submarines.model.Square;
 
@@ -34,6 +29,9 @@ public class SquareDrawer implements ShapeDrawingStrategy {
                         break;
                     case OCCUPIED_BY_SUBMARINE_SURROUND:
                         p.setColor(Color.YELLOW);
+                        break;
+                    case OCCUPIED_BY_SUBMARINE_AND_HIT:
+                        p.setColor(Color.GREEN);
                         break;
                     case MISS:
                         p.setColor(Color.BLUE);

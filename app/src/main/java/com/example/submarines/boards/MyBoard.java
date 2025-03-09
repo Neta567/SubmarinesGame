@@ -17,9 +17,7 @@ public class MyBoard extends BoardGame {
     @Override
     public void onDraw(@NonNull Canvas canvas) {
         initBoards(canvas);
-        //initShips(canvas);
         drawBoard(boardPlayer1, canvas);
-        //drawShips(canvas);
         drawSubmarines(canvas);
 
         if(GameModel.getInstance().isGameStarted())
