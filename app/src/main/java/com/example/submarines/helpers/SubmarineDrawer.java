@@ -27,18 +27,22 @@ public class SubmarineDrawer implements ShapeDrawingStrategy {
             Submarine submarine = (Submarine) shape;
             String key;
             int resId;
+            int width = submarine.getWidth();
+            int height = submarine.getHeight();
 
             if (submarine.isVertical()) {
                 key = "submarine_vertical_" + submarine.getHeight();
                 resId = R.drawable.submarine_vertical;
             } else {
-                key = "submarine_horizontal_" + submarine.getHeight();
+                key = "submarine_horizontal_" + submarine.getWidth();
                 resId = R.drawable.submarine_horizontal;
+                width = submarine.getHeight();
+                height = submarine.getWidth();
             }
 
             if (((GameActivity) context).getBitmapFromMemCache(key) == null) {
                 Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), resId);
-                Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, submarine.getWidth(), submarine.getHeight(), true);
+                Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap,width, height, true);
                 ((GameActivity) context).addBitmapToMemoryCache(key, scaledBitmap);
             }
 
