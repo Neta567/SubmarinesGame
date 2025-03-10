@@ -37,13 +37,7 @@ public class Square extends Shape {
     }
 
     public void setOccupiedSubmarine(Submarine submarine) {
-        boolean isOccupied = submarine != null;
         this.submarine = submarine;
-        if(isOccupied) {
-            state = SquareState.OCCUPIED_BY_SUBMARINE;
-        } else {
-            state = SquareState.EMPTY;
-        }
     }
 
     public Submarine getOccupiedSubmarine() {
