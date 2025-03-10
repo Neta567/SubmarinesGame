@@ -33,7 +33,8 @@ public class SquareDrawer implements ShapeDrawingStrategy {
         p.setStrokeWidth(10);
         p.setColor(Color.BLACK);
 
-        boolean isHit = false;
+        String hitMissKey = null;
+        int resId = R.drawable.boom;
         if (shape instanceof Square) {
             Square square = (Square) shape;
             switch (square.getState()) {
@@ -44,22 +45,21 @@ public class SquareDrawer implements ShapeDrawingStrategy {
                     p.setColor(Color.YELLOW);
                     break;
                 case OCCUPIED_BY_SUBMARINE_AND_HIT:
-                    p.setColor(Color.GREEN);
-                    isHit = true;
+                    hitMissKey = "boom";
                     break;
                 case MISS:
-                    p.setColor(Color.BLUE);
+                    hitMissKey = "miss";
+                    resId = R.drawable.miss_icon;
                     break;
             }
         }
-        if (isHit) {
-            String boomKey = "boom";
-            if (((GameActivity) context).getBitmapFromMemCache(boomKey) == null) {
-                Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.boom);
+        if (hitMissKey != null) {
+            if (((GameActivity) context).getBitmapFromMemCache(hitMissKey) == null) {
+                Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), resId);
                 Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, Square.SQUARE_SIZE, Square.SQUARE_SIZE, true);
-                ((GameActivity) context).addBitmapToMemoryCache(boomKey, scaledBitmap);
+                ((GameActivity) context).addBitmapToMemoryCache(hitMissKey, scaledBitmap);
             }
-            Bitmap boomBitmap = ((GameActivity) context).getBitmapFromMemCache(boomKey);
+            Bitmap boomBitmap = ((GameActivity) context).getBitmapFromMemCache(hitMissKey);
             canvas.drawBitmap(boomBitmap, shape.getX(), shape.getY(), p);
         } else {
             canvas.drawRect(shape.getX(), shape.getY(),
