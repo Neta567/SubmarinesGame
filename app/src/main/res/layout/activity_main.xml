@@ -3,29 +3,31 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/background">
+    android:background="@drawable/background_mainphoto">
 
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/submarines"
-        android:textSize="60sp"
-        android:layout_marginTop="20dp"
-        android:layout_marginStart="45dp"
-        android:textColor="#EDEFF4"
-        android:textStyle="bold" />
+        android:textSize="50sp"
+        android:layout_marginTop="60dp"
+        android:gravity="center"
+        android:textColor="#FFFFFF"
+        android:background="#7B000000"
+        android:textStyle="italic" />
 
     <Button
         android:id="@+id/btnStart"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
-        android:layout_marginTop="400dp"
-        android:backgroundTint="#F8F9FA"
+        android:layout_marginTop="480dp"
+        android:backgroundTint="#4903080D"
         android:text="@string/start"
-        android:textColor="#020825"
-        android:textSize="40sp" />
+        android:textColor="#FFFFFF"
+        android:textStyle="italic"
+        android:textSize="30sp" />
 
     <Button
         android:id="@+id/btnInstructions"
@@ -33,9 +35,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
         android:layout_marginTop="10dp"
-        android:backgroundTint="#F8F9FA"
+        android:backgroundTint="#4903080D"
         android:text="@string/instructions2"
-        android:textColor="#020825"
-        android:textSize="40sp" />
+        android:textColor="#FFFFFF"
+        android:textStyle="italic"
+        android:textSize="30sp" />
 
 </LinearLayout>
