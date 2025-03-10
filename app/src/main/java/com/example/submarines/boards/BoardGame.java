@@ -204,6 +204,16 @@ public class BoardGame extends View {
         }
     }
 
+    protected void drawFiredSquares(Square[][] boardPlayer, Canvas canvas) {
+        for (Square[] squares : boardPlayer) {
+            for (int j = 0; j < boardPlayer.length; j++) {
+                if(squares[j].getState() == Square.SquareState.OCCUPIED_BY_SUBMARINE_AND_HIT) {
+                    squares[j].draw(canvas);
+                }
+            }
+        }
+    }
+
     public void initBoard1(Canvas canvas) {
         boardPlayer1 = GameModel.getInstance().initPlayer1SubmarinesBoard();
         ShapeDrawingStrategy drawingStrategy = new SquareDrawer(this.getContext());

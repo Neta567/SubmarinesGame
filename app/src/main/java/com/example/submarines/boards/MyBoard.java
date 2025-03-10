@@ -23,6 +23,7 @@ public class MyBoard extends BoardGame {
         if(GameModel.getInstance().isGameStarted())
         {
             drawBoard(boardPlayer2, canvas);
+            drawFiredSquares(boardPlayer1, canvas);
         }
     }
 }
