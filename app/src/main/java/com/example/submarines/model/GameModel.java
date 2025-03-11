@@ -6,6 +6,7 @@ import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 
 import com.example.submarines.BR;
+import com.google.firebase.firestore.Exclude;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -25,6 +26,7 @@ public class GameModel extends BaseObservable {
     private String gameResult = "";
     private String currentPlayer = "Player 1";
     private final int[][] player1SubmarineBoardModel;
+    private final int[][] player1FireBoardModel;
     private Square[][] player1SubmarineBoard;
     private Square[][] player1FireBoard;
     private ArrayList<Submarine> submarineArrayList;
@@ -36,11 +38,13 @@ public class GameModel extends BaseObservable {
 
         int NUM_OF_SQUARES = 6;
         player1SubmarineBoardModel = new int[NUM_OF_SQUARES][NUM_OF_SQUARES];
+        player1FireBoardModel = new int[NUM_OF_SQUARES][NUM_OF_SQUARES];
     }
 
     public static GameModel getInstance() {
         return INSTANCE;
     }
+
     public String getGameId() {
         return gameId;
     }
@@ -51,11 +55,12 @@ public class GameModel extends BaseObservable {
 
     public void setGameState(GameState gameState) {
         this.gameState = gameState;
-        if(gameState == GameState.STARTED) {
+        if (gameState == GameState.STARTED) {
             currentSubmarine = null;
             notifyPropertyChanged(BR.gameStarted);
         }
     }
+
     @Bindable
     public String getGameResult() {
         return gameResult;
@@ -74,61 +79,62 @@ public class GameModel extends BaseObservable {
     public String getCurrentPlayerName() {
         return currentPlayer;
     }
-
     public void setCurrentSubmarine(Submarine submarine) {
         currentSubmarine = submarine;
     }
-
+    @Exclude
     public Submarine getCurrentSubmarine() {
         return currentSubmarine;
     }
+
     public void setCurrentPlayer(String player) {
         currentPlayer = player;
         notifyPropertyChanged(BR.currentPlayerName);
     }
 
-    public void setSquareState(int i, int j, Square.SquareState state) {
+    public void setSubmarineBoardSquareState(int i, int j, Square.SquareState state) {
         player1SubmarineBoardModel[i][j] = state.getValue();
+        player1SubmarineBoard[i][j].setState(state);
+    }
+
+    public void setFireBoardSquareState(int i, int j, Square.SquareState state) {
+        player1FireBoardModel[i][j] = state.getValue();
+        player1FireBoard[i][j].setState(state);
     }
 
     public ArrayList<Submarine> initPlayer1Submarines() {
-        if(submarineArrayList == null){
+        if (submarineArrayList == null) {
             submarineArrayList = new ArrayList<>(4);
         }
         return submarineArrayList;
     }
+
     public Square[][] initPlayer1SubmarinesBoard() {
-        if(player1SubmarineBoard == null) {
+        if (player1SubmarineBoard == null) {
             player1SubmarineBoard = new Square[NUM_OF_SQUARES][NUM_OF_SQUARES];
         }
         return player1SubmarineBoard;
     }
+
     public Square[][] initPlayer1FireBoard() {
-        if(player1FireBoard == null) {
+        if (player1FireBoard == null) {
             player1FireBoard = new Square[NUM_OF_SQUARES][NUM_OF_SQUARES];
         }
         return player1FireBoard;
     }
-    public String getPlayer1BoardState() {
+
+    public String getPlayer1SubmarineBoardState() {
         Gson gson = new GsonBuilder()
                 .setPrettyPrinting()
                 .create();
         return gson.toJson(player1SubmarineBoardModel);
     }
+    public String getPlayer1FireBoardState() {
+        Gson gson = new GsonBuilder()
+                .setPrettyPrinting()
+                .create();
+        return gson.toJson(player1FireBoardModel);
+    }
 
-//    public String getPlayer1SubmarineBoardState() {
-//        Gson gson = new GsonBuilder()
-//                .setPrettyPrinting()
-//                .create();
-//        return gson.toJson(player1SubmarineBoard);
-//    }
-//
-//    public String getPlayer1FireBoardState() {
-//        Gson gson = new GsonBuilder()
-//                .setPrettyPrinting()
-//                .create();
-//        String json = gson.toJson(player1FireBoard);
-//        return json;
-//    }
 
 }

@@ -92,8 +92,7 @@ public class BoardGame extends View {
     public void resetBoard() {
         for (int i = 0; i < boardPlayer1.length; i++) {
             for (int j = 0; j < boardPlayer1.length; j++) {
-                boardPlayer1[i][j].setState(Square.SquareState.EMPTY);
-                model.setSquareState(i, j, Square.SquareState.EMPTY);
+                model.setSubmarineBoardSquareState(i, j, Square.SquareState.EMPTY);
             }
         }
         for (Submarine submarine : submarineArrayList) {
@@ -149,18 +148,12 @@ public class BoardGame extends View {
         for (int i = 0; i < boardPlayer1.length; i++) {
             for (int j = 0; j < boardPlayer1.length; j++) {
                 if (submarine.strictIntersectsWith(boardPlayer1[i][j])) {
-                    boardPlayer1[i][j].setOccupiedSubmarine(submarine);
-                    boardPlayer1[i][j].setState(Square.SquareState.OCCUPIED_BY_SUBMARINE);
-                    model.setSquareState(i, j, Square.SquareState.OCCUPIED_BY_SUBMARINE);
+                    model.setSubmarineBoardSquareState(i, j, Square.SquareState.OCCUPIED_BY_SUBMARINE);
                 } else if (submarine.intersectsWith(boardPlayer1[i][j])) {
-                    boardPlayer1[i][j].setOccupiedSubmarine(submarine);
-                    boardPlayer1[i][j].setState(Square.SquareState.OCCUPIED_BY_SUBMARINE_SURROUND);
-                    model.setSquareState(i, j, Square.SquareState.OCCUPIED_BY_SUBMARINE_SURROUND);
+                    model.setSubmarineBoardSquareState(i, j, Square.SquareState.OCCUPIED_BY_SUBMARINE_SURROUND);
                 } else {
                     if (boardPlayer1[i][j].getOccupiedSubmarine() == submarine) {
-                        boardPlayer1[i][j].setOccupiedSubmarine(null);
-                        boardPlayer1[i][j].setState(Square.SquareState.EMPTY);
-                        model.setSquareState(i, j, Square.SquareState.EMPTY);
+                        model.setSubmarineBoardSquareState(i, j, Square.SquareState.EMPTY);
                     }
                 }
             }
@@ -266,11 +259,11 @@ public class BoardGame extends View {
             for (int j = 0; j < boardPlayer2.length; j++) {
                 if (boardPlayer2[i][j].didUserTouchMe(x, y)) {
                     if(boardPlayer1[i][j].getState() == Square.SquareState.OCCUPIED_BY_SUBMARINE) {
-                        boardPlayer2[i][j].setState(Square.SquareState.OCCUPIED_BY_SUBMARINE_AND_HIT);
-                        boardPlayer1[i][j].setState(Square.SquareState.OCCUPIED_BY_SUBMARINE_AND_HIT);
+                        model.setFireBoardSquareState(i, j, Square.SquareState.OCCUPIED_BY_SUBMARINE_AND_HIT);
+                        model.setSubmarineBoardSquareState(i, j, Square.SquareState.OCCUPIED_BY_SUBMARINE_AND_HIT);
                     } else {
-                        boardPlayer2[i][j].setState(Square.SquareState.MISS);
-                        boardPlayer1[i][j].setState(Square.SquareState.MISS);
+                        model.setFireBoardSquareState(i, j, Square.SquareState.MISS);
+                        model.setSubmarineBoardSquareState(i, j, Square.SquareState.MISS);
                     }
                 }
             }
