@@ -3,10 +3,13 @@ package com.example.submarines.model;
 import static com.example.submarines.model.Square.SQUARE_SIZE;
 import com.example.submarines.helpers.ShapeDrawingStrategy;
 
+import java.util.ArrayList;
+
 public class Submarine extends Shape {
     private final int initialX;
     private final int initialY;
     private boolean isVertical = true;
+    ArrayList<Square> occupiedSquares = new ArrayList<>();
 
     public Submarine(int x, int y, int width, int height, ShapeDrawingStrategy drawingStrategy) {
         super(x, y, width, height, drawingStrategy);
@@ -57,5 +60,15 @@ public class Submarine extends Shape {
 
     public boolean isVertical() {
         return isVertical;
+    }
+
+    public void updateOccupiedSquares(ArrayList<Square> squares) {
+        occupiedSquares = squares;
+    }
+
+    public boolean isDestroyed() {
+        return occupiedSquares.stream()
+                .allMatch(square ->
+                        square.getState() == Square.SquareState.OCCUPIED_BY_SUBMARINE_AND_HIT);
     }
 }

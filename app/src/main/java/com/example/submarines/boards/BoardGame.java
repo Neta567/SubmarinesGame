@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -18,8 +19,6 @@ import com.example.submarines.model.Square;
 import com.example.submarines.model.Submarine;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Optional;
 
 public class BoardGame extends View {
 
@@ -95,7 +94,7 @@ public class BoardGame extends View {
         return check;
     }
 
-    public void resetBoard() {
+    public void resetSubmarineBoard() {
         for (int i = 0; i < player1SubmarinesBoard.length; i++) {
             for (int j = 0; j < player1SubmarinesBoard.length; j++) {
                 model.setSubmarineBoardSquareState(i, j, Square.SquareState.EMPTY);
@@ -104,6 +103,23 @@ public class BoardGame extends View {
         for (Submarine submarine : submarineArrayList) {
             submarine.reset();
         }
+        FireBaseStore.INSTANCE.saveGame(model);
+        invalidate();
+    }
+
+    public void resetFireBoard() {
+        for (int i = 0; i < player1FireBoard.length; i++) {
+            for (int j = 0; j < player1FireBoard.length; j++) {
+                model.setFireBoardSquareState(i, j, Square.SquareState.EMPTY);
+            }
+        }
+        FireBaseStore.INSTANCE.saveGame(model);
+        invalidate();
+    }
+
+    public void resetGame() {
+        resetSubmarineBoard();
+        resetFireBoard();
         FireBaseStore.INSTANCE.saveGame(model);
         invalidate();
     }
@@ -153,10 +169,12 @@ public class BoardGame extends View {
     }
 
     private void updateOccupiedSquares(Submarine submarine) {
+        ArrayList<Square> occupiedSquares = new ArrayList<>();
         for (int i = 0; i < player1SubmarinesBoard.length; i++) {
             for (int j = 0; j < player1SubmarinesBoard.length; j++) {
                 if (submarine.strictIntersectsWith(player1SubmarinesBoard[i][j])) {
                     model.setSubmarineBoardSquareState(i, j, Square.SquareState.OCCUPIED_BY_SUBMARINE);
+                    occupiedSquares.add(player1SubmarinesBoard[i][j]);
                 } else if (submarine.intersectsWith(player1SubmarinesBoard[i][j])) {
                     model.setSubmarineBoardSquareState(i, j, Square.SquareState.OCCUPIED_BY_SUBMARINE_SURROUND);
                 } else {
@@ -166,6 +184,7 @@ public class BoardGame extends View {
                 }
             }
         }
+        submarine.updateOccupiedSquares(occupiedSquares);
     }
 
     protected void initSubmarines() {
@@ -264,18 +283,24 @@ public class BoardGame extends View {
     }
 
     public void fireOnSubmarineAt(int x, int y) {
-        if (isInsideFireBoard(x, y)) {
-            findSquareAtBoardAndApplyAction(player1FireBoard, x, y, (i, j) -> {
-                if (player1SubmarinesBoard[i][j].getState() == Square.SquareState.OCCUPIED_BY_SUBMARINE) {
-                    model.setFireBoardSquareState(i, j, Square.SquareState.OCCUPIED_BY_SUBMARINE_AND_HIT);
-                    model.setSubmarineBoardSquareState(i, j, Square.SquareState.OCCUPIED_BY_SUBMARINE_AND_HIT);
-                } else {
-                    model.setFireBoardSquareState(i, j, Square.SquareState.MISS);
-                    model.setSubmarineBoardSquareState(i, j, Square.SquareState.MISS);
-                }
-            });
+        if(!GameModel.getInstance().isGameOver()) {
+            if (isInsideFireBoard(x, y)) {
+                findSquareAtBoardAndApplyAction(player1FireBoard, x, y, (i, j) -> {
+                    if (player1SubmarinesBoard[i][j].getState() == Square.SquareState.OCCUPIED_BY_SUBMARINE) {
+                        model.setFireBoardSquareState(i, j, Square.SquareState.OCCUPIED_BY_SUBMARINE_AND_HIT);
+                        model.setSubmarineBoardSquareState(i, j, Square.SquareState.OCCUPIED_BY_SUBMARINE_AND_HIT);
+                    } else {
+                        model.setFireBoardSquareState(i, j, Square.SquareState.MISS);
+                        model.setSubmarineBoardSquareState(i, j, Square.SquareState.MISS);
+                    }
+                });
+            }
+            FireBaseStore.INSTANCE.saveGame(GameModel.getInstance());
         }
-        FireBaseStore.INSTANCE.saveGame(GameModel.getInstance());
+        if(GameModel.getInstance().isGameOver()) {
+            Toast.makeText(this.getContext(), "Game Over", Toast.LENGTH_SHORT).show();
+            resetGame();
+        }
     }
 
     public void findSquareAtBoardAndApplyAction(Square[][] board, int x, int y, SquareActionCallback callback) {

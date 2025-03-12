@@ -24,6 +24,8 @@ public class MyBoard extends BoardGame {
         {
             drawBoard(player1FireBoard, canvas);
             drawFiredSquares(player1SubmarinesBoard, canvas);
+        } else {
+            //todo: hide fire board
         }
     }
 }

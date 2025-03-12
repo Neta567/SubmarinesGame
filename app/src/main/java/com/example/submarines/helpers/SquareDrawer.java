@@ -56,11 +56,11 @@ public class SquareDrawer implements ShapeDrawingStrategy {
         if (hitMissKey != null) {
             if (((GameActivity) context).getBitmapFromMemCache(hitMissKey) == null) {
                 Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), resId);
-                Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, Square.SQUARE_SIZE, Square.SQUARE_SIZE, true);
+                Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, Square.SQUARE_SIZE-80, Square.SQUARE_SIZE-80, true);
                 ((GameActivity) context).addBitmapToMemoryCache(hitMissKey, scaledBitmap);
             }
             Bitmap boomBitmap = ((GameActivity) context).getBitmapFromMemCache(hitMissKey);
-            canvas.drawBitmap(boomBitmap, shape.getX(), shape.getY(), p);
+            canvas.drawBitmap(boomBitmap, shape.getX()+40, shape.getY()+40, p);
         } else {
             canvas.drawRect(shape.getX(), shape.getY(),
                     shape.getX() + shape.getWidth(), shape.getY() + shape.getHeight(), p);

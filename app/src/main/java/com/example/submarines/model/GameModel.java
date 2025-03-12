@@ -136,5 +136,8 @@ public class GameModel extends BaseObservable {
         return gson.toJson(player1FireBoardModel);
     }
 
-
+    @Exclude
+    public boolean isGameOver() {
+        return submarineArrayList.stream().allMatch(Submarine::isDestroyed);
+    }
 }
