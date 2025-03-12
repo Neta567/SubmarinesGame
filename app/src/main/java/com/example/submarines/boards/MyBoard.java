@@ -17,13 +17,13 @@ public class MyBoard extends BoardGame {
     @Override
     public void onDraw(@NonNull Canvas canvas) {
         initBoards(canvas);
-        drawBoard(boardPlayer1, canvas);
+        drawBoard(player1SubmarinesBoard, canvas);
         drawSubmarines(canvas);
 
         if(GameModel.getInstance().isGameStarted())
         {
-            drawBoard(boardPlayer2, canvas);
-            drawFiredSquares(boardPlayer1, canvas);
+            drawBoard(player1FireBoard, canvas);
+            drawFiredSquares(player1SubmarinesBoard, canvas);
         }
     }
 }
