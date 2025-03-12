@@ -6,6 +6,7 @@ import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 
 import com.example.submarines.BR;
+import com.example.submarines.FireBaseStore;
 import com.google.firebase.firestore.Exclude;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -25,6 +26,7 @@ public class GameModel extends BaseObservable {
     private String gameId = "-1";
     private String gameResult = "";
     private String currentPlayer = "Player 1";
+    private String otherPlayer = "";
     private final int[][] player1SubmarineBoardModel;
     private final int[][] player1FireBoardModel;
     private Square[][] player1SubmarineBoard;
@@ -39,6 +41,7 @@ public class GameModel extends BaseObservable {
         int NUM_OF_SQUARES = 6;
         player1SubmarineBoardModel = new int[NUM_OF_SQUARES][NUM_OF_SQUARES];
         player1FireBoardModel = new int[NUM_OF_SQUARES][NUM_OF_SQUARES];
+
     }
 
     public static GameModel getInstance() {
@@ -47,6 +50,11 @@ public class GameModel extends BaseObservable {
 
     public String getGameId() {
         return gameId;
+    }
+
+    public void setOtherPlayer(String otherPlayer) {
+        this.otherPlayer = otherPlayer;
+        notifyPropertyChanged(BR.otherPlayer);
     }
 
     public void setGameId(String gameId) {
@@ -78,6 +86,16 @@ public class GameModel extends BaseObservable {
     @Bindable
     public String getCurrentPlayerName() {
         return currentPlayer;
+    }
+
+    public String getOtherPlayerName() {
+
+        return FireBaseStore.INSTANCE.getOtherPlayerName(this);
+    }
+    @Exclude
+    @Bindable
+    public String getOtherPlayer() {
+        return otherPlayer;
     }
     public void setCurrentSubmarine(Submarine submarine) {
         currentSubmarine = submarine;
