@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -28,10 +30,15 @@ public class JoinGameActivity extends AppCompatActivity {
 
         binding.btnJoin.setOnClickListener(v -> {
             binding.btnJoin.setEnabled(false);
-            binding.textGameStatus.setText("Joining...");
+            binding.textGameStarting.setText("Joining...\n");
+            Animation anim = AnimationUtils.loadAnimation(context, R.anim.blink);
+            anim.setDuration(2000);
+            binding.textGameStarting.startAnimation(anim);
+
             FireBaseStore.INSTANCE.getOpenGameId(new FireBaseStore.Callback<String>() {
                 @Override
                 public void onSuccess(String result) {
+
                     String user = binding.editTextUsername.getText().toString();
                     String gameId = String.valueOf(new Random().nextInt(10000));
                     boolean isExistingGame = (result != null && !result.isEmpty());
@@ -47,11 +54,15 @@ public class JoinGameActivity extends AppCompatActivity {
                     gameStatusBuilder.append("User: ").append(user)
                             .append(" Joined. Game ID: ").append(gameId).append("\n");
                     if(isExistingGame) {
-                        gameStatusBuilder.append("User: " + "Player2" + " also joined\n" + "Starting Game...");
+                        gameStatusBuilder.append("User: " + "Player2" + " also joined\n");
+                        binding.textGameStarting.setText("Starting...");
+                        binding.textGameStarting.startAnimation(anim);
                         GameModel.getInstance().setGameState(GameModel.GameState.TWO_PLAYERS_JOINED);
 
                     } else {
-                        gameStatusBuilder.append("No other player joined. Waiting...");
+                        gameStatusBuilder.append("No other player joined.");
+                        binding.textGameStarting.setText("Waiting...");
+                        binding.textGameStarting.startAnimation(anim);
                         GameModel.getInstance().setGameState(GameModel.GameState.ONE_PLAYER_JOINED);
                     }
 
