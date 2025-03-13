@@ -12,9 +12,8 @@ public class FireBaseStore {
     public void saveGame(GameModel model) {
         try {
             db.collection("Games")
-                    .document(model.getGameId())
-                    .collection("Players")
-                    .document(model.getCurrentPlayerName()).set(model);
+                    .document(model.getGameId()).set(model.getGame())
+                    .addOnSuccessListener(v -> System.out.println("Game saved"));
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -43,7 +42,8 @@ public class FireBaseStore {
         return GameModel.getInstance().getOtherPlayer();
     }
     public void getOpenGameId(final Callback<String> callback) {
-        db.collection("/Games")
+        db.collection("Games")
+                .whereEqualTo("gameState", GameModel.GameState.ONE_PLAYER_JOINED.toString())
                 .limit(1)
                 .get()
                 .addOnSuccessListener(querySnapshot -> {
@@ -53,7 +53,7 @@ public class FireBaseStore {
                         callback.onSuccess(gameId);
                     } else {
                         // No open game found
-                        callback.onFailure(null);
+                        callback.onSuccess("");
                     }
                 })
                 .addOnFailureListener(e -> {

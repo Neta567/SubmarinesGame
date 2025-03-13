@@ -11,11 +11,15 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class GameModel extends BaseObservable {
 
     public enum GameState {
         NOT_STARTED,
+        ONE_PLAYER_JOINED,
+        TWO_PLAYERS_JOINED,
         STARTED,
         FINISHED
     }
@@ -49,6 +53,18 @@ public class GameModel extends BaseObservable {
 
     public String getGameId() {
         return gameId;
+    }
+    @Exclude
+    public GameState getGameState() {
+        return gameState;
+    }
+
+    public Map<String, Object> getGame() {
+        HashMap<String, Object> game = new HashMap<>();
+        //game.put("gameId", gameId);
+        game.put("gameState", gameState.toString());
+
+        return game;
     }
 
     public void setOtherPlayer(String otherPlayer) {
