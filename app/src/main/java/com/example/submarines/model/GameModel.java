@@ -6,7 +6,6 @@ import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 
 import com.example.submarines.BR;
-import com.example.submarines.FireBaseStore;
 import com.google.firebase.firestore.Exclude;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -88,10 +87,6 @@ public class GameModel extends BaseObservable {
         return currentPlayer;
     }
 
-    public String getOtherPlayerName() {
-
-        return FireBaseStore.INSTANCE.getOtherPlayerName(this);
-    }
     @Exclude
     @Bindable
     public String getOtherPlayer() {

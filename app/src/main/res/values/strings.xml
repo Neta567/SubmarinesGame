@@ -8,4 +8,8 @@
     <string name="todo">TODO</string>
     <string name="Go_back">Return</string>
     <string name="vs">VS</string>
+    <string name="join">Join</string>
+    <string name="user">User</string>
+    <string name="game_id">Game Id</string>
+    <string name="select_game">Select Game</string>
 </resources>

@@ -7,7 +7,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class FireBaseStore {
 
     public static FireBaseStore INSTANCE = new FireBaseStore();
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     public void saveGame(GameModel model) {
         try {
@@ -29,7 +29,7 @@ public class FireBaseStore {
                     .get()
                     .addOnSuccessListener(documentSnapshot -> {
                         String otherPlayerName = "";
-                        if(documentSnapshot.size() == 1) {
+                        if (documentSnapshot.size() == 1) {
                             otherPlayerName =
                                     documentSnapshot.getDocuments().get(0)
                                             .get("currentPlayerName", String.class);
@@ -37,16 +37,34 @@ public class FireBaseStore {
                         }
 
                     });
-        }catch (Exception ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
         return GameModel.getInstance().getOtherPlayer();
     }
-
-    public void setReference(GameModel model) {
-//        db.collection("Games").document(model.getGameId()).addSnapshotListener(
-//                (documentSnapshot, e) -> {
-//        )
+    public void getOpenGameId(final Callback<String> callback) {
+        db.collection("/Games")
+                .limit(1)
+                .get()
+                .addOnSuccessListener(querySnapshot -> {
+                    if (!querySnapshot.isEmpty()) {
+                        // Open game found
+                        String gameId = querySnapshot.getDocuments().get(0).getId();
+                        callback.onSuccess(gameId);
+                    } else {
+                        // No open game found
+                        callback.onFailure(null);
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    // Handle errors
+                    e.printStackTrace();
+                    callback.onFailure(null);
+                });
     }
 
+    public interface Callback<T> {
+        void onSuccess(T result);
+        void onFailure(Exception e);
+    }
 }
