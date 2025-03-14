@@ -14,6 +14,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.submarines.databinding.ActivityJoinGameBinding;
 import com.example.submarines.model.GameModel;
 
+import java.util.Map;
+import java.util.Objects;
 import java.util.Random;
 
 public class JoinGameActivity extends AppCompatActivity {
@@ -35,26 +37,30 @@ public class JoinGameActivity extends AppCompatActivity {
             anim.setDuration(2000);
             binding.textGameStarting.startAnimation(anim);
 
-            FireBaseStore.INSTANCE.getOpenGameId(new FireBaseStore.Callback<String>() {
+            FireBaseStore.INSTANCE.getOpenGameId(new FireBaseStore.Callback<Map<String, Object>>() {
                 @Override
-                public void onSuccess(String result) {
+                public void onSuccess(Map<String, Object> result) {
 
-                    String user = binding.editTextUsername.getText().toString();
+                    String player = binding.editTextUsername.getText().toString();
                     String gameId = String.valueOf(new Random().nextInt(10000));
                     boolean isExistingGame = (result != null && !result.isEmpty());
                     if (isExistingGame) {
                         // Open game found, use existing game ID
-                        gameId = result;
+                        gameId = Objects.requireNonNull(result.get("gameId")).toString();
                     }
                     // No open game found, create a new game ID
                     GameModel.getInstance().setGameId(gameId);
-                    GameModel.getInstance().setCurrentPlayer(user);
+                    GameModel.getInstance().setCurrentPlayer(player);
 
                     StringBuilder gameStatusBuilder = new StringBuilder();
-                    gameStatusBuilder.append("User: ").append(user)
-                            .append(" Joined. Game ID: ").append(gameId).append("\n");
+                    gameStatusBuilder.append("Game ID: :").append(gameId).append("\n");
+                    gameStatusBuilder.append("Player: ").append(player).append(" Joined.\n");
                     if(isExistingGame) {
-                        gameStatusBuilder.append("User: " + "Player2" + " also joined\n");
+                        String otherPlayer = Objects.requireNonNull(result.get("otherPlayer")).toString();
+
+                        GameModel.getInstance().setOtherPlayer(otherPlayer);
+
+                        gameStatusBuilder.append("Player: ").append(otherPlayer).append(" also joined\n");
                         binding.textGameStarting.setText("Starting...");
                         binding.textGameStarting.startAnimation(anim);
                         GameModel.getInstance().setGameState(GameModel.GameState.TWO_PLAYERS_JOINED);

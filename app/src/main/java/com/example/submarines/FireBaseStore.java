@@ -5,6 +5,9 @@ import com.example.submarines.model.GameModel;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class FireBaseStore {
 
     public static FireBaseStore INSTANCE = new FireBaseStore();
@@ -33,15 +36,15 @@ public class FireBaseStore {
         }
     }
 
-    public String getOtherPlayerName(GameModel model) {
+    private String getOtherPlayerName(GameModel model) {
         try {
             db.collection("Games").document(model.getGameId())
                     .collection("Players")
-                    .whereEqualTo("currentPlayerName", model.getCurrentPlayerName())
+                    .whereNotEqualTo("currentPlayerName", model.getCurrentPlayerName())
                     //.whereNotEqualTo("currentPlayerName", model.getCurrentPlayerName())
                     .get()
                     .addOnSuccessListener(documentSnapshot -> {
-                        String otherPlayerName = "";
+                        String otherPlayerName;
                         if (documentSnapshot.size() == 1) {
                             otherPlayerName =
                                     documentSnapshot.getDocuments().get(0)
@@ -55,7 +58,7 @@ public class FireBaseStore {
         }
         return GameModel.getInstance().getOtherPlayer();
     }
-    public void getOpenGameId(final Callback<String> callback) {
+    public void getOpenGameId(final Callback<Map<String, Object>> callback) {
         db.collection("Games")
                 .whereEqualTo("gameState", GameModel.GameState.ONE_PLAYER_JOINED.toString())
                 .limit(1)
@@ -64,10 +67,16 @@ public class FireBaseStore {
                     if (!querySnapshot.isEmpty()) {
                         // Open game found
                         String gameId = querySnapshot.getDocuments().get(0).getId();
-                        callback.onSuccess(gameId);
+                        Map<String, Object> gameData = new HashMap<>();
+                        gameData.put("gameId", gameId);
+
+                        String otherPlayerName = "Player2";
+                        gameData.put("otherPlayer", otherPlayerName);
+
+                        callback.onSuccess(gameData);
                     } else {
                         // No open game found
-                        callback.onSuccess("");
+                        callback.onSuccess(new HashMap<>());
                     }
                 })
                 .addOnFailureListener(e -> {
