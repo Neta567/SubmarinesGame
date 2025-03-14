@@ -36,12 +36,12 @@ public class JoinGameActivity extends AppCompatActivity {
             Animation anim = AnimationUtils.loadAnimation(context, R.anim.blink);
             anim.setDuration(2000);
             binding.textGameStarting.startAnimation(anim);
+            String player = binding.editTextUsername.getText().toString();
 
-            FireBaseStore.INSTANCE.getOpenGameId(new FireBaseStore.Callback<Map<String, Object>>() {
+            FireBaseStore.INSTANCE.getOpenGameId(player, new FireBaseStore.Callback<Map<String, Object>>() {
                 @Override
                 public void onSuccess(Map<String, Object> result) {
 
-                    String player = binding.editTextUsername.getText().toString();
                     String gameId = String.valueOf(new Random().nextInt(10000));
                     boolean isExistingGame = (result != null && !result.isEmpty());
                     if (isExistingGame) {

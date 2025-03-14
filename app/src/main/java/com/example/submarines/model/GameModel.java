@@ -19,19 +19,23 @@ public class GameModel extends BaseObservable {
         GAME_OVER
     }
 
+    public enum GameModelFields {
+        game_id,
+        game_state,
+        game_result
+    }
+
     private static final GameModel INSTANCE = new GameModel();
 
     private String gameId = "-1";
     private String gameResult = "";
-    private String currentPlayer = "Player 1";
-    private String otherPlayer = "";
+    private final Player[] players = new Player[2];
     private final int[][] player1SubmarineBoardModel;
     private final int[][] player1FireBoardModel;
     private Square[][] player1SubmarineBoard;
     private Square[][] player1FireBoard;
     private ArrayList<Submarine> submarineArrayList;
     private GameState gameState = GameState.NOT_STARTED;
-
     private Submarine currentSubmarine;
 
     private GameModel() {
@@ -82,22 +86,22 @@ public class GameModel extends BaseObservable {
 
     @Bindable
     public String getCurrentPlayerName() {
-        return currentPlayer;
+        return players[0].getName();
     }
 
     @Exclude
     @Bindable
     public String getOtherPlayer() {
-        return otherPlayer;
+        return players[1].getName();
     }
 
     public void setCurrentPlayer(String player) {
-        currentPlayer = player;
+        players[0] = new Player(player);
         notifyPropertyChanged(BR.currentPlayerName);
     }
 
     public void setOtherPlayer(String otherPlayer) {
-        this.otherPlayer = otherPlayer;
+        players[1] = new Player(otherPlayer);
         notifyPropertyChanged(BR.otherPlayer);
     }
 
@@ -148,14 +152,14 @@ public class GameModel extends BaseObservable {
     public Map<String, Object> getGame() {
         HashMap<String, Object> game = new HashMap<>();
         //game.put("gameId", gameId);
-        game.put("gameState", gameState.toString());
+        game.put(GameModelFields.game_state.toString(), gameState.toString());
 
         return game;
     }
 
     public Map<String, Object> getPlayer() {
         HashMap<String, Object> player = new HashMap<>();
-        player.put("playerName", currentPlayer);
+        player.put("playerName", players[0].getName());
 
         return player;
     }
