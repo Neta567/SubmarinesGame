@@ -16,7 +16,7 @@ public class GameModel extends BaseObservable {
         ONE_PLAYER_JOINED,
         TWO_PLAYERS_JOINED,
         STARTED,
-        FINISHED
+        GAME_OVER
     }
 
     private static final GameModel INSTANCE = new GameModel();
@@ -52,11 +52,6 @@ public class GameModel extends BaseObservable {
     @Exclude
     public GameState getGameState() {
         return gameState;
-    }
-
-    public void setOtherPlayer(String otherPlayer) {
-        this.otherPlayer = otherPlayer;
-        notifyPropertyChanged(BR.otherPlayer);
     }
 
     public void setGameId(String gameId) {
@@ -95,17 +90,23 @@ public class GameModel extends BaseObservable {
     public String getOtherPlayer() {
         return otherPlayer;
     }
+
+    public void setCurrentPlayer(String player) {
+        currentPlayer = player;
+        notifyPropertyChanged(BR.currentPlayerName);
+    }
+
+    public void setOtherPlayer(String otherPlayer) {
+        this.otherPlayer = otherPlayer;
+        notifyPropertyChanged(BR.otherPlayer);
+    }
+
     public void setCurrentSubmarine(Submarine submarine) {
         currentSubmarine = submarine;
     }
     @Exclude
     public Submarine getCurrentSubmarine() {
         return currentSubmarine;
-    }
-
-    public void setCurrentPlayer(String player) {
-        currentPlayer = player;
-        notifyPropertyChanged(BR.currentPlayerName);
     }
 
     public void setSubmarineBoardSquareState(int i, int j, Square.SquareState state) {

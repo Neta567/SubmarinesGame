@@ -298,6 +298,10 @@ public class BoardGame extends View {
             FireBaseStore.INSTANCE.saveGame(GameModel.getInstance());
         }
         if(GameModel.getInstance().isGameOver()) {
+            model.setGameResult("Game Over");
+            model.setGameState(GameModel.GameState.GAME_OVER);
+            FireBaseStore.INSTANCE.saveGame(GameModel.getInstance());
+
             Toast.makeText(this.getContext(), "Game Over", Toast.LENGTH_SHORT).show();
             resetGame();
         }
