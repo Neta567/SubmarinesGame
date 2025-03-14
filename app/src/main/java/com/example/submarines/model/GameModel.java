@@ -1,15 +1,10 @@
 package com.example.submarines.model;
 
 import static com.example.submarines.boards.BoardGame.NUM_OF_SQUARES;
-
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
-
 import com.example.submarines.BR;
 import com.google.firebase.firestore.Exclude;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -57,14 +52,6 @@ public class GameModel extends BaseObservable {
     @Exclude
     public GameState getGameState() {
         return gameState;
-    }
-
-    public Map<String, Object> getGame() {
-        HashMap<String, Object> game = new HashMap<>();
-        //game.put("gameId", gameId);
-        game.put("gameState", gameState.toString());
-
-        return game;
     }
 
     public void setOtherPlayer(String otherPlayer) {
@@ -152,21 +139,23 @@ public class GameModel extends BaseObservable {
         return player1FireBoard;
     }
 
-    public String getPlayer1SubmarineBoardState() {
-        Gson gson = new GsonBuilder()
-                .setPrettyPrinting()
-                .create();
-        return gson.toJson(player1SubmarineBoardModel);
-    }
-    public String getPlayer1FireBoardState() {
-        Gson gson = new GsonBuilder()
-                .setPrettyPrinting()
-                .create();
-        return gson.toJson(player1FireBoardModel);
-    }
-
     @Exclude
     public boolean isGameOver() {
         return submarineArrayList.stream().allMatch(Submarine::isDestroyed);
+    }
+
+    public Map<String, Object> getGame() {
+        HashMap<String, Object> game = new HashMap<>();
+        //game.put("gameId", gameId);
+        game.put("gameState", gameState.toString());
+
+        return game;
+    }
+
+    public Map<String, Object> getPlayer() {
+        HashMap<String, Object> player = new HashMap<>();
+        player.put("playerName", currentPlayer);
+
+        return player;
     }
 }

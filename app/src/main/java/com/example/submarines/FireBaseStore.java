@@ -2,6 +2,7 @@ package com.example.submarines;
 
 
 import com.example.submarines.model.GameModel;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class FireBaseStore {
@@ -11,9 +12,22 @@ public class FireBaseStore {
 
     public void saveGame(GameModel model) {
         try {
-            db.collection("Games")
-                    .document(model.getGameId()).set(model.getGame())
+            DocumentReference gameDocumentRef = db.collection("Games")
+                    .document(model.getGameId());
+            gameDocumentRef.set(model.getGame())
                     .addOnSuccessListener(v -> System.out.println("Game saved"));
+            savePlayer(gameDocumentRef, model);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void savePlayer(DocumentReference gameDocumentRef, GameModel model) {
+        try {
+            gameDocumentRef.collection("Players")
+                    .document(model.getCurrentPlayerName())
+                    .set(model.getPlayer())
+                    .addOnSuccessListener(v -> System.out.println("Player saved"));
         } catch (Exception ex) {
             ex.printStackTrace();
         }
