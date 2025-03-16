@@ -70,22 +70,47 @@ public class JoinGameActivity extends AppCompatActivity {
                         binding.textGameStarting.setText("Waiting...");
                         binding.textGameStarting.startAnimation(anim);
                         GameModel.getInstance().setGameState(GameModel.GameState.ONE_PLAYER_JOINED);
+
+                        FireBaseStore.INSTANCE.subscribeForGameStateChange(
+                                GameModel.getInstance().getGameId(), new FireBaseStore.Callback<Map<String, Object>>() {
+                                    @Override
+                                    public void onSuccess(Map<String, Object> result) {
+                                        if (result != null && !result.isEmpty()) {
+                                            if(result.containsKey(GameModel.GameModelFields.game_state.toString())) {
+                                                GameModel.getInstance().setGameState(
+                                                        GameModel.GameState.valueOf((String) result.get(GameModel.GameModelFields.game_state.toString())));
+
+                                                if(GameModel.getInstance().getGameState() == GameModel.GameState.TWO_PLAYERS_JOINED) {
+                                                    FireBaseStore.INSTANCE.getOtherPlayerName(GameModel.getInstance().getGameId(),
+                                                            GameModel.getInstance().getCurrentPlayerName(), new FireBaseStore.Callback<Map<String, Object>>() {
+                                                                @Override
+                                                                public void onSuccess(Map<String, Object> result) {
+                                                                    GameModel.getInstance().setOtherPlayer(Objects.requireNonNull(result.get("otherPlayer")).toString());
+                                                                    startGame();
+                                                                }
+
+                                                                @Override
+                                                                public void onFailure(Exception e) {
+                                                                    e.printStackTrace();
+                                                                }
+                                                            });
+                                                }
+                                            };
+
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Exception e) {
+                                        Log.d("Join Game", "Failed to handle update in game state: ", e);
+                                    }
+                                });
                     }
 
                     binding.textGameStatus.setText(gameStatusBuilder.toString());
                     FireBaseStore.INSTANCE.saveGame(GameModel.getInstance());
 
-                    if(GameModel.getInstance().getGameState() == GameModel.GameState.TWO_PLAYERS_JOINED) {
-                        Handler handler = new Handler(Looper.getMainLooper());
-                        // Create a Runnable to start the new Activity
-                        Runnable startNewActivityRunnable = () -> {
-                            Intent intent = new Intent(context, GameActivity.class);
-                            startActivity(intent);
-                        };
-
-                        // Delay the start of the new Activity by 2 seconds
-                        handler.postDelayed(startNewActivityRunnable, 2000);
-                    }
+                    startGame();
                 }
                 @Override
                 public void onFailure(Exception e) {
@@ -93,5 +118,23 @@ public class JoinGameActivity extends AppCompatActivity {
                 }
             });
         });
+    }
+
+    private void startGame() {
+        if(GameModel.getInstance().getGameState() == GameModel.GameState.TWO_PLAYERS_JOINED) {
+            Handler handler = new Handler(Looper.getMainLooper());
+            // Create a Runnable to start the new Activity
+            Runnable startNewActivityRunnable = () -> {
+                try {
+                    Intent intent = new Intent(context, GameActivity.class);
+                    startActivity(intent);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            };
+
+            // Delay the start of the new Activity by 2 seconds
+            handler.postDelayed(startNewActivityRunnable, 2000);
+        }
     }
 }

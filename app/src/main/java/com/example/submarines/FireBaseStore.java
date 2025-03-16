@@ -1,9 +1,14 @@
 package com.example.submarines;
 
 
+import android.util.Log;
+
 import com.example.submarines.model.GameModel;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.ListenSource;
+import com.google.firebase.firestore.MetadataChanges;
+import com.google.firebase.firestore.SnapshotListenOptions;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -38,8 +43,9 @@ public class FireBaseStore {
         }
     }
 
-    private void getOtherPlayerName(String gameId, String currentPlayerName, Callback<Map<String, Object>> callback) {
+    public void getOtherPlayerName(String gameId, String currentPlayerName, Callback<Map<String, Object>> callback) {
         try {
+            //TODO: fix bug in case two players join with the same name
             db.collection(GAMES).document(gameId)
                     .collection(PLAYERS)
                     .whereNotEqualTo("playerName", currentPlayerName)
@@ -64,6 +70,7 @@ public class FireBaseStore {
             ex.printStackTrace();
         }
     }
+
     public void getOpenGameId(String playerName, final Callback<Map<String, Object>> callback) {
         db.collection(GAMES)
                 .whereEqualTo(GameModel.GameModelFields.game_state.toString(),
@@ -106,8 +113,57 @@ public class FireBaseStore {
                 });
     }
 
+    public void subscribeForGameStateChange(String gameId, Callback<Map<String, Object>> callback) {
+        DocumentReference gameDocumentRef = db.collection(GAMES)
+                .document(gameId);
+
+//        SnapshotListenOptions options = new SnapshotListenOptions.Builder()
+//                .setMetadataChanges(MetadataChanges.EXCLUDE)
+//                .setSource(ListenSource.DEFAULT)
+//                .build();
+
+
+
+        gameDocumentRef.addSnapshotListener((snapshot, e) -> {
+            if (e != null) {
+                callback.onFailure(e);
+                return;
+            }
+
+           //handle only server events
+           if(snapshot != null && !snapshot.getMetadata().hasPendingWrites()) {
+               if (snapshot.exists()) {
+                   callback.onSuccess(snapshot.getData());
+               } else {
+                   callback.onFailure(null);
+               }
+           }
+        });
+    }
+
+    public void subscribeForPlayerStateChange(String gameId, String playerName) {
+
+        DocumentReference playerDocumentRef = db.collection(GAMES)
+                .document(gameId).collection(PLAYERS).document(playerName);
+        playerDocumentRef.addSnapshotListener((snapshot, e) -> {
+            if (e != null) {
+                Log.w("TAG", "Listen failed.", e);
+                return;
+            }
+
+            if (snapshot != null && snapshot.exists()) {
+                Log.d("TAG", "Current data: " + snapshot.getData());
+            } else {
+                Log.d("TAG", "Current data: null");
+            }
+        });
+    }
+
+
+
     public interface Callback<T> {
         void onSuccess(T result);
+
         void onFailure(Exception e);
     }
 }

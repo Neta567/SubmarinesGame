@@ -48,6 +48,10 @@ public class GameActivity extends AppCompatActivity {
                     myBoard.invalidate();
                 }
         );
+
+        //FireBaseStore.INSTANCE.subscribeForGameStateChange(GameModel.getInstance().getGameId());
+        //FireBaseStore.INSTANCE.subscribeForPlayerStateChange(GameModel.getInstance().getGameId(),
+        //        GameModel.getInstance().getOtherPlayer());
     }
 
     public void addBitmapToMemoryCache(String key, Bitmap bitmap) {
