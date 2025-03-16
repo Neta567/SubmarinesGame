@@ -1,6 +1,5 @@
 package com.example.submarines.model;
 
-import static com.example.submarines.boards.BoardGame.NUM_OF_SQUARES;
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 import com.example.submarines.BR;
@@ -30,21 +29,10 @@ public class GameModel extends BaseObservable {
     private String gameId = "-1";
     private String gameResult = "";
     private final Player[] players = new Player[2];
-    private final int[][] player1SubmarineBoardModel;
-    private final int[][] player1FireBoardModel;
-    private Square[][] player1SubmarineBoard;
-    private Square[][] player1FireBoard;
-    private ArrayList<Submarine> submarineArrayList;
     private GameState gameState = GameState.NOT_STARTED;
     private Submarine currentSubmarine;
 
-    private GameModel() {
-
-        int NUM_OF_SQUARES = 6;
-        player1SubmarineBoardModel = new int[NUM_OF_SQUARES][NUM_OF_SQUARES];
-        player1FireBoardModel = new int[NUM_OF_SQUARES][NUM_OF_SQUARES];
-
-    }
+    private GameModel() {}
 
     public static GameModel getInstance() {
         return INSTANCE;
@@ -114,39 +102,29 @@ public class GameModel extends BaseObservable {
     }
 
     public void setSubmarineBoardSquareState(int i, int j, Square.SquareState state) {
-        player1SubmarineBoardModel[i][j] = state.getValue();
-        player1SubmarineBoard[i][j].setState(state);
+        players[0].setSubmarineBoardSquareState(i, j, state);
     }
 
     public void setFireBoardSquareState(int i, int j, Square.SquareState state) {
-        player1FireBoardModel[i][j] = state.getValue();
-        player1FireBoard[i][j].setState(state);
+        players[0].setFireBoardSquareState(i, j, state);
     }
 
     public ArrayList<Submarine> initPlayer1Submarines() {
-        if (submarineArrayList == null) {
-            submarineArrayList = new ArrayList<>(4);
-        }
-        return submarineArrayList;
+        return players[0].initSubmarines();
     }
 
     public Square[][] initPlayer1SubmarinesBoard() {
-        if (player1SubmarineBoard == null) {
-            player1SubmarineBoard = new Square[NUM_OF_SQUARES][NUM_OF_SQUARES];
-        }
-        return player1SubmarineBoard;
+        return players[0].initSubmarinesBoard();
     }
 
     public Square[][] initPlayer1FireBoard() {
-        if (player1FireBoard == null) {
-            player1FireBoard = new Square[NUM_OF_SQUARES][NUM_OF_SQUARES];
-        }
-        return player1FireBoard;
+        return players[0].initFireBoard();
     }
 
     @Exclude
     public boolean isGameOver() {
-        return submarineArrayList.stream().allMatch(Submarine::isDestroyed);
+        return players[0].isGameOver();
+                //|| players[1].isGameOver();
     }
 
     public Map<String, Object> getGame() {
