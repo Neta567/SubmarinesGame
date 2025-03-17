@@ -62,4 +62,8 @@ public class Player {
     public int[][] getFireBoardModel() {
         return fireBoardModel;
     }
+
+    public int[][] getSubmarinesBoardModel() {
+        return submarinesBoardModel;
+    }
 }

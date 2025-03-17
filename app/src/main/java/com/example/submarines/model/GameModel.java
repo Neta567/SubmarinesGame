@@ -143,6 +143,7 @@ public class GameModel extends BaseObservable {
 
         Gson gson = new Gson();
         player.put("fireBoard", gson.toJson(players[0].getFireBoardModel()));
+        player.put("submarinesBoard", gson.toJson(players[0].getSubmarinesBoardModel()));
 
         return player;
     }
