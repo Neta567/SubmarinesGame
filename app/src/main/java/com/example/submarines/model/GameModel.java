@@ -4,6 +4,8 @@ import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 import com.example.submarines.BR;
 import com.google.firebase.firestore.Exclude;
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -138,6 +140,9 @@ public class GameModel extends BaseObservable {
     public Map<String, Object> getPlayer() {
         HashMap<String, Object> player = new HashMap<>();
         player.put("playerName", players[0].getName());
+
+        Gson gson = new Gson();
+        player.put("fireBoard", gson.toJson(players[0].getFireBoardModel()));
 
         return player;
     }

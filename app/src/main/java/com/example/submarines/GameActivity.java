@@ -11,6 +11,8 @@ import com.example.submarines.boards.MyBoard;
 import com.example.submarines.databinding.ActivityGameBinding;
 import com.example.submarines.model.GameModel;
 
+import java.util.Map;
+
 public class GameActivity extends AppCompatActivity {
 
     private ActivityGameBinding binding;
@@ -50,8 +52,18 @@ public class GameActivity extends AppCompatActivity {
         );
 
         //FireBaseStore.INSTANCE.subscribeForGameStateChange(GameModel.getInstance().getGameId());
-        //FireBaseStore.INSTANCE.subscribeForPlayerStateChange(GameModel.getInstance().getGameId(),
-        //        GameModel.getInstance().getOtherPlayer());
+        FireBaseStore.INSTANCE.subscribeForPlayerStateChange(GameModel.getInstance().getGameId(),
+                GameModel.getInstance().getOtherPlayer(), new FireBaseStore.Callback<Map<String, Object>>() {
+                    @Override
+                    public void onSuccess(Map<String, Object> result) {
+                        Boolean name = result.containsKey("name");
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+
+                    }
+                });
     }
 
     public void addBitmapToMemoryCache(String key, Bitmap bitmap) {

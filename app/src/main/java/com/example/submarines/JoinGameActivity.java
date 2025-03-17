@@ -30,6 +30,9 @@ public class JoinGameActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         this.context = this;
 
+        int random = new Random().nextInt(100);
+        binding.editTextUsername.setText("Piccachu" + random);
+
         binding.btnJoin.setOnClickListener(v -> {
             binding.btnJoin.setEnabled(false);
             binding.textGameStarting.setText("Joining...\n");

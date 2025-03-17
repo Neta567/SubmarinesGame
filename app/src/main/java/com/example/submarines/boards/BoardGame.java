@@ -103,7 +103,6 @@ public class BoardGame extends View {
         for (Submarine submarine : submarineArrayList) {
             submarine.reset();
         }
-        FireBaseStore.INSTANCE.saveGame(model);
         invalidate();
     }
 
@@ -113,7 +112,6 @@ public class BoardGame extends View {
                 model.setFireBoardSquareState(i, j, Square.SquareState.EMPTY);
             }
         }
-        FireBaseStore.INSTANCE.saveGame(model);
         invalidate();
     }
 
@@ -148,7 +146,6 @@ public class BoardGame extends View {
                 }
             });
             updateOccupiedSquares(submarine);
-            FireBaseStore.INSTANCE.saveGame(model);
         } else {
             submarine.reset();
         }

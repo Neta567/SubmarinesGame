@@ -58,4 +58,8 @@ public class Player {
     public boolean isGameOver() {
         return submarineArrayList.stream().allMatch(Submarine::isDestroyed);
     }
+
+    public int[][] getFireBoardModel() {
+        return fireBoardModel;
+    }
 }
