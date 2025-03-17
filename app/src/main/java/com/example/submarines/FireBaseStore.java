@@ -116,14 +116,6 @@ public class FireBaseStore {
     public void subscribeForGameStateChange(String gameId, Callback<Map<String, Object>> callback) {
         DocumentReference gameDocumentRef = db.collection(GAMES)
                 .document(gameId);
-
-//        SnapshotListenOptions options = new SnapshotListenOptions.Builder()
-//                .setMetadataChanges(MetadataChanges.EXCLUDE)
-//                .setSource(ListenSource.DEFAULT)
-//                .build();
-
-
-
         gameDocumentRef.addSnapshotListener((snapshot, e) -> {
             if (e != null) {
                 callback.onFailure(e);
@@ -141,20 +133,22 @@ public class FireBaseStore {
         });
     }
 
-    public void subscribeForPlayerStateChange(String gameId, String playerName) {
+    public void subscribeForPlayerStateChange(String gameId, String playerName, Callback<Map<String, Object>> callback) {
 
         DocumentReference playerDocumentRef = db.collection(GAMES)
                 .document(gameId).collection(PLAYERS).document(playerName);
         playerDocumentRef.addSnapshotListener((snapshot, e) -> {
             if (e != null) {
-                Log.w("TAG", "Listen failed.", e);
+                callback.onFailure(e);
                 return;
             }
 
-            if (snapshot != null && snapshot.exists()) {
-                Log.d("TAG", "Current data: " + snapshot.getData());
-            } else {
-                Log.d("TAG", "Current data: null");
+            if (snapshot != null && !snapshot.getMetadata().hasPendingWrites()) {
+                if (snapshot.exists()) {
+                    callback.onSuccess(snapshot.getData());
+                } else {
+                    callback.onFailure(null);
+                }
             }
         });
     }

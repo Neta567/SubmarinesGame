@@ -4,7 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".JoinGameActivity">
+    tools:context=".JoinGameActivity"
+    android:background="@drawable/background_login"
+    >
+
 
     <TextView
         android:id="@+id/textUsername"
@@ -14,8 +17,9 @@
         android:layout_marginTop="80sp"
         android:text="@string/user"
         android:textAlignment="center"
-        android:textSize="20sp"
-        android:textStyle="bold" />
+        android:textSize="50sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/white"/>
 
     <EditText
         android:id="@+id/editTextUsername"
@@ -27,6 +31,7 @@
         android:gravity="center_horizontal"
         android:inputType="textEmailAddress"
         android:textAlignment="center"
+        android:textColor="@android:color/white"
         android:textSize="24sp"
         android:text="Piccachu"
         tools:ignore="LabelFor" />
@@ -37,7 +42,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="150sp"
         android:gravity="center_horizontal"
-        android:text="@string/join" />
+        android:text="@string/join"
+        android:backgroundTint="#4903080D"/>
 
     <TextView
         android:id="@+id/textGameStarting"
@@ -47,6 +53,7 @@
         android:layout_marginTop="80sp"
         android:text=""
         android:textAlignment="center"
+        android:textColor="@android:color/white"
         android:textSize="20sp"
         android:textStyle="bold" />
 
@@ -58,6 +65,7 @@
         android:layout_marginTop="80sp"
         android:text=""
         android:textAlignment="center"
+        android:textColor="@android:color/white"
         android:textSize="20sp"
         android:textStyle="bold" />
 
