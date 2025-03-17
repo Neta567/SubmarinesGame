@@ -139,11 +139,13 @@ public class GameModel extends BaseObservable {
 
     public Map<String, Object> getPlayer() {
         HashMap<String, Object> player = new HashMap<>();
-        player.put("playerName", players[0].getName());
+        player.put(Player.PlayerFields.name.toString(), players[0].getName());
 
         Gson gson = new Gson();
-        player.put("fireBoard", gson.toJson(players[0].getFireBoardModel()));
-        player.put("submarinesBoard", gson.toJson(players[0].getSubmarinesBoardModel()));
+        player.put(Player.PlayerFields.fire_board.toString(),
+                gson.toJson(players[0].getFireBoardModel()));
+        player.put(Player.PlayerFields.submarines_board.toString(),
+                gson.toJson(players[0].getSubmarinesBoardModel()));
 
         return player;
     }

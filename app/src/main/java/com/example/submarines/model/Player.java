@@ -12,6 +12,11 @@ public class Player {
     private Square[][] fireBoard;
     private ArrayList<Submarine> submarineArrayList;
 
+    public enum PlayerFields {
+        name,
+        fire_board,
+        submarines_board
+    }
     public Player(String player) {
         this.name = player;
 
