@@ -23,7 +23,7 @@ import java.util.ArrayList;
 public class BoardGame extends View {
 
     protected GameModel model = GameModel.getInstance();
-    protected Square[][] player1SubmarinesBoard, player1FireBoard;
+    protected Square[][] player1SubmarinesBoard, player2SubmarinesBoard, player1FireBoard;
     protected ArrayList<Submarine> submarineArrayList;
     public static final int NUM_OF_SQUARES = 6;
     private boolean firstTimeBoard = true;
@@ -137,6 +137,8 @@ public class BoardGame extends View {
 
             findSquareAtBoardAndApplyAction(player1SubmarinesBoard, x, y, (i, j) -> {
                 Square square = player1SubmarinesBoard[i][j];
+                //TODO: Fix bug when moving submarine to adjacent square it overrides occupied submarines
+                // and creates an ability for forbidden move - may be need to manage list of occupied submarines per square
                 if (square.getState() == Square.SquareState.EMPTY ||
                         square.getState() != Square.SquareState.OCCUPIED_BY_SUBMARINE
                                 && square.getOccupiedSubmarine() == submarine) {
@@ -172,8 +174,10 @@ public class BoardGame extends View {
                 if (submarine.strictIntersectsWith(player1SubmarinesBoard[i][j])) {
                     model.setSubmarineBoardSquareState(i, j, Square.SquareState.OCCUPIED_BY_SUBMARINE);
                     occupiedSquares.add(player1SubmarinesBoard[i][j]);
+                    player1SubmarinesBoard[i][j].setOccupiedSubmarine(submarine);
                 } else if (submarine.intersectsWith(player1SubmarinesBoard[i][j])) {
                     model.setSubmarineBoardSquareState(i, j, Square.SquareState.OCCUPIED_BY_SUBMARINE_SURROUND);
+                    player1SubmarinesBoard[i][j].setOccupiedSubmarine(submarine);
                 } else {
                     if (player1SubmarinesBoard[i][j].getOccupiedSubmarine() == submarine) {
                         model.setSubmarineBoardSquareState(i, j, Square.SquareState.EMPTY);
@@ -210,6 +214,7 @@ public class BoardGame extends View {
             Square.SQUARE_SIZE = canvas.getWidth() / 3 / NUM_OF_SQUARES + 95;
 
             initPlayer1SubmarinesBoard();
+            initPlayer2SubmarinesBoard();
             initPlayer1FireBoard();
             firstTimeBoard = false;
         }
@@ -235,15 +240,24 @@ public class BoardGame extends View {
 
     public void initPlayer1SubmarinesBoard() {
         player1SubmarinesBoard = GameModel.getInstance().initPlayer1SubmarinesBoard();
+        initSubmarinesBoard(player1SubmarinesBoard);
+    }
+
+    public void initPlayer2SubmarinesBoard() {
+        player2SubmarinesBoard = GameModel.getInstance().initPlayer2SubmarinesBoard();
+        initSubmarinesBoard(player2SubmarinesBoard);
+    }
+
+    private void initSubmarinesBoard(Square[][] board) {
         ShapeDrawingStrategy drawingStrategy = new SquareDrawer(this.getContext());
 
         int x1 = 0;
         int y1 = 0;
         int w1 = Square.SQUARE_SIZE;
 
-        for (int i = 0; i < player1SubmarinesBoard.length; i++) {
+        for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < NUM_OF_SQUARES; j++) {
-                player1SubmarinesBoard[i][j] = new Square(x1, y1, w1, w1, drawingStrategy);
+                board[i][j] = new Square(x1, y1, w1, w1, drawingStrategy);
                 x1 = x1 + w1;
             }
             x1 = 0;
@@ -283,12 +297,12 @@ public class BoardGame extends View {
         if(!GameModel.getInstance().isGameOver()) {
             if (isInsideFireBoard(x, y)) {
                 findSquareAtBoardAndApplyAction(player1FireBoard, x, y, (i, j) -> {
-                    if (player1SubmarinesBoard[i][j].getState() == Square.SquareState.OCCUPIED_BY_SUBMARINE) {
+                    if (player2SubmarinesBoard[i][j].getState() == Square.SquareState.OCCUPIED_BY_SUBMARINE) {
                         model.setFireBoardSquareState(i, j, Square.SquareState.OCCUPIED_BY_SUBMARINE_AND_HIT);
-                        model.setSubmarineBoardSquareState(i, j, Square.SquareState.OCCUPIED_BY_SUBMARINE_AND_HIT);
+                        model.setPlayer2SubmarineBoardSquareState(i, j, Square.SquareState.OCCUPIED_BY_SUBMARINE_AND_HIT);
                     } else {
                         model.setFireBoardSquareState(i, j, Square.SquareState.MISS);
-                        model.setSubmarineBoardSquareState(i, j, Square.SquareState.MISS);
+                        model.setPlayer2SubmarineBoardSquareState(i, j, Square.SquareState.MISS);
                     }
                 });
             }

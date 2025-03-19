@@ -12,10 +12,18 @@ public class Player {
     private Square[][] fireBoard;
     private ArrayList<Submarine> submarineArrayList;
 
+    private PlayerGameStatus gameStatus = PlayerGameStatus.NOT_STARTED;
+
     public enum PlayerFields {
         name,
         fire_board,
-        submarines_board
+        submarines_board,
+        game_status
+    }
+
+    public enum PlayerGameStatus {
+        NOT_STARTED,
+        STARTED,
     }
     public Player(String player) {
         this.name = player;
@@ -55,6 +63,26 @@ public class Player {
        submarinesBoard[i][j].setState(state);
     }
 
+    public void updateSubmarinesBoard(int[][] subBoard) {
+        for (int i = 0; i < NUM_OF_SQUARES; i++) {
+            for (int j = 0; j < NUM_OF_SQUARES; j++) {
+                submarinesBoardModel[i][j] = subBoard[i][j];
+                submarinesBoard[i][j].setState(Square.SquareState.fromValue(subBoard[i][j]));
+            }
+        }
+    }
+
+    public void updateSubmarinesBoardAfterFire(int[][] fireBoard) {
+        for (int i = 0; i < NUM_OF_SQUARES; i++) {
+            for (int j = 0; j < NUM_OF_SQUARES; j++) {
+                if(fireBoard[i][j] != Square.SquareState.EMPTY.getValue()) {
+                    //submarinesBoardModel[i][j] = subBoard[i][j];
+                    submarinesBoard[i][j].setState(Square.SquareState.fromValue(fireBoard[i][j]));
+                }
+            }
+        }
+    }
+
     public void setFireBoardSquareState(int i, int j, Square.SquareState state) {
         fireBoardModel[i][j] = state.getValue();
         fireBoard[i][j].setState(state);
@@ -70,5 +98,13 @@ public class Player {
 
     public int[][] getSubmarinesBoardModel() {
         return submarinesBoardModel;
+    }
+
+    public void setGameStatus(PlayerGameStatus playerGameStatus) {
+        this.gameStatus = playerGameStatus;
+    }
+
+    public PlayerGameStatus getGameStatus() {
+        return this.gameStatus;
     }
 }

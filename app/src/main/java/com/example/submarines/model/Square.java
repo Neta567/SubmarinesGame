@@ -2,6 +2,9 @@ package com.example.submarines.model;
 
 import com.example.submarines.helpers.ShapeDrawingStrategy;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Square extends Shape {
 
     public enum SquareState {
@@ -11,10 +14,22 @@ public class Square extends Shape {
         OCCUPIED_BY_SUBMARINE_AND_HIT(3),
         MISS(4);
 
+        private static final Map<Integer, SquareState> map = new HashMap<>();
+
+        static {
+            for (SquareState state : SquareState.values()) {
+                map.put(state.value, state);
+            }
+        }
+
         private final int value;
 
         SquareState(int value) {
             this.value = value;
+        }
+
+        public static SquareState fromValue(int i) {
+            return map.get(i);
         }
 
         public int getValue() {

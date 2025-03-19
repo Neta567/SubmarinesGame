@@ -56,6 +56,7 @@ public class GameModel extends BaseObservable {
         this.gameState = gameState;
         if (gameState == GameState.STARTED) {
             currentSubmarine = null;
+            //players[0].setGameStatus(Player.PlayerGameStatus.STARTED);
             notifyPropertyChanged(BR.gameStarted);
         }
     }
@@ -79,10 +80,18 @@ public class GameModel extends BaseObservable {
         return players[0].getName();
     }
 
+    public Player.PlayerGameStatus getCurrentPlayerGameStatus() {
+        return players[0].getGameStatus();
+    }
+
     @Exclude
     @Bindable
     public String getOtherPlayer() {
         return players[1].getName();
+    }
+
+    public Player.PlayerGameStatus getOtherPlayerGameStatus() {
+        return players[1].getGameStatus();
     }
 
     public void setCurrentPlayer(String player) {
@@ -90,9 +99,17 @@ public class GameModel extends BaseObservable {
         notifyPropertyChanged(BR.currentPlayerName);
     }
 
+    public void setCurrentPlayerGameStatus(Player.PlayerGameStatus playerGameStatus) {
+        players[0].setGameStatus(playerGameStatus);
+    }
+
     public void setOtherPlayer(String otherPlayer) {
         players[1] = new Player(otherPlayer);
         notifyPropertyChanged(BR.otherPlayer);
+    }
+
+    public void setOtherPlayerGameStatus(Player.PlayerGameStatus playerGameStatus) {
+        players[1].setGameStatus(playerGameStatus);
     }
 
     public void setCurrentSubmarine(Submarine submarine) {
@@ -107,6 +124,18 @@ public class GameModel extends BaseObservable {
         players[0].setSubmarineBoardSquareState(i, j, state);
     }
 
+    public void setPlayer2SubmarineBoardSquareState(int i, int j, Square.SquareState state) {
+        players[1].setSubmarineBoardSquareState(i, j, state);
+    }
+
+    public void updatePlayer2SubmarinesBoard(int[][] subBoard) {
+        players[1].updateSubmarinesBoard(subBoard);
+    }
+
+    public void updatePlayer1SubmarinesBoardAfterFire(int[][] fireBoard) {
+        players[0].updateSubmarinesBoardAfterFire(fireBoard);
+    }
+
     public void setFireBoardSquareState(int i, int j, Square.SquareState state) {
         players[0].setFireBoardSquareState(i, j, state);
     }
@@ -117,6 +146,10 @@ public class GameModel extends BaseObservable {
 
     public Square[][] initPlayer1SubmarinesBoard() {
         return players[0].initSubmarinesBoard();
+    }
+
+    public Square[][] initPlayer2SubmarinesBoard() {
+        return players[1].initSubmarinesBoard();
     }
 
     public Square[][] initPlayer1FireBoard() {
@@ -140,6 +173,7 @@ public class GameModel extends BaseObservable {
     public Map<String, Object> getPlayer() {
         HashMap<String, Object> player = new HashMap<>();
         player.put(Player.PlayerFields.name.toString(), players[0].getName());
+        player.put(Player.PlayerFields.game_status.toString(), players[0].getGameStatus().toString());
 
         Gson gson = new Gson();
         player.put(Player.PlayerFields.fire_board.toString(),

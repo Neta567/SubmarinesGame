@@ -1,14 +1,10 @@
 package com.example.submarines;
 
 
-import android.util.Log;
-
 import com.example.submarines.model.GameModel;
+import com.example.submarines.model.Player;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.ListenSource;
-import com.google.firebase.firestore.MetadataChanges;
-import com.google.firebase.firestore.SnapshotListenOptions;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -48,14 +44,14 @@ public class FireBaseStore {
             //TODO: fix bug in case two players join with the same name
             db.collection(GAMES).document(gameId)
                     .collection(PLAYERS)
-                    .whereNotEqualTo("playerName", currentPlayerName)
+                    .whereNotEqualTo(Player.PlayerFields.name.toString(), currentPlayerName)
                     //.whereNotEqualTo("currentPlayerName", model.getCurrentPlayerName())
                     .get()
                     .addOnSuccessListener(querySnapshot -> {
                         if (!querySnapshot.isEmpty()) {
                             String otherPlayerName =
                                     querySnapshot.getDocuments().get(0)
-                                            .get("playerName", String.class);
+                                            .get(Player.PlayerFields.name.toString(), String.class);
 
                             Map<String, Object> playerData = new HashMap<>();
                             playerData.put("otherPlayer", otherPlayerName);
