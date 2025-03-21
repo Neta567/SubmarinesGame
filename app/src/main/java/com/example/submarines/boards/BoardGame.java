@@ -35,6 +35,20 @@ public class BoardGame extends View {
         super(context);
     }
 
+    @Override
+    public void onDraw(@NonNull Canvas canvas) {
+        initBoards(canvas);
+        drawBoard(player1SubmarinesBoard, canvas);
+        drawSubmarines(canvas);
+
+        if(GameModel.getInstance().isGameStarted() ||
+                GameModel.getInstance().getGameState() == GameModel.GameState.GAME_OVER )
+        {
+            drawBoard(player1FireBoard, canvas);
+            drawFiredSquares(player1SubmarinesBoard, canvas);
+        }
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {

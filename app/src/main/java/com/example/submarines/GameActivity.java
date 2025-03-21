@@ -4,18 +4,16 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Dialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
-import android.util.LruCache;
 import android.view.View;
 import android.view.Window;
 import android.widget.Toast;
 
-import com.example.submarines.boards.MyBoard;
+import com.example.submarines.boards.BoardGame;
 import com.example.submarines.databinding.ActivityGameBinding;
 import com.example.submarines.databinding.GameOverBinding;
 import com.example.submarines.model.GameModel;
@@ -24,13 +22,13 @@ import com.google.gson.Gson;
 
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.Callable;
 
 public class GameActivity extends AppCompatActivity {
 
     private ActivityGameBinding binding;
+    private GameOverBinding gameOverBinding;
     private Dialog turnDialog;
-    public LruCache<String, Bitmap> bitmapLruCache = new LruCache<>(100);
+    private Dialog winLooseDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,9 +41,15 @@ public class GameActivity extends AppCompatActivity {
         turnDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         turnDialog.setContentView(R.layout.game_turn);
 
+        gameOverBinding = GameOverBinding.inflate(getLayoutInflater());
+        winLooseDialog = new Dialog(GameActivity.this);
+        winLooseDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        winLooseDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        winLooseDialog.setContentView(gameOverBinding.getRoot());
+
         binding.setViewModel(GameModel.getInstance());
 
-        MyBoard myBoard = new MyBoard(this);
+        BoardGame myBoard = new BoardGame(this);
         myBoard.subscribeOnFireEvent(() -> {
             turnDialog.show();
             return null;
@@ -94,30 +98,8 @@ public class GameActivity extends AppCompatActivity {
                                 if (GameModel.getInstance().getGameState() == GameModel.GameState.STARTED) {
                                     myBoard.invalidate();
                                 } else if (GameModel.getInstance().getGameState() == GameModel.GameState.GAME_OVER) {
-                                    //myBoard.resetGame();
-
-                                    GameOverBinding gameOverBinding = GameOverBinding.inflate(getLayoutInflater());
-                                    Dialog winLooseDialog = new Dialog(GameActivity.this);
-                                    winLooseDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                                    winLooseDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-                                    winLooseDialog.setContentView(gameOverBinding.getRoot());
                                     String msg = Objects.requireNonNull(result.get(GameModel.GameModelFields.game_result.toString())).toString();
-                                    gameOverBinding.gameOverTxt.setText(msg);
-                                    winLooseDialog.show();
-
-                                    Handler handler = new Handler(Looper.getMainLooper());
-                                    // Create a Runnable to start the new Activity
-                                    Runnable startNewActivityRunnable = () -> {
-                                        try {
-                                            Intent intent = new Intent(binding.getRoot().getContext(), MainActivity.class);
-                                            startActivity(intent);
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
-                                        }
-                                    };
-
-                                    // Delay the start of the new Activity by 2 seconds
-                                    handler.postDelayed(startNewActivityRunnable, 3000);
+                                    endGame(msg);
                                 }
                             }
                         }
@@ -161,6 +143,8 @@ public class GameActivity extends AppCompatActivity {
                                             GameModel.getInstance().setGameState(GameModel.GameState.GAME_OVER);
                                             GameModel.getInstance().setCurrentPlayerGameStatus(Player.PlayerGameStatus.LOOSE);
                                             FireBaseStore.INSTANCE.saveGame(GameModel.getInstance());
+
+                                            endGame(GameModel.getInstance().getOtherPlayer() + " WON");
                                         }
                                     }
                                 } else if (gameStatus == Player.PlayerGameStatus.LOOSE) {
@@ -174,18 +158,27 @@ public class GameActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Exception e) {
-
+                        e.printStackTrace();
                     }
                 });
     }
 
-    public void addBitmapToMemoryCache(String key, Bitmap bitmap) {
-        if (getBitmapFromMemCache(key) == null) {
-            bitmapLruCache.put(key, bitmap);
-        }
-    }
+    private void endGame(String gameResult) {
+        gameOverBinding.gameOverTxt.setText(gameResult);
+        winLooseDialog.show();
 
-    public Bitmap getBitmapFromMemCache(String key) {
-        return bitmapLruCache.get(key);
+        Handler handler = new Handler(Looper.getMainLooper());
+        // Create a Runnable to start the new Activity
+        Runnable startNewActivityRunnable = () -> {
+            try {
+                Intent intent = new Intent(binding.getRoot().getContext(), MainActivity.class);
+                startActivity(intent);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        };
+
+        // Delay the start of the new Activity by 2 seconds
+        handler.postDelayed(startNewActivityRunnable, 3000);
     }
 }

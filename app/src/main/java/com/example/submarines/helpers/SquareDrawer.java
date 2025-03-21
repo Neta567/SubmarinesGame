@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import com.example.submarines.GameActivity;
 import com.example.submarines.R;
 import com.example.submarines.model.Shape;
 import com.example.submarines.model.Square;
@@ -54,12 +53,12 @@ public class SquareDrawer implements ShapeDrawingStrategy {
             }
         }
         if (hitMissKey != null) {
-            if (((GameActivity) context).getBitmapFromMemCache(hitMissKey) == null) {
+            if (BitmapCache.getInstance().getBitmapFromMemCache(hitMissKey) == null) {
                 Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), resId);
                 Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, Square.SQUARE_SIZE-80, Square.SQUARE_SIZE-80, true);
-                ((GameActivity) context).addBitmapToMemoryCache(hitMissKey, scaledBitmap);
+                BitmapCache.getInstance().addBitmapToMemoryCache(hitMissKey, scaledBitmap);
             }
-            Bitmap boomBitmap = ((GameActivity) context).getBitmapFromMemCache(hitMissKey);
+            Bitmap boomBitmap = BitmapCache.getInstance().getBitmapFromMemCache(hitMissKey);
             canvas.drawBitmap(boomBitmap, shape.getX()+40, shape.getY()+40, p);
         } else {
             canvas.drawRect(shape.getX(), shape.getY(),
