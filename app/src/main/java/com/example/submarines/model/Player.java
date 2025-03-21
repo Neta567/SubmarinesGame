@@ -24,6 +24,8 @@ public class Player {
     public enum PlayerGameStatus {
         NOT_STARTED,
         STARTED,
+        WON,
+        LOOSE
     }
     public Player(String player) {
         this.name = player;

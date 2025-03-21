@@ -39,10 +39,10 @@ public class SquareDrawer implements ShapeDrawingStrategy {
             Square square = (Square) shape;
             switch (square.getState()) {
                 case OCCUPIED_BY_SUBMARINE:
-                    p.setColor(Color.RED);
+                    //p.setColor(Color.RED);
                     break;
                 case OCCUPIED_BY_SUBMARINE_SURROUND:
-                    p.setColor(Color.YELLOW);
+                    //p.setColor(Color.YELLOW);
                     break;
                 case OCCUPIED_BY_SUBMARINE_AND_HIT:
                     hitMissKey = "boom";

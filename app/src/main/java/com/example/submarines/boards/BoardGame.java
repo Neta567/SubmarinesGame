@@ -5,7 +5,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -19,6 +18,7 @@ import com.example.submarines.model.Square;
 import com.example.submarines.model.Submarine;
 
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
 
 public class BoardGame extends View {
 
@@ -29,6 +29,7 @@ public class BoardGame extends View {
     private boolean firstTimeBoard = true;
     private boolean firstTimeSubmarine = true;
     protected Submarine s1, s2, s3, s4;
+    private Callable<Void> onFireEventCallable;
 
     public BoardGame(Context context) {
         super(context);
@@ -306,15 +307,13 @@ public class BoardGame extends View {
                     }
                 });
             }
-            FireBaseStore.INSTANCE.saveGame(GameModel.getInstance());
-        }
-        if(GameModel.getInstance().isGameOver()) {
-            model.setGameResult("Game Over");
-            model.setGameState(GameModel.GameState.GAME_OVER);
-            FireBaseStore.INSTANCE.saveGame(GameModel.getInstance());
+            try {
+                onFireEventCallable.call();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
 
-            Toast.makeText(this.getContext(), "Game Over", Toast.LENGTH_SHORT).show();
-            resetGame();
+            FireBaseStore.INSTANCE.saveGame(GameModel.getInstance());
         }
     }
 
@@ -332,5 +331,9 @@ public class BoardGame extends View {
         updateSubmarineAndBoard(s2, player1SubmarinesBoard[3][0].getX(), player1SubmarinesBoard[3][0].getY());
         updateSubmarineAndBoard(s3, player1SubmarinesBoard[3][3].getX(), player1SubmarinesBoard[3][3].getY());
         updateSubmarineAndBoard(s4, player1SubmarinesBoard[0][5].getX(), player1SubmarinesBoard[0][5].getY());
+    }
+
+    public void subscribeOnFireEvent(Callable<Void> callable) {
+        this.onFireEventCallable = callable;
     }
 }

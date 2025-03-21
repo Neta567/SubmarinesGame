@@ -5,9 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".JoinGameActivity"
-    android:background="@drawable/background_login"
-    >
-
+    android:background="@drawable/background_login">
 
     <TextView
         android:id="@+id/textUsername"
@@ -29,11 +27,11 @@
         android:autofillHints=""
         android:ems="10"
         android:gravity="center_horizontal"
-        android:inputType="textEmailAddress"
+        android:inputType="textPersonName"
         android:textAlignment="center"
         android:textColor="@android:color/white"
         android:textSize="24sp"
-        android:text="Piccachu"
+        android:text=""
         tools:ignore="LabelFor" />
 
     <Button

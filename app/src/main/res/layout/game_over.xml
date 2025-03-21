@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/gameOver"
+    android:layout_width="350dp"
+    android:layout_height="800dp"
+    android:layout_gravity="center"
+    android:layout_margin="10dp">
+
+    <TextView
+        android:id="@+id/gameOverTxt"
+        android:layout_width="300dp"
+        android:layout_height="100dp"
+        android:background="@drawable/background_mainphoto"
+        android:paddingTop="20dp"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="40sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

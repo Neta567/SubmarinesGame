@@ -2,24 +2,34 @@ package com.example.submarines;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.util.LruCache;
 import android.view.View;
+import android.view.Window;
 import android.widget.Toast;
+
 import com.example.submarines.boards.MyBoard;
 import com.example.submarines.databinding.ActivityGameBinding;
+import com.example.submarines.databinding.GameOverBinding;
 import com.example.submarines.model.GameModel;
 import com.example.submarines.model.Player;
 import com.google.gson.Gson;
 
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.Callable;
 
 public class GameActivity extends AppCompatActivity {
 
     private ActivityGameBinding binding;
+    private Dialog turnDialog;
     public LruCache<String, Bitmap> bitmapLruCache = new LruCache<>(100);
 
     @Override
@@ -28,25 +38,38 @@ public class GameActivity extends AppCompatActivity {
         binding = ActivityGameBinding.inflate(getLayoutInflater());
         setContentView(binding.rootLayout);
 
+        turnDialog = new Dialog(GameActivity.this);
+        turnDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        turnDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        turnDialog.setContentView(R.layout.game_turn);
+
         binding.setViewModel(GameModel.getInstance());
 
         MyBoard myBoard = new MyBoard(this);
+        myBoard.subscribeOnFireEvent(() -> {
+            turnDialog.show();
+            return null;
+        });
         binding.ll.addView(myBoard);
 
         binding.startGameButton.setOnClickListener(v -> {
-            if(myBoard.validateCanStartTheGame()) {
+            if (myBoard.validateCanStartTheGame()) {
                 Toast.makeText(myBoard.getContext(), "Game Started", Toast.LENGTH_SHORT).show();
-                if(GameModel.getInstance().getOtherPlayerGameStatus() == Player.PlayerGameStatus.STARTED) {
-                    GameModel.getInstance().setGameState(GameModel.GameState.STARTED);
-                }
                 GameModel.getInstance().setCurrentPlayerGameStatus(Player.PlayerGameStatus.STARTED);
 
                 binding.rotationButton.setEnabled(false);
                 binding.rotationButton.setVisibility(View.INVISIBLE);
                 binding.erasureButton.setEnabled(false);
                 binding.erasureButton.setVisibility(View.INVISIBLE);
+
+                if (GameModel.getInstance().getOtherPlayerGameStatus() == Player.PlayerGameStatus.STARTED) {
+                    GameModel.getInstance().setGameState(GameModel.GameState.STARTED);
+                }
+
                 FireBaseStore.INSTANCE.saveGame(GameModel.getInstance());
-                myBoard.invalidate();
+                //myBoard.invalidate();
+                turnDialog.show();
+
             } else {
                 Toast.makeText(myBoard.getContext(), "Not all submarines are placed", Toast.LENGTH_SHORT).show();
             }
@@ -64,12 +87,37 @@ public class GameActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(Map<String, Object> result) {
                         if (result != null && !result.isEmpty()) {
-                            if(result.containsKey(GameModel.GameModelFields.game_state.toString())) {
+                            if (result.containsKey(GameModel.GameModelFields.game_state.toString())) {
                                 GameModel.getInstance().setGameState(
                                         GameModel.GameState.valueOf((String) result.get(GameModel.GameModelFields.game_state.toString())));
 
-                                if(GameModel.getInstance().getGameState() == GameModel.GameState.STARTED) {
+                                if (GameModel.getInstance().getGameState() == GameModel.GameState.STARTED) {
                                     myBoard.invalidate();
+                                } else if (GameModel.getInstance().getGameState() == GameModel.GameState.GAME_OVER) {
+                                    //myBoard.resetGame();
+
+                                    GameOverBinding gameOverBinding = GameOverBinding.inflate(getLayoutInflater());
+                                    Dialog winLooseDialog = new Dialog(GameActivity.this);
+                                    winLooseDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                                    winLooseDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                                    winLooseDialog.setContentView(gameOverBinding.getRoot());
+                                    String msg = Objects.requireNonNull(result.get(GameModel.GameModelFields.game_result.toString())).toString();
+                                    gameOverBinding.gameOverTxt.setText(msg);
+                                    winLooseDialog.show();
+
+                                    Handler handler = new Handler(Looper.getMainLooper());
+                                    // Create a Runnable to start the new Activity
+                                    Runnable startNewActivityRunnable = () -> {
+                                        try {
+                                            Intent intent = new Intent(binding.getRoot().getContext(), MainActivity.class);
+                                            startActivity(intent);
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+                                    };
+
+                                    // Delay the start of the new Activity by 2 seconds
+                                    handler.postDelayed(startNewActivityRunnable, 3000);
                                 }
                             }
                         }
@@ -85,16 +133,19 @@ public class GameActivity extends AppCompatActivity {
                 GameModel.getInstance().getOtherPlayer(), new FireBaseStore.Callback<Map<String, Object>>() {
                     @Override
                     public void onSuccess(Map<String, Object> result) {
-                        if(result != null && !result.isEmpty()) {
-                            if(result.containsKey(Player.PlayerFields.game_status.toString())) {
+                        //TODO: Fix board first update of the player that started the game last (other player board is not updated)
+                        if (result != null && !result.isEmpty()) {
+                            if (result.containsKey(Player.PlayerFields.game_status.toString())) {
                                 Player.PlayerGameStatus gameStatus =
                                         Player.PlayerGameStatus.valueOf((String) result.get(Player.PlayerFields.game_status.toString()));
 
                                 GameModel.getInstance().setOtherPlayerGameStatus(
                                         Player.PlayerGameStatus.valueOf((String) result.get(Player.PlayerFields.game_status.toString())));
 
-                                if(gameStatus == Player.PlayerGameStatus.STARTED &&
+                                if (gameStatus == Player.PlayerGameStatus.STARTED &&
                                         GameModel.getInstance().getCurrentPlayerGameStatus() == Player.PlayerGameStatus.STARTED) {
+                                    turnDialog.dismiss();
+
                                     Gson Gs = new Gson();
                                     if (result.containsKey(Player.PlayerFields.submarines_board.toString())) {
                                         Object subBoardJson = result.get(Player.PlayerFields.submarines_board.toString());
@@ -105,7 +156,17 @@ public class GameActivity extends AppCompatActivity {
                                         int[][] fireBoard = Gs.fromJson(Objects.requireNonNull(fireBoardJson).toString(), int[][].class);
                                         GameModel.getInstance().updatePlayer1SubmarinesBoardAfterFire(fireBoard);
                                         myBoard.invalidate();
+
+                                        if (GameModel.getInstance().isGameOver()) {
+                                            GameModel.getInstance().setGameState(GameModel.GameState.GAME_OVER);
+                                            GameModel.getInstance().setCurrentPlayerGameStatus(Player.PlayerGameStatus.LOOSE);
+                                            FireBaseStore.INSTANCE.saveGame(GameModel.getInstance());
+                                        }
                                     }
+                                } else if (gameStatus == Player.PlayerGameStatus.LOOSE) {
+                                    GameModel.getInstance().setGameState(GameModel.GameState.GAME_OVER);
+                                    GameModel.getInstance().setCurrentPlayerGameStatus(Player.PlayerGameStatus.WON);
+                                    FireBaseStore.INSTANCE.saveGame(GameModel.getInstance());
                                 }
                             }
                         }

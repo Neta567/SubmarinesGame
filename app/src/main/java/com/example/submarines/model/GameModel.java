@@ -3,7 +3,6 @@ package com.example.submarines.model;
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 import com.example.submarines.BR;
-import com.google.firebase.firestore.Exclude;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -29,7 +28,6 @@ public class GameModel extends BaseObservable {
     private static final GameModel INSTANCE = new GameModel();
 
     private String gameId = "-1";
-    private String gameResult = "";
     private final Player[] players = new Player[2];
     private GameState gameState = GameState.NOT_STARTED;
     private Submarine currentSubmarine;
@@ -43,7 +41,6 @@ public class GameModel extends BaseObservable {
     public String getGameId() {
         return gameId;
     }
-    @Exclude
     public GameState getGameState() {
         return gameState;
     }
@@ -56,23 +53,24 @@ public class GameModel extends BaseObservable {
         this.gameState = gameState;
         if (gameState == GameState.STARTED) {
             currentSubmarine = null;
-            //players[0].setGameStatus(Player.PlayerGameStatus.STARTED);
-            notifyPropertyChanged(BR.gameStarted);
+            //notifyPropertyChanged(BR.gameStarted);
         }
     }
 
-    @Bindable
     public String getGameResult() {
+
+        String gameResult = "In Progress";
+        if(gameState == GameState.GAME_OVER) {
+            if (players[0].isGameOver())
+                gameResult = players[1].getName() + " WON";
+            else
+                gameResult = players[0].getName() + " WON";
+        }
         return gameResult;
     }
 
-    @Bindable
     public boolean isGameStarted() {
         return gameState == GameState.STARTED;
-    }
-
-    public void setGameResult(String gameResult) {
-        this.gameResult = gameResult;
     }
 
     @Bindable
@@ -80,11 +78,15 @@ public class GameModel extends BaseObservable {
         return players[0].getName();
     }
 
+    @Bindable
+    public String getCurrentPlayerStatus() {
+        return getCurrentPlayerGameStatus().toString();
+    }
+
     public Player.PlayerGameStatus getCurrentPlayerGameStatus() {
         return players[0].getGameStatus();
     }
 
-    @Exclude
     @Bindable
     public String getOtherPlayer() {
         return players[1].getName();
@@ -101,6 +103,7 @@ public class GameModel extends BaseObservable {
 
     public void setCurrentPlayerGameStatus(Player.PlayerGameStatus playerGameStatus) {
         players[0].setGameStatus(playerGameStatus);
+        notifyPropertyChanged(BR.currentPlayerStatus);
     }
 
     public void setOtherPlayer(String otherPlayer) {
@@ -115,7 +118,6 @@ public class GameModel extends BaseObservable {
     public void setCurrentSubmarine(Submarine submarine) {
         currentSubmarine = submarine;
     }
-    @Exclude
     public Submarine getCurrentSubmarine() {
         return currentSubmarine;
     }
@@ -156,7 +158,6 @@ public class GameModel extends BaseObservable {
         return players[0].initFireBoard();
     }
 
-    @Exclude
     public boolean isGameOver() {
         return players[0].isGameOver();
                 //|| players[1].isGameOver();
@@ -164,8 +165,9 @@ public class GameModel extends BaseObservable {
 
     public Map<String, Object> getGame() {
         HashMap<String, Object> game = new HashMap<>();
-        //game.put("gameId", gameId);
+        game.put(GameModelFields.game_id.toString(), gameId);
         game.put(GameModelFields.game_state.toString(), gameState.toString());
+        game.put(GameModelFields.game_result.toString(), getGameResult());
 
         return game;
     }
