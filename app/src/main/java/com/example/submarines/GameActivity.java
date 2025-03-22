@@ -2,20 +2,17 @@ package com.example.submarines;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Dialog;
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
 import android.widget.Toast;
-
 import com.example.submarines.boards.BoardGame;
 import com.example.submarines.databinding.ActivityGameBinding;
 import com.example.submarines.databinding.GameOverBinding;
+import com.example.submarines.helpers.DialogService;
 import com.example.submarines.helpers.FireBaseStore;
 import com.example.submarines.helpers.MusicService;
 import com.example.submarines.model.GameModel;
@@ -29,40 +26,29 @@ public class GameActivity extends AppCompatActivity {
 
     private ActivityGameBinding binding;
     private GameOverBinding gameOverBinding;
-    private Dialog turnDialog;
-    private Dialog winLooseDialog;
-    private boolean isMusicPlaying;
     private MusicService musicService;
     private final static FireBaseStore fireBaseStore = FireBaseStore.getInstance();
 
     private MainActivity mainActivity;
+
+    private DialogService dialogService = DialogService.getInstance();
+    private boolean isMusicPlaying;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityGameBinding.inflate(getLayoutInflater());
         setContentView(binding.rootLayout);
-
-        turnDialog = new Dialog(GameActivity.this);
-        turnDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        turnDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        turnDialog.setContentView(R.layout.game_turn);
+        binding.setViewModel(GameModel.getInstance());
 
         gameOverBinding = GameOverBinding.inflate(getLayoutInflater());
-        winLooseDialog = new Dialog(GameActivity.this);
-        winLooseDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        winLooseDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        winLooseDialog.setContentView(gameOverBinding.getRoot());
-
-        binding.setViewModel(GameModel.getInstance());
 
         BoardGame myBoard = new BoardGame(this);
         myBoard.subscribeOnFireEvent(() -> {
-            turnDialog.show();
+            dialogService.getOpponentTurnDialog(this).show();
             return null;
         });
         binding.ll.addView(myBoard);
-
         startMusicService();
 
         binding.startGameButton.setOnClickListener(v -> {
@@ -80,8 +66,7 @@ public class GameActivity extends AppCompatActivity {
                 }
 
                 FireBaseStore.getInstance().saveGame(GameModel.getInstance());
-                //myBoard.invalidate();
-                turnDialog.show();
+                dialogService.getOpponentTurnDialog(this).show();
 
             } else {
                 Toast.makeText(myBoard.getContext(), "Not all submarines are placed", Toast.LENGTH_SHORT).show();
@@ -102,7 +87,6 @@ public class GameActivity extends AppCompatActivity {
                     }
                 }
         );
-
 
         fireBaseStore.subscribeForGameStateChange(
                 GameModel.getInstance().getGameId(), new FireBaseStore.Callback<Map<String, Object>>() {
@@ -133,7 +117,6 @@ public class GameActivity extends AppCompatActivity {
                 GameModel.getInstance().getOtherPlayer(), new FireBaseStore.Callback<Map<String, Object>>() {
                     @Override
                     public void onSuccess(Map<String, Object> result) {
-                        //TODO: Fix board first update of the player that started the game last (other player board is not updated)
                         if (result != null && !result.isEmpty()) {
                             if (result.containsKey(Player.PlayerFields.game_status.toString())) {
                                 Player.PlayerGameStatus gameStatus =
@@ -144,7 +127,7 @@ public class GameActivity extends AppCompatActivity {
 
                                 if (gameStatus == Player.PlayerGameStatus.STARTED &&
                                         GameModel.getInstance().getCurrentPlayerGameStatus() == Player.PlayerGameStatus.STARTED) {
-                                    turnDialog.dismiss();
+                                    dialogService.getOpponentTurnDialog(GameActivity.this).dismiss();
 
                                     Gson Gs = new Gson();
                                     if (result.containsKey(Player.PlayerFields.submarines_board.toString())) {
@@ -183,7 +166,7 @@ public class GameActivity extends AppCompatActivity {
 
     private void endGame(String gameResult) {
         gameOverBinding.gameOverTxt.setText(gameResult);
-        winLooseDialog.show();
+        dialogService.getWinLooseDialog(this, gameOverBinding.getRoot()).show();
 
         Handler handler = new Handler(Looper.getMainLooper());
         // Create a Runnable to start the new Activity

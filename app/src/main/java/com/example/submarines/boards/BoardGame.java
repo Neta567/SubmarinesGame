@@ -313,22 +313,23 @@ public class BoardGame extends View {
         if(!GameModel.getInstance().isGameOver()) {
             if (isInsideFireBoard(x, y)) {
                 findSquareAtBoardAndApplyAction(player1FireBoard, x, y, (i, j) -> {
-                    if (player2SubmarinesBoard[i][j].getState() == Square.SquareState.OCCUPIED_BY_SUBMARINE) {
-                        model.setFireBoardSquareState(i, j, Square.SquareState.OCCUPIED_BY_SUBMARINE_AND_HIT);
-                        model.setPlayer2SubmarineBoardSquareState(i, j, Square.SquareState.OCCUPIED_BY_SUBMARINE_AND_HIT);
-                    } else {
-                        model.setFireBoardSquareState(i, j, Square.SquareState.MISS);
-                        model.setPlayer2SubmarineBoardSquareState(i, j, Square.SquareState.MISS);
+                    if(player1FireBoard[i][j].getState() == Square.SquareState.EMPTY) {
+                        if (player2SubmarinesBoard[i][j].getState() == Square.SquareState.OCCUPIED_BY_SUBMARINE) {
+                            model.setFireBoardSquareState(i, j, Square.SquareState.OCCUPIED_BY_SUBMARINE_AND_HIT);
+                            model.setPlayer2SubmarineBoardSquareState(i, j, Square.SquareState.OCCUPIED_BY_SUBMARINE_AND_HIT);
+                        } else {
+                            model.setFireBoardSquareState(i, j, Square.SquareState.MISS);
+                            model.setPlayer2SubmarineBoardSquareState(i, j, Square.SquareState.MISS);
+                        }
+                        try {
+                            onFireEventCallable.call();
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
+                        }
+                        fireBaseStore.saveGame(GameModel.getInstance());
                     }
                 });
             }
-            try {
-                onFireEventCallable.call();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-
-            fireBaseStore.saveGame(GameModel.getInstance());
         }
     }
 
