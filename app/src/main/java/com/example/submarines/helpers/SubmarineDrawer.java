@@ -11,6 +11,7 @@ import com.example.submarines.model.Submarine;
 public class SubmarineDrawer implements ShapeDrawingStrategy {
 
     private final Context context;
+    private final static BitmapCache bitmapCache = BitmapCache.getInstance();
 
     public SubmarineDrawer(Context context) {
         this.context = context;
@@ -34,13 +35,13 @@ public class SubmarineDrawer implements ShapeDrawingStrategy {
                 height = submarine.getWidth();
             }
 
-            if (BitmapCache.getInstance().getBitmapFromMemCache(key) == null) {
+            if (bitmapCache.getBitmapFromMemCache(key) == null) {
                 Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), resId);
                 Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap,width, height, true);
-                BitmapCache.getInstance().addBitmapToMemoryCache(key, scaledBitmap);
+                bitmapCache.addBitmapToMemoryCache(key, scaledBitmap);
             }
 
-            Bitmap submarineBitmap = BitmapCache.getInstance().getBitmapFromMemCache(key);
+            Bitmap submarineBitmap = bitmapCache.getBitmapFromMemCache(key);
             canvas.drawBitmap(submarineBitmap, submarine.getX(), submarine.getY(), null);
         }
     }

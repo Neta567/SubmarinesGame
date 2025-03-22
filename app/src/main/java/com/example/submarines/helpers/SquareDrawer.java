@@ -12,8 +12,9 @@ import com.example.submarines.model.Square;
 
 public class SquareDrawer implements ShapeDrawingStrategy {
 
-
     private final Context context;
+
+    private final static BitmapCache bitmapCache = BitmapCache.getInstance();
 
     public SquareDrawer(Context context) {
         this.context = context;
@@ -53,12 +54,12 @@ public class SquareDrawer implements ShapeDrawingStrategy {
             }
         }
         if (hitMissKey != null) {
-            if (BitmapCache.getInstance().getBitmapFromMemCache(hitMissKey) == null) {
+            if (bitmapCache.getBitmapFromMemCache(hitMissKey) == null) {
                 Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), resId);
                 Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, Square.SQUARE_SIZE-80, Square.SQUARE_SIZE-80, true);
-                BitmapCache.getInstance().addBitmapToMemoryCache(hitMissKey, scaledBitmap);
+                bitmapCache.addBitmapToMemoryCache(hitMissKey, scaledBitmap);
             }
-            Bitmap boomBitmap = BitmapCache.getInstance().getBitmapFromMemCache(hitMissKey);
+            Bitmap boomBitmap = bitmapCache.getBitmapFromMemCache(hitMissKey);
             canvas.drawBitmap(boomBitmap, shape.getX()+40, shape.getY()+40, p);
         } else {
             canvas.drawRect(shape.getX(), shape.getY(),
