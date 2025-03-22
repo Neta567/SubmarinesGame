@@ -91,7 +91,7 @@
             </ImageButton>
             <ImageButton
                 android:id="@+id/setup"
-                android:background="@drawable/submarines_setup"
+                android:background="@drawable/submarines_setup2"
                 android:layout_height="60dp"
                 android:layout_width="60dp"
                 android:layout_marginStart="10dp"
