@@ -8,7 +8,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:id="@+id/rootLayout"
-        android:background="@drawable/background">
+        android:background="@drawable/submarines_background1">
 
         <TextView
             android:layout_width="match_parent"
@@ -52,7 +52,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:columnCount="4"
+            android:columnCount="5"
             android:rowCount="1"
             android:gravity="center_horizontal"
             android:layout_marginStart="15pt"
@@ -70,7 +70,7 @@
                 android:background="@drawable/trash_can"
                 android:layout_height="60dp"
                 android:layout_width="60dp"
-                android:layout_marginStart="20dp"
+                android:layout_marginStart="10dp"
                 android:contentDescription="@string/todo">
             </ImageButton>
             <ImageButton
@@ -78,15 +78,23 @@
                 android:background="@drawable/check_mark1"
                 android:layout_height="60dp"
                 android:layout_width="60dp"
-                android:layout_marginStart="20dp"
+                android:layout_marginStart="10dp"
+                android:contentDescription="@string/todo">
+            </ImageButton>
+            <ImageButton
+                android:id="@+id/startStopMusicButton"
+                android:background="@drawable/music_button_2"
+                android:layout_height="60dp"
+                android:layout_width="60dp"
+                android:layout_marginStart="10dp"
                 android:contentDescription="@string/todo">
             </ImageButton>
             <ImageButton
                 android:id="@+id/setup"
-                android:background="@drawable/common_google_signin_btn_icon_dark"
+                android:background="@drawable/submarines_setup"
                 android:layout_height="60dp"
                 android:layout_width="60dp"
-                android:layout_marginStart="20dp"
+                android:layout_marginStart="10dp"
                 android:contentDescription="@string/todo">
             </ImageButton>
         </GridLayout>

@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".JoinGameActivity"
-    android:background="@drawable/background_login">
+    android:background="@drawable/submarines_join_game">
 
     <TextView
         android:id="@+id/textUsername"

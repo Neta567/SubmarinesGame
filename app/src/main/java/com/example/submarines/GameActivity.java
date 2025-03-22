@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.example.submarines.boards.BoardGame;
 import com.example.submarines.databinding.ActivityGameBinding;
 import com.example.submarines.databinding.GameOverBinding;
+import com.example.submarines.helpers.MusicService;
 import com.example.submarines.model.GameModel;
 import com.example.submarines.model.Player;
 import com.google.gson.Gson;
@@ -29,6 +30,7 @@ public class GameActivity extends AppCompatActivity {
     private GameOverBinding gameOverBinding;
     private Dialog turnDialog;
     private Dialog winLooseDialog;
+    private boolean isMusicPlaying;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +57,8 @@ public class GameActivity extends AppCompatActivity {
             return null;
         });
         binding.ll.addView(myBoard);
+
+        startMusicService();
 
         binding.startGameButton.setOnClickListener(v -> {
             if (myBoard.validateCanStartTheGame()) {
@@ -85,6 +89,15 @@ public class GameActivity extends AppCompatActivity {
                     myBoard.invalidate();
                 }
         );
+        binding.startStopMusicButton.setOnClickListener(v -> {
+                    if(isMusicPlaying) {
+                        stopMusicService();
+                    } else {
+                        startMusicService();
+                    }
+                }
+        );
+
 
         FireBaseStore.INSTANCE.subscribeForGameStateChange(
                 GameModel.getInstance().getGameId(), new FireBaseStore.Callback<Map<String, Object>>() {
@@ -181,4 +194,20 @@ public class GameActivity extends AppCompatActivity {
         // Delay the start of the new Activity by 2 seconds
         handler.postDelayed(startNewActivityRunnable, 3000);
     }
+
+    private void startMusicService() {
+        isMusicPlaying = true;
+        Intent serviceIntent = new Intent(this, MusicService.class);
+        serviceIntent.setAction("PLAY");
+        startService(serviceIntent);
+    }
+
+    private void stopMusicService() {
+        isMusicPlaying = false;
+        Intent serviceIntent = new Intent(this, MusicService.class);
+        serviceIntent.setAction("STOP");
+        startService(serviceIntent);
+    }
+
+
 }
