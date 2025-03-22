@@ -13,8 +13,12 @@ public class FireBaseStore {
 
     public static final String GAMES = "Games";
     public static final String PLAYERS = "Players";
-    public static FireBaseStore INSTANCE = new FireBaseStore();
+    private static final FireBaseStore INSTANCE = new FireBaseStore();
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+    private FireBaseStore() {}
+
+    public static FireBaseStore getInstance() { return INSTANCE; }
 
     public void saveGame(GameModel model) {
         try {

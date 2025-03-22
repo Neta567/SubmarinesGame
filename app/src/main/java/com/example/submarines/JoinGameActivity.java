@@ -14,16 +14,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.submarines.databinding.ActivityJoinGameBinding;
 import com.example.submarines.helpers.FireBaseStore;
 import com.example.submarines.model.GameModel;
-
 import java.util.Map;
-import java.util.Objects;
 import java.util.Random;
 
 public class JoinGameActivity extends AppCompatActivity {
 
     private ActivityJoinGameBinding binding;
     private Context context;
-    private final static FireBaseStore fireBaseStore = FireBaseStore.INSTANCE;
+    private final static FireBaseStore fireBaseStore = FireBaseStore.getInstance();
     private GameActivity gameActivity;
 
     @Override

@@ -30,7 +30,7 @@ public class BoardGame extends View {
     private boolean firstTimeSubmarine = true;
     protected Submarine s1, s2, s3, s4;
     private Callable<Void> onFireEventCallable;
-    private final static FireBaseStore fireBaseStore = FireBaseStore.INSTANCE;
+    private final static FireBaseStore fireBaseStore = FireBaseStore.getInstance();
 
     public BoardGame(Context context) {
         super(context);

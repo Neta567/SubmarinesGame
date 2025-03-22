@@ -33,7 +33,7 @@ public class GameActivity extends AppCompatActivity {
     private Dialog winLooseDialog;
     private boolean isMusicPlaying;
     private MusicService musicService;
-    private final static FireBaseStore fireBaseStore = FireBaseStore.INSTANCE;
+    private final static FireBaseStore fireBaseStore = FireBaseStore.getInstance();
 
     private MainActivity mainActivity;
 
@@ -79,7 +79,7 @@ public class GameActivity extends AppCompatActivity {
                     GameModel.getInstance().setGameState(GameModel.GameState.STARTED);
                 }
 
-                FireBaseStore.INSTANCE.saveGame(GameModel.getInstance());
+                FireBaseStore.getInstance().saveGame(GameModel.getInstance());
                 //myBoard.invalidate();
                 turnDialog.show();
 
