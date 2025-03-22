@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Submarines</string>
-    <string name="instructions">OBJECT OF THE GAME\nBe the first to sink all 4 of your opponent\'s ships.</string>
+    <string name="instructions">GOAL OF THE GAME\nBe the first to sink all 4 of your opponent\'s ships.</string>
     <string name="submarines">Submarines</string>
     <string name="start">New Game</string>
     <string name="instructions2">Instructions</string>

@@ -43,23 +43,23 @@ public class FireBaseStore {
         }
     }
 
-    public void getOtherPlayerName(String gameId, String currentPlayerName, Callback<Map<String, Object>> callback) {
+    public void getOtherPlayerName(String gameId, String currentPlayerName, Callback<Map<String, Object>> callback) { // לפי האידי הוא מחזיר את המידע על השחקן
         try {
             //TODO: fix bug in case two players join with the same name
-            db.collection(GAMES).document(gameId)
-                    .collection(PLAYERS)
-                    .whereNotEqualTo(Player.PlayerFields.name.toString(), currentPlayerName)
+            db.collection(GAMES).document(gameId) // הולך לקולקשיין משחקים ואז למסמך משחק
+                    .collection(PLAYERS)// ואז לקולקשיין שחקנים
+                    .whereNotEqualTo(Player.PlayerFields.name.toString(), currentPlayerName) // מחפש איזה שחקן מתאים לשם השחקן השני
                     .get()
-                    .addOnSuccessListener(querySnapshot -> {
+                    .addOnSuccessListener(querySnapshot -> { // מחזיר תמונת מצב
                         if (!querySnapshot.isEmpty()) {
                             String otherPlayerName =
                                     querySnapshot.getDocuments().get(0)
-                                            .get(Player.PlayerFields.name.toString(), String.class);
+                                            .get(Player.PlayerFields.name.toString(), String.class); // מכניס למשתנה את השם שמצא
 
-                            Map<String, Object> playerData = new HashMap<>();
-                            playerData.put("otherPlayer", otherPlayerName);
+                            Map<String, Object> playerData = new HashMap<>(); // יוצר האש מאפ
+                            playerData.put("otherPlayer", otherPlayerName); // מכניס לשם את השם
 
-                            callback.onSuccess(playerData);
+                            callback.onSuccess(playerData); // שולח חזרה את השם לאיפה שקראו לפעולה הזו
                         } else {
                             callback.onFailure(null);
                         }
@@ -69,24 +69,26 @@ public class FireBaseStore {
         }
     }
 
-    public void getOpenGameId(String playerName, final Callback<Map<String, Object>> callback) {
-        db.collection(GAMES)
-                .whereEqualTo(GameModel.GameModelFields.game_state.toString(),
-                        GameModel.GameState.ONE_PLAYER_JOINED.toString())
-                .limit(1)
+    public void getOpenGameId(String playerName, final Callback<Map<String, Object>> callback) { // מקבל שם של שחקן
+        db.collection(GAMES) //ניגש לקולקשיין של המשחקים
+                .whereEqualTo(GameModel.GameModelFields.game_state.toString(), // הולך למצב משחק
+                        GameModel.GameState.ONE_PLAYER_JOINED.toString()) // ובודק לאיזה משחקים המצב הוא של שחקן אחד שהתחבר
+                .limit(1) // לוקח רק משחק אחד משם
                 .get()
-                .addOnSuccessListener(querySnapshot -> {
-                    if (!querySnapshot.isEmpty()) {
-                        // Open game found
-                        String gameId = querySnapshot.getDocuments().get(0).getId();
-                        Map<String, Object> gameData = new HashMap<>();
-                        gameData.put("gameId", gameId);
+                .addOnSuccessListener(querySnapshot -> { // מחזיר סנאפשוט - תמונת מצב שמכילה מסמך של המשחק שהוא מצא
 
-                        getOtherPlayerName(gameId, playerName, new Callback<Map<String, Object>>() {
+                    //  כל מסמך שמור עם האש מאפים
+                    if (!querySnapshot.isEmpty()) { // אם קיים משחק כזה - בדרך כלל תמיד יהיה
+                        // Open game found
+                        String gameId = querySnapshot.getDocuments().get(0).getId(); // לוקח את הסנאפשוט הולך למסמך ולמיקום 0 שזה האידי
+                        Map<String, Object> gameData = new HashMap<>(); // יוצר האש מאפ חדש
+                        gameData.put("gameId", gameId); // מכניס אליו את הגיים אידי שהוא מצא שפתוח
+
+                        getOtherPlayerName(gameId, playerName, new Callback<Map<String, Object>>() { // מקבלים את השם של השחקן השני שנמצא במשחק הפתוח
                             @Override
                             public void onSuccess(Map<String, Object> result) {
-                                gameData.putAll(result);
-                                callback.onSuccess(gameData);
+                                gameData.putAll(result); // נהיה האש מאפ עם אי די ושם של השחקן השני
+                                callback.onSuccess(gameData); // מחזיר את האש מאפ לאן שקראו לו
                             }
 
                             @Override
@@ -106,19 +108,19 @@ public class FireBaseStore {
                 });
     }
 
-    public void subscribeForGameStateChange(String gameId, Callback<Map<String, Object>> callback) {
-        DocumentReference gameDocumentRef = db.collection(GAMES)
-                .document(gameId);
-        gameDocumentRef.addSnapshotListener((snapshot, e) -> {
+    public void subscribeForGameStateChange(String gameId, Callback<Map<String, Object>> callback) { // מקבל אי די של משחק
+        DocumentReference gameDocumentRef = db.collection(GAMES) // הולך לקולקשיין משחק
+                .document(gameId); // והולך למסמך של הגיים איי די שנשלח אליו
+        gameDocumentRef.addSnapshotListener((snapshot, e) -> { // מוסיף למסמך זה מאזין ומבצע פעולה ברגע שמתבצע שינוי
             if (e != null) {
                 callback.onFailure(e);
                 return;
             }
 
            //handle only server events
-           if(snapshot != null && !snapshot.getMetadata().hasPendingWrites()) {
+           if(snapshot != null && !snapshot.getMetadata().hasPendingWrites()) { // אם התמונת מצב של השינוי לא ריקה והתמונת מצב זה שינוי חיצוני ולא שלי אז -
                if (snapshot.exists()) {
-                   callback.onSuccess(snapshot.getData());
+                   callback.onSuccess(snapshot.getData()); // מחזיר את המסמך עם השינוי
                } else {
                    callback.onFailure(null);
                }

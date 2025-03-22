@@ -19,80 +19,80 @@ import java.util.Random;
 
 public class JoinGameActivity extends AppCompatActivity {
 
-    private ActivityJoinGameBinding binding;
-    private Context context;
-    private final static FireBaseStore fireBaseStore = FireBaseStore.getInstance();
+    private ActivityJoinGameBinding binding; // ויו ביידינג
+    private Context context; // קונטקסט של הקלאס הזה לשלוח לגיים אקטיביטי לאחר מכן
+    private final static FireBaseStore fireBaseStore = FireBaseStore.getInstance(); // הצבעה לפייר סטור
     private GameActivity gameActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityJoinGameBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        binding = ActivityJoinGameBinding.inflate(getLayoutInflater()); // יוצר את הקשר של הביינדינג
+        setContentView(binding.getRoot()); // מראה את הנתונים על המסך
         this.context = this;
 
         int random = new Random().nextInt(100);
         binding.editTextUsername.setText("Piccachu" + random);
 
-        binding.btnJoin.setOnClickListener(v -> {
-            binding.btnJoin.setEnabled(false);
-            binding.textGameStarting.setText("Joining...\n");
+        binding.btnJoin.setOnClickListener(v -> { // אם לחצו על הכפתור של גויין
+            binding.btnJoin.setEnabled(false); // אי אפשר ללחוץ יותר עליו
+            binding.textGameStarting.setText("Joining...\n"); // מריץ על המסך את הסטרינג הזה
 
-            Animation anim = AnimationUtils.loadAnimation(context, R.anim.blink);
-            anim.setDuration(2000);
-            binding.textGameStarting.startAnimation(anim);
+            Animation anim = AnimationUtils.loadAnimation(context, R.anim.blink); // יוצר אנימציה לסטרינג הקודם
+            anim.setDuration(2000); // אורך של 2 דקות
+            binding.textGameStarting.startAnimation(anim); // מפעיל את האנימציה
 
-            String player = binding.editTextUsername.getText().toString();
-            fireBaseStore.getOpenGameId(player, new FireBaseStore.Callback<Map<String, Object>>() {
+            String player = binding.editTextUsername.getText().toString(); // לוקח את השם של השחקן שהכנסנו
+            fireBaseStore.getOpenGameId(player, new FireBaseStore.Callback<Map<String, Object>>() { // פנייה לפיירבייס שמחפש לאיזה משחק להוסיף את השחקן שהתחבר ומביא האש מאפ של שם של השחקן השני ושם משחק שפתוח
                 @Override
                 public void onSuccess(Map<String, Object> result) {
 
-                    String gameId = String.valueOf(new Random().nextInt(10000));
-                    boolean isExistingGame = (result != null && !result.isEmpty());
-                    if (isExistingGame) {
+                    String gameId = String.valueOf(new Random().nextInt(10000)); // מייצר סתם קוד למשחק חדש במידת הצורך
+                    boolean isExistingGame = (result != null && !result.isEmpty()); // אם קיים משחק פתוח?
+                    if (isExistingGame) { // אם קיים משחק
                         // Open game found, use existing game ID
-                        gameId = result.get("gameId").toString();
+                        gameId = result.get("gameId").toString(); // הקוד יהפוך למה שהגיע אליו
                     }
                     // No open game found, create a new game ID
-                    GameModel.getInstance().setGameId(gameId);
-                    GameModel.getInstance().setCurrentPlayer(player);
+                    GameModel.getInstance().setGameId(gameId); // מעדכנים את הגיים מודל עם הקוד משחק
+                    GameModel.getInstance().setCurrentPlayer(player); // מעדכנים את השם שחקן שלי במודל גם כן
 
-                    StringBuilder gameStatusBuilder = new StringBuilder();
-                    gameStatusBuilder.append("Game ID: :").append(gameId).append("\n");
-                    gameStatusBuilder.append("Player: ").append(player).append(" Joined.\n");
+                    StringBuilder gameStatusBuilder = new StringBuilder(); // מאפשר לחבר שתי מחרוזות ביחד
+                    gameStatusBuilder.append("Game ID: :").append(gameId).append("\n"); // משרשר את ההתחלה לקוד עצמו
+                    gameStatusBuilder.append("Player: ").append(player).append(" Joined.\n"); // גם כן השרשור
 
-                    if(isExistingGame) {
-                        String otherPlayer = result.get("otherPlayer").toString();
+                    if(isExistingGame) { // שוב בודק אם קיים - אם כן -
+                        String otherPlayer = result.get("otherPlayer").toString(); // ניקח ממה שהגיע את השם של השחקן השני
 
-                        GameModel.getInstance().setOtherPlayer(otherPlayer);
+                        GameModel.getInstance().setOtherPlayer(otherPlayer); // נעדכן גם אותו במודל
 
-                        gameStatusBuilder.append("Player: ").append(otherPlayer).append(" also joined\n");
-                        binding.textGameStarting.setText("Starting...");
-                        binding.textGameStarting.startAnimation(anim);
-                        GameModel.getInstance().setGameState(GameModel.GameState.TWO_PLAYERS_JOINED);
+                        gameStatusBuilder.append("Player: ").append(otherPlayer).append(" also joined\n"); // נשרשר גם אותו
+                        binding.textGameStarting.setText("Starting..."); // נתחיל טקסט של התחלה כי הצלחנו לחבר 2 שחקנים יחד
+                        binding.textGameStarting.startAnimation(anim); // הפעלת אנימציה
+                        GameModel.getInstance().setGameState(GameModel.GameState.TWO_PLAYERS_JOINED); // מעביר את מצב המשחק ל2 שהתחברו
 
-                    } else {
-                        gameStatusBuilder.append("No other player joined.");
-                        binding.textGameStarting.setText("Waiting...");
-                        binding.textGameStarting.startAnimation(anim);
-                        GameModel.getInstance().setGameState(GameModel.GameState.ONE_PLAYER_JOINED);
+                    } else { // אם לא קיים משחק פתוח
+                        gameStatusBuilder.append("No other player joined."); // מוסיף למה שכתוב על המסך את זה
+                        binding.textGameStarting.setText("Waiting..."); // רושם ממתין
+                        binding.textGameStarting.startAnimation(anim); // מפעיל על זה אנימציה
+                        GameModel.getInstance().setGameState(GameModel.GameState.ONE_PLAYER_JOINED); // מעדכן את מצב המשחק לשחקן אחד שהתחבר
 
                         fireBaseStore.subscribeForGameStateChange(
-                                GameModel.getInstance().getGameId(), new FireBaseStore.Callback<Map<String, Object>>() {
+                                GameModel.getInstance().getGameId(), new FireBaseStore.Callback<Map<String, Object>>() { // במקרה שקרה שינוי חיצוני כלשהו אנחנו מקבלים עם הקול באק סנאפשוט של השינוי (מישהו חדש רוצה להיכנס למשחק)
                                     @Override
-                                    public void onSuccess(Map<String, Object> result) {
+                                    public void onSuccess(Map<String, Object> result) { // השינוי שחוזר כאש מאפ
                                         if (result != null && !result.isEmpty()) {
-                                            if(result.containsKey(GameModel.GameModelFields.game_state.toString())) {
+                                            if(result.containsKey(GameModel.GameModelFields.game_state.toString())) { // אם יש בשינוי שדה של מצב משחק אז -
                                                 GameModel.getInstance().setGameState(
-                                                        GameModel.GameState.valueOf((String) result.get(GameModel.GameModelFields.game_state.toString())));
+                                                        GameModel.GameState.valueOf((String) result.get(GameModel.GameModelFields.game_state.toString()))); // תשנה במודל את המצב משחק למצב משחק שקרה השינוי
 
-                                                if(GameModel.getInstance().getGameState() == GameModel.GameState.TWO_PLAYERS_JOINED) {
+                                                if(GameModel.getInstance().getGameState() == GameModel.GameState.TWO_PLAYERS_JOINED) { // אם המצב נהפך ל2 משתתפים נכנסו למשחק אז -
                                                     fireBaseStore.getOtherPlayerName(GameModel.getInstance().getGameId(),
-                                                            GameModel.getInstance().getCurrentPlayerName(), new FireBaseStore.Callback<Map<String, Object>>() {
+                                                            GameModel.getInstance().getCurrentPlayerName(), new FireBaseStore.Callback<Map<String, Object>>() { // מביא אי די וש םשל הנוכחי ורוצה שיחזיר לו את השם של השחקן השני
                                                                 @Override
-                                                                public void onSuccess(Map<String, Object> result) {
-                                                                    GameModel.getInstance().setOtherPlayer(result.get("otherPlayer").toString());
-                                                                    startGame();
+                                                                public void onSuccess(Map<String, Object> result) { // השם מגיע לכאן
+                                                                    GameModel.getInstance().setOtherPlayer(result.get("otherPlayer").toString()); // מעדכנים את השם במודל
+                                                                    startGame(); // מתחילים את המשחק
                                                                 }
 
                                                                 @Override
@@ -113,10 +113,10 @@ public class JoinGameActivity extends AppCompatActivity {
                                 });
                     }
 
-                    binding.textGameStatus.setText(gameStatusBuilder.toString());
-                    fireBaseStore.saveGame(GameModel.getInstance());
+                    binding.textGameStatus.setText(gameStatusBuilder.toString()); // אם היה פתוח אז תשים את הטקסט
+                    fireBaseStore.saveGame(GameModel.getInstance()); // שומר את כל הנתונים של המשחק בפייר סטור
 
-                    startGame();
+                    startGame(); // מתחיל את המשחק
                 }
                 @Override
                 public void onFailure(Exception e) {
@@ -127,12 +127,12 @@ public class JoinGameActivity extends AppCompatActivity {
     }
 
     private void startGame() {
-        if(GameModel.getInstance().getGameState() == GameModel.GameState.TWO_PLAYERS_JOINED) {
-            Handler handler = new Handler(Looper.getMainLooper());
+        if(GameModel.getInstance().getGameState() == GameModel.GameState.TWO_PLAYERS_JOINED) { // אם המצב ששני שחקנים התחברו -
+            Handler handler = new Handler(Looper.getMainLooper()); // מפעילים הנדלר שזה מתזמן מעבר בין אקטיביטים
             // Create a Runnable to start the new Activity
-            Runnable startNewActivityRunnable = () -> {
+            Runnable startNewActivityRunnable = () -> { // מבצעים את הפעולה הזאת שזה מעכב את המסך ל2 שניות ואז מבצע את הפעולה הבאה
                 try {
-                    Intent intent = new Intent(context, GameActivity.class);
+                    Intent intent = new Intent(context, GameActivity.class); // מעבר לגיים אקטיביטי
                     startActivity(intent);
                 } catch (Exception e) {
                     e.printStackTrace();

@@ -6,8 +6,8 @@ import java.util.ArrayList;
 
 public class Player {
     private final String name;
-    private final int[][] submarinesBoardModel;
-    private Square[][] submarinesBoard;
+    private final int[][] submarinesBoardModel; // מערך המיוצג על ידי אינטים של אינמים נשמר בפיירסבייס
+    private Square[][] submarinesBoard; // מערך שמכיל ריבועים
     private final int[][] fireBoardModel;
     private Square[][] fireBoard;
     private ArrayList<Submarine> submarineArrayList;
@@ -69,23 +69,23 @@ public class Player {
         for (int i = 0; i < NUM_OF_SQUARES; i++) {
             for (int j = 0; j < NUM_OF_SQUARES; j++) {
                 submarinesBoardModel[i][j] = subBoard[i][j];
-                submarinesBoard[i][j].setState(Square.SquareState.fromValue(subBoard[i][j]));
+                submarinesBoard[i][j].setState(Square.SquareState.fromValue(subBoard[i][j])); // הופך את הלוח צוללות של השני לאינמים
             }
         }
     }
 
-    public void updateSubmarinesBoardAfterFire(int[][] fireBoard) {
-        for (int i = 0; i < NUM_OF_SQUARES; i++) {
+    public void updateSubmarinesBoardAfterFire(int[][] fireBoard) { // מקבל מערך של מספרים של הלוח יריות של השני
+        for (int i = 0; i < NUM_OF_SQUARES; i++) { // עוברים עליו
             for (int j = 0; j < NUM_OF_SQUARES; j++) {
-                if(fireBoard[i][j] != Square.SquareState.EMPTY.getValue()) {
+                if(fireBoard[i][j] != Square.SquareState.EMPTY.getValue()) { // מה שלא ריק
                     //submarinesBoardModel[i][j] = subBoard[i][j];
-                    submarinesBoard[i][j].setState(Square.SquareState.fromValue(fireBoard[i][j]));
+                    submarinesBoard[i][j].setState(Square.SquareState.fromValue(fireBoard[i][j])); // מעבירים את המצב של הלוח יריות ללוח צוללות שלי
                 }
             }
         }
     }
 
-    public void setFireBoardSquareState(int i, int j, Square.SquareState state) {
+    public void setFireBoardSquareState(int i, int j, Square.SquareState state) { // מעדכן מצב של ריבוע בלוח יריות שלי (פגעתי או לא)
         fireBoardModel[i][j] = state.getValue();
         fireBoard[i][j].setState(state);
     }
