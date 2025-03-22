@@ -202,14 +202,14 @@ public class GameActivity extends AppCompatActivity {
 
     private void startMusicService() {
         isMusicPlaying = true;
-        Intent serviceIntent = new Intent(this, musicService.getClass());
+        Intent serviceIntent = new Intent(this, MusicService.class);
         serviceIntent.setAction("PLAY");
         startService(serviceIntent);
     }
 
     private void stopMusicService() {
         isMusicPlaying = false;
-        Intent serviceIntent = new Intent(this, musicService.getClass());
+        Intent serviceIntent = new Intent(this, MusicService.class);
         serviceIntent.setAction("STOP");
         startService(serviceIntent);
     }

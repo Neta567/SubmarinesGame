@@ -39,11 +39,12 @@ public class JoinGameActivity extends AppCompatActivity {
         binding.btnJoin.setOnClickListener(v -> {
             binding.btnJoin.setEnabled(false);
             binding.textGameStarting.setText("Joining...\n");
+
             Animation anim = AnimationUtils.loadAnimation(context, R.anim.blink);
             anim.setDuration(2000);
             binding.textGameStarting.startAnimation(anim);
-            String player = binding.editTextUsername.getText().toString();
 
+            String player = binding.editTextUsername.getText().toString();
             fireBaseStore.getOpenGameId(player, new FireBaseStore.Callback<Map<String, Object>>() {
                 @Override
                 public void onSuccess(Map<String, Object> result) {
@@ -52,7 +53,7 @@ public class JoinGameActivity extends AppCompatActivity {
                     boolean isExistingGame = (result != null && !result.isEmpty());
                     if (isExistingGame) {
                         // Open game found, use existing game ID
-                        gameId = Objects.requireNonNull(result.get("gameId")).toString();
+                        gameId = result.get("gameId").toString();
                     }
                     // No open game found, create a new game ID
                     GameModel.getInstance().setGameId(gameId);
@@ -61,8 +62,9 @@ public class JoinGameActivity extends AppCompatActivity {
                     StringBuilder gameStatusBuilder = new StringBuilder();
                     gameStatusBuilder.append("Game ID: :").append(gameId).append("\n");
                     gameStatusBuilder.append("Player: ").append(player).append(" Joined.\n");
+
                     if(isExistingGame) {
-                        String otherPlayer = Objects.requireNonNull(result.get("otherPlayer")).toString();
+                        String otherPlayer = result.get("otherPlayer").toString();
 
                         GameModel.getInstance().setOtherPlayer(otherPlayer);
 
@@ -91,7 +93,7 @@ public class JoinGameActivity extends AppCompatActivity {
                                                             GameModel.getInstance().getCurrentPlayerName(), new FireBaseStore.Callback<Map<String, Object>>() {
                                                                 @Override
                                                                 public void onSuccess(Map<String, Object> result) {
-                                                                    GameModel.getInstance().setOtherPlayer(Objects.requireNonNull(result.get("otherPlayer")).toString());
+                                                                    GameModel.getInstance().setOtherPlayer(result.get("otherPlayer").toString());
                                                                     startGame();
                                                                 }
 

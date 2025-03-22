@@ -53,7 +53,6 @@ public class GameModel extends BaseObservable {
         this.gameState = gameState;
         if (gameState == GameState.STARTED) {
             currentSubmarine = null;
-            //notifyPropertyChanged(BR.gameStarted);
         }
     }
 

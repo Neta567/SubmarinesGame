@@ -20,8 +20,8 @@ public class FireBaseStore {
         try {
             DocumentReference gameDocumentRef = db.collection(GAMES)
                     .document(model.getGameId());
-            gameDocumentRef.set(model.getGame())
-                    .addOnSuccessListener(v -> System.out.println("Game saved"));
+            gameDocumentRef.set(model.getGame());
+                    //.addOnSuccessListener(v -> System.out.println("Game saved"));
             savePlayer(gameDocumentRef, model);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -32,8 +32,8 @@ public class FireBaseStore {
         try {
             gameDocumentRef.collection(PLAYERS)
                     .document(model.getCurrentPlayerName())
-                    .set(model.getPlayer())
-                    .addOnSuccessListener(v -> System.out.println("Player saved"));
+                    .set(model.getPlayer());
+                   // .addOnSuccessListener(v -> System.out.println("Player saved"));
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -45,7 +45,6 @@ public class FireBaseStore {
             db.collection(GAMES).document(gameId)
                     .collection(PLAYERS)
                     .whereNotEqualTo(Player.PlayerFields.name.toString(), currentPlayerName)
-                    //.whereNotEqualTo("currentPlayerName", model.getCurrentPlayerName())
                     .get()
                     .addOnSuccessListener(querySnapshot -> {
                         if (!querySnapshot.isEmpty()) {
@@ -60,7 +59,6 @@ public class FireBaseStore {
                         } else {
                             callback.onFailure(null);
                         }
-
                     });
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -93,10 +91,6 @@ public class FireBaseStore {
                             }
                         });
 
-                        //String otherPlayerName = "Player2";
-                        //gameData.put("otherPlayer", otherPlayerName);
-
-
                     } else {
                         // No open game found
                         callback.onSuccess(new HashMap<>());
@@ -104,7 +98,6 @@ public class FireBaseStore {
                 })
                 .addOnFailureListener(e -> {
                     // Handle errors
-                    e.printStackTrace();
                     callback.onFailure(null);
                 });
     }
