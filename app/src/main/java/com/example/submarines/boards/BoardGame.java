@@ -8,7 +8,7 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 
-import com.example.submarines.FireBaseStore;
+import com.example.submarines.helpers.FireBaseStore;
 import com.example.submarines.helpers.ShapeDrawingStrategy;
 import com.example.submarines.helpers.SquareActionCallback;
 import com.example.submarines.helpers.SquareDrawer;
@@ -30,6 +30,7 @@ public class BoardGame extends View {
     private boolean firstTimeSubmarine = true;
     protected Submarine s1, s2, s3, s4;
     private Callable<Void> onFireEventCallable;
+    private final static FireBaseStore fireBaseStore = FireBaseStore.INSTANCE;
 
     public BoardGame(Context context) {
         super(context);
@@ -133,7 +134,7 @@ public class BoardGame extends View {
     public void resetGame() {
         resetSubmarineBoard();
         resetFireBoard();
-        FireBaseStore.INSTANCE.saveGame(model);
+        fireBaseStore.saveGame(model);
         invalidate();
     }
 
@@ -327,7 +328,7 @@ public class BoardGame extends View {
                 throw new RuntimeException(e);
             }
 
-            FireBaseStore.INSTANCE.saveGame(GameModel.getInstance());
+            fireBaseStore.saveGame(GameModel.getInstance());
         }
     }
 

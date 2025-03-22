@@ -12,6 +12,7 @@ import android.view.animation.AnimationUtils;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.submarines.databinding.ActivityJoinGameBinding;
+import com.example.submarines.helpers.FireBaseStore;
 import com.example.submarines.model.GameModel;
 
 import java.util.Map;

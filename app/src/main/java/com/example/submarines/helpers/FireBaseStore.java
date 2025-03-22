@@ -1,4 +1,4 @@
-package com.example.submarines;
+package com.example.submarines.helpers;
 
 
 import com.example.submarines.model.GameModel;
