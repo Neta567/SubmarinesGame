@@ -12,6 +12,8 @@ import com.example.submarines.databinding.ActivityInstructionsBinding;
 public class InstructionsActivity extends AppCompatActivity implements View.OnClickListener {
     private ActivityInstructionsBinding binding;
 
+    private MainActivity mainActivity;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

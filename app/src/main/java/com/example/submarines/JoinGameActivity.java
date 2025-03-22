@@ -22,6 +22,8 @@ public class JoinGameActivity extends AppCompatActivity {
 
     private ActivityJoinGameBinding binding;
     private Context context;
+    private final static FireBaseStore fireBaseStore = FireBaseStore.INSTANCE;
+    private GameActivity gameActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +43,7 @@ public class JoinGameActivity extends AppCompatActivity {
             binding.textGameStarting.startAnimation(anim);
             String player = binding.editTextUsername.getText().toString();
 
-            FireBaseStore.INSTANCE.getOpenGameId(player, new FireBaseStore.Callback<Map<String, Object>>() {
+            fireBaseStore.getOpenGameId(player, new FireBaseStore.Callback<Map<String, Object>>() {
                 @Override
                 public void onSuccess(Map<String, Object> result) {
 
@@ -74,7 +76,7 @@ public class JoinGameActivity extends AppCompatActivity {
                         binding.textGameStarting.startAnimation(anim);
                         GameModel.getInstance().setGameState(GameModel.GameState.ONE_PLAYER_JOINED);
 
-                        FireBaseStore.INSTANCE.subscribeForGameStateChange(
+                        fireBaseStore.subscribeForGameStateChange(
                                 GameModel.getInstance().getGameId(), new FireBaseStore.Callback<Map<String, Object>>() {
                                     @Override
                                     public void onSuccess(Map<String, Object> result) {
@@ -84,7 +86,7 @@ public class JoinGameActivity extends AppCompatActivity {
                                                         GameModel.GameState.valueOf((String) result.get(GameModel.GameModelFields.game_state.toString())));
 
                                                 if(GameModel.getInstance().getGameState() == GameModel.GameState.TWO_PLAYERS_JOINED) {
-                                                    FireBaseStore.INSTANCE.getOtherPlayerName(GameModel.getInstance().getGameId(),
+                                                    fireBaseStore.getOtherPlayerName(GameModel.getInstance().getGameId(),
                                                             GameModel.getInstance().getCurrentPlayerName(), new FireBaseStore.Callback<Map<String, Object>>() {
                                                                 @Override
                                                                 public void onSuccess(Map<String, Object> result) {
@@ -111,7 +113,7 @@ public class JoinGameActivity extends AppCompatActivity {
                     }
 
                     binding.textGameStatus.setText(gameStatusBuilder.toString());
-                    FireBaseStore.INSTANCE.saveGame(GameModel.getInstance());
+                    fireBaseStore.saveGame(GameModel.getInstance());
 
                     startGame();
                 }

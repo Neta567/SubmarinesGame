@@ -31,6 +31,10 @@ public class GameActivity extends AppCompatActivity {
     private Dialog turnDialog;
     private Dialog winLooseDialog;
     private boolean isMusicPlaying;
+    private MusicService musicService;
+    private final static FireBaseStore fireBaseStore = FireBaseStore.INSTANCE;
+
+    private MainActivity mainActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,7 +103,7 @@ public class GameActivity extends AppCompatActivity {
         );
 
 
-        FireBaseStore.INSTANCE.subscribeForGameStateChange(
+        fireBaseStore.subscribeForGameStateChange(
                 GameModel.getInstance().getGameId(), new FireBaseStore.Callback<Map<String, Object>>() {
                     @Override
                     public void onSuccess(Map<String, Object> result) {
@@ -124,7 +128,7 @@ public class GameActivity extends AppCompatActivity {
                     }
                 });
 
-        FireBaseStore.INSTANCE.subscribeForPlayerStateChange(GameModel.getInstance().getGameId(),
+        fireBaseStore.subscribeForPlayerStateChange(GameModel.getInstance().getGameId(),
                 GameModel.getInstance().getOtherPlayer(), new FireBaseStore.Callback<Map<String, Object>>() {
                     @Override
                     public void onSuccess(Map<String, Object> result) {
@@ -155,7 +159,7 @@ public class GameActivity extends AppCompatActivity {
                                         if (GameModel.getInstance().isGameOver()) {
                                             GameModel.getInstance().setGameState(GameModel.GameState.GAME_OVER);
                                             GameModel.getInstance().setCurrentPlayerGameStatus(Player.PlayerGameStatus.LOOSE);
-                                            FireBaseStore.INSTANCE.saveGame(GameModel.getInstance());
+                                            fireBaseStore.saveGame(GameModel.getInstance());
 
                                             endGame(GameModel.getInstance().getOtherPlayer() + " WON");
                                         }
@@ -163,7 +167,7 @@ public class GameActivity extends AppCompatActivity {
                                 } else if (gameStatus == Player.PlayerGameStatus.LOOSE) {
                                     GameModel.getInstance().setGameState(GameModel.GameState.GAME_OVER);
                                     GameModel.getInstance().setCurrentPlayerGameStatus(Player.PlayerGameStatus.WON);
-                                    FireBaseStore.INSTANCE.saveGame(GameModel.getInstance());
+                                    fireBaseStore.saveGame(GameModel.getInstance());
                                 }
                             }
                         }
@@ -197,17 +201,15 @@ public class GameActivity extends AppCompatActivity {
 
     private void startMusicService() {
         isMusicPlaying = true;
-        Intent serviceIntent = new Intent(this, MusicService.class);
+        Intent serviceIntent = new Intent(this, musicService.getClass());
         serviceIntent.setAction("PLAY");
         startService(serviceIntent);
     }
 
     private void stopMusicService() {
         isMusicPlaying = false;
-        Intent serviceIntent = new Intent(this, MusicService.class);
+        Intent serviceIntent = new Intent(this, musicService.getClass());
         serviceIntent.setAction("STOP");
         startService(serviceIntent);
     }
-
-
 }

@@ -9,6 +9,8 @@ import com.example.submarines.databinding.ActivityMainBinding;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private ActivityMainBinding binding; //מצהיר על ביינדינג
+    private JoinGameActivity joinGameActivity;
+    private InstructionsActivity instructionsActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
