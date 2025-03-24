@@ -5,6 +5,9 @@ import android.graphics.Canvas;
 import com.example.submarines.helpers.ShapeDrawingStrategy;
 
 public class Shape extends Location {
+
+    // יורשים ממנה ריבוע וצוללת
+    // אם רוצים לצייר אותה אז נפעיל אסטרטגיה שמתאים לצורה שלה
     protected int width;
     protected int height;
 

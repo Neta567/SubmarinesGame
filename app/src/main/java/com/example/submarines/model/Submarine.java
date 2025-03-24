@@ -9,7 +9,7 @@ public class Submarine extends Shape {
     private final int initialX;
     private final int initialY;
     private boolean isVertical = true;
-    ArrayList<Square> occupiedSquares = new ArrayList<>();
+    ArrayList<Square> occupiedSquares = new ArrayList<>(); // מערך של כל הריבועים שהצוללת תופסת
 
     public Submarine(int x, int y, int width, int height, ShapeDrawingStrategy drawingStrategy) {
         super(x, y, width, height, drawingStrategy);
@@ -28,7 +28,7 @@ public class Submarine extends Shape {
                 yu >= y && yu < y + getHeight();
     }
 
-    public boolean intersectsWith(Square square) {
+    public boolean intersectsWith(Square square) { // האם הריבוע נמצא במסביב של הצוללת או לא?
         boolean result = square.getX() >= this.x - SQUARE_SIZE && square.getX() <= this.x + width + SQUARE_SIZE
                 && square.getY() >= this.y - SQUARE_SIZE && square.getY() <= this.y + SQUARE_SIZE;
 
@@ -38,7 +38,7 @@ public class Submarine extends Shape {
         }
         return result;
     }
-    public boolean strictIntersectsWith(Square square) {
+    public boolean strictIntersectsWith(Square square) { // האם הריבוע נמצא מתחת לצוללת?
         boolean result = this.x + height > square.getX() &&  this.x <= square.getX()
                 && this.y >= square.getY() &&  this.y < square.getY() + SQUARE_SIZE;
 
@@ -54,7 +54,7 @@ public class Submarine extends Shape {
         this.y = initialY;
     }
 
-    public boolean isPlacedOnBoard() {
+    public boolean isPlacedOnBoard() { // אם המיקומים הם לא כמו ההתחלתיים אז הצוללת על המסך
         return this.x != initialX || this.y != initialY;
     }
 
@@ -66,7 +66,7 @@ public class Submarine extends Shape {
         occupiedSquares = squares;
     }
 
-    public boolean isDestroyed() {
+    public boolean isDestroyed() { // בודק האם הצוללת הרוסה - האם כל הריבועים שהיא תופסת הם תפוסים והרוסים?
         return occupiedSquares.stream()
                 .allMatch(square ->
                         square.getState() == Square.SquareState.OCCUPIED_BY_SUBMARINE_AND_HIT);

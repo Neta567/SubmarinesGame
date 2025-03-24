@@ -18,14 +18,14 @@ public class SubmarineDrawer implements ShapeDrawingStrategy {
     }
 
     public void draw(Shape shape, Canvas canvas) {
-        if (shape instanceof Submarine) {
+        if (shape instanceof Submarine) { // אם צריך לצייר צוללת
             Submarine submarine = (Submarine) shape;
-            String key;
-            int resId;
+            String key; // שם של ביטמאפ
+            int resId; // אידי של הביטמאפ
             int width = submarine.getWidth();
             int height = submarine.getHeight();
 
-            if (submarine.isVertical()) {
+            if (submarine.isVertical()) { // אם אנכי -
                 key = "submarine_vertical_" + submarine.getHeight();
                 resId = R.drawable.submarine_vertical;
             } else {
