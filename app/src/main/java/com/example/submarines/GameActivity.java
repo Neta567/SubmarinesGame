@@ -25,7 +25,7 @@ import java.util.Objects;
 public class GameActivity extends AppCompatActivity {
 
     private ActivityGameBinding binding; // מייצר ביינדינג חדש
-    private GameOverBinding gameOverBinding; // ??
+    private GameOverBinding gameOverBinding; // ?
     private MusicService musicService;
     private final static FireBaseStore fireBaseStore = FireBaseStore.getInstance();
 
