@@ -2,6 +2,11 @@ package com.example.submarines;
 
 import static com.example.submarines.Square.SQUARE_SIZE;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+
 import java.util.ArrayList;
 
 public class Submarine extends Shape {
@@ -9,9 +14,11 @@ public class Submarine extends Shape {
     private final int initialY;
     private boolean isVertical = true;
     ArrayList<Square> occupiedSquares = new ArrayList<>(); // מערך של כל הריבועים שהצוללת תופסת
+    private final BitmapCache bitmapCache = new BitmapCache();
 
-    public Submarine(int x, int y, int width, int height, ShapeDrawingStrategy drawingStrategy) {
-        super(x, y, width, height, drawingStrategy);
+
+    public Submarine(int x, int y, int width, int height) {
+        super(x, y, width, height);
         initialX = x;
         initialY = y;
     }
@@ -70,4 +77,32 @@ public class Submarine extends Shape {
                 .allMatch(square ->
                         square.getState() == Square.SquareState.OCCUPIED_BY_SUBMARINE_AND_HIT);
     }
-}
+    public void draw(Canvas canvas, Context context) {
+            String key; // שם של ביטמאפ
+            int resId; // אידי של הביטמאפ
+            int width = this.getWidth();
+            int height = this.getHeight();
+
+            if (this.isVertical()) { // אם אנכי -
+                key = "submarine_vertical_" + this.getHeight();
+                resId = R.drawable.submarine_vertical;
+            } else {
+                key = "submarine_horizontal_" + this.getWidth();
+                resId = R.drawable.submarine_horizontal;
+                width = this.getHeight();
+                height = this.getWidth();
+            }
+
+            if (bitmapCache.getBitmapFromMemCache(key) == null) {
+                Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), resId);
+                Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap,width, height, true);
+                bitmapCache.addBitmapToMemoryCache(key, scaledBitmap);
+            }
+
+            Bitmap submarineBitmap = bitmapCache.getBitmapFromMemCache(key);
+            canvas.drawBitmap(submarineBitmap, this.getX(), this.getY(), null);
+        }
+    }
+
+
+

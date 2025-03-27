@@ -30,6 +30,8 @@ public class GameActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
         super.onCreate(savedInstanceState);
         binding = ActivityGameBinding.inflate(getLayoutInflater()); // מקשר את ....
         setContentView(binding.rootLayout); // מפעיל את האקסמל על המסך

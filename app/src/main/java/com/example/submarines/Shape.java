@@ -9,13 +9,10 @@ public class Shape extends Location {
     protected int width;
     protected int height;
 
-    protected ShapeDrawingStrategy drawingStrategy;
-
-    public Shape(int x, int y, int width, int height, ShapeDrawingStrategy drawingStrategy) {
+    public Shape(int x, int y, int width, int height) {
         super(x,y);
         this.width = width;
         this.height = height;
-        this.drawingStrategy = drawingStrategy;
     }
 
     public int getWidth() {
@@ -26,7 +23,5 @@ public class Shape extends Location {
         return height;
     }
 
-    public void draw(Canvas canvas) {
-        drawingStrategy.draw(this, canvas);
-    }
+
 }

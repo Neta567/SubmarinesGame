@@ -22,9 +22,12 @@ public class BoardGame extends View {
     protected Submarine s1, s2, s3, s4;
     private Callable<Void> onFireEventCallable; // מייצר קריאה בשביל להפעיל א הדיאלוג
     private final FireBaseStore fireBaseStore = new FireBaseStore();
+    private Context context1;
 
     public BoardGame(Context context) {
         super(context);
+        context1 = context;
+
     }
 
     @Override
@@ -197,22 +200,21 @@ public class BoardGame extends View {
 
     protected void initSubmarines() {
         submarineArrayList = GameModel.getInstance().initPlayer1Submarines(); // הולכים למודל ולוקחים משם את המצב ההתחלתי של הצוללות
-        ShapeDrawingStrategy drawingStrategy = new SubmarineDrawer(this.getContext()); // מגדירים אסטרטגית ציור של צוללות
 
         s1 = new Submarine(player1SubmarinesBoard[5][1].getX(), player1SubmarinesBoard[5][1].getY() + Square.SQUARE_SIZE * 2,
-                Square.SQUARE_SIZE, Square.SQUARE_SIZE * 2, drawingStrategy);
+                Square.SQUARE_SIZE, Square.SQUARE_SIZE * 2);
         submarineArrayList.add(s1);
 
         s2 = new Submarine(player1SubmarinesBoard[5][2].getX(), player1SubmarinesBoard[5][2].getY() + Square.SQUARE_SIZE * 2,
-                Square.SQUARE_SIZE, Square.SQUARE_SIZE * 2, drawingStrategy);
+                Square.SQUARE_SIZE, Square.SQUARE_SIZE * 2);
         submarineArrayList.add(s2);
 
         s3 = new Submarine(player1SubmarinesBoard[5][3].getX(), player1SubmarinesBoard[5][3].getY() + Square.SQUARE_SIZE * 2,
-                Square.SQUARE_SIZE, Square.SQUARE_SIZE * 3, drawingStrategy);
+                Square.SQUARE_SIZE, Square.SQUARE_SIZE * 3);
         submarineArrayList.add(s3);
 
         s4 = new Submarine(player1SubmarinesBoard[5][4].getX(), player1SubmarinesBoard[5][4].getY() + Square.SQUARE_SIZE * 2,
-                Square.SQUARE_SIZE, Square.SQUARE_SIZE * 4, drawingStrategy);
+                Square.SQUARE_SIZE, Square.SQUARE_SIZE * 4);
         submarineArrayList.add(s4);
     }
 
@@ -230,7 +232,7 @@ public class BoardGame extends View {
     protected void drawBoard(Square[][] boardPlayer, Canvas canvas) {
         for (Square[] squares : boardPlayer) {
             for (int j = 0; j < boardPlayer.length; j++) {
-                squares[j].draw(canvas);
+                squares[j].draw(canvas,context1);
             }
         }
     }
@@ -239,7 +241,7 @@ public class BoardGame extends View {
         for (Square[] squares : boardPlayer) {
             for (int j = 0; j < boardPlayer.length; j++) {
                 if (squares[j].getState() == Square.SquareState.OCCUPIED_BY_SUBMARINE_AND_HIT) {
-                    squares[j].draw(canvas);
+                    squares[j].draw(canvas,context1);
                 }
             }
         }
@@ -256,15 +258,13 @@ public class BoardGame extends View {
     }
 
     private void initSubmarinesBoard(Square[][] board) {
-        ShapeDrawingStrategy drawingStrategy = new SquareDrawer(this.getContext());
-
         int x1 = 0;
         int y1 = 0;
         int w1 = Square.SQUARE_SIZE;
 
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < NUM_OF_SQUARES; j++) {
-                board[i][j] = new Square(x1, y1, w1, w1, drawingStrategy);
+                board[i][j] = new Square(x1, y1, w1, w1);
                 x1 = x1 + w1;
             }
             x1 = 0;
@@ -274,15 +274,13 @@ public class BoardGame extends View {
 
     private void initPlayer1FireBoard() {
         player1FireBoard = GameModel.getInstance().initPlayer1FireBoard();
-        ShapeDrawingStrategy drawingStrategy = new SquareDrawer(this.getContext());
-
         int x2 = 0;
         int y2 = player1SubmarinesBoard[5][5].getY() + 250;
         int w2 = Square.SQUARE_SIZE;
 
         for (int i = 0; i < player1FireBoard.length; i++) {
             for (int j = 0; j < NUM_OF_SQUARES; j++) {
-                player1FireBoard[i][j] = new Square(x2, y2, w2, w2, drawingStrategy);
+                player1FireBoard[i][j] = new Square(x2, y2, w2, w2);
                 x2 = x2 + w2;
             }
             x2 = 0;
@@ -296,7 +294,7 @@ public class BoardGame extends View {
             firstTimeSubmarine = false;
         }
         for (int i = 0; i < submarineArrayList.size(); i++) {
-            submarineArrayList.get(i).draw(layout);
+            submarineArrayList.get(i).draw(layout,context1);
         }
     }
 
