@@ -30,7 +30,7 @@ public class BoardGame extends View {
     private boolean firstTimeSubmarine = true;
     protected Submarine s1, s2, s3, s4;
     private Callable<Void> onFireEventCallable; // מייצר קריאה בשביל להפעיל א הדיאלוג
-    private final static FireBaseStore fireBaseStore = FireBaseStore.getInstance();
+    private final FireBaseStore fireBaseStore = new FireBaseStore();
 
     public BoardGame(Context context) {
         super(context);

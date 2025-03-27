@@ -16,7 +16,7 @@ public class SquareDrawer implements ShapeDrawingStrategy {
 
     private final Context context;
 
-    private final static BitmapCache bitmapCache = BitmapCache.getInstance();
+    private final BitmapCache bitmapCache = new BitmapCache();
 
     public SquareDrawer(Context context) {
         this.context = context;

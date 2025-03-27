@@ -27,11 +27,11 @@ public class GameActivity extends AppCompatActivity {
     private ActivityGameBinding binding; // מייצר ביינדינג חדש
     private GameOverBinding gameOverBinding; // ?
     private MusicService musicService;
-    private final static FireBaseStore fireBaseStore = FireBaseStore.getInstance();
+    private final FireBaseStore fireBaseStore = new FireBaseStore();
 
     private MainActivity mainActivity;
 
-    private DialogService dialogService = DialogService.getInstance(); // ??
+    private DialogService dialogService = new DialogService();
     private boolean isMusicPlaying;
 
     @Override
@@ -65,7 +65,7 @@ public class GameActivity extends AppCompatActivity {
                     GameModel.getInstance().setGameState(GameModel.GameState.STARTED); // מעדכנים את מצב המשחק להתחיל
                 }
 
-                FireBaseStore.getInstance().saveGame(GameModel.getInstance()); // שומרים את הנתונים החדשים בפייק סטור
+                fireBaseStore.saveGame(GameModel.getInstance()); // שומרים את הנתונים החדשים בפייק סטור
                 dialogService.getOpponentTurnDialog(this).show(); // מופעלת חסימת מסך
 
             } else {

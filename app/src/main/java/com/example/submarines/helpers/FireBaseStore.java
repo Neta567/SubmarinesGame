@@ -11,14 +11,9 @@ import java.util.Map;
 
 public class FireBaseStore {
 
-    public static final String GAMES = "Games";
-    public static final String PLAYERS = "Players";
-    private static final FireBaseStore INSTANCE = new FireBaseStore();
+    public final String GAMES = "Games";
+    public final String PLAYERS = "Players";
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-    private FireBaseStore() {}
-
-    public static FireBaseStore getInstance() { return INSTANCE; }
 
     public void saveGame(GameModel model) {
         try {

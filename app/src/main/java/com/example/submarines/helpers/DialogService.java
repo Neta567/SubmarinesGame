@@ -9,11 +9,9 @@ import com.example.submarines.R;
 
 public class DialogService {
 
-    private final static DialogService instance = new DialogService(); // מופע של הדיאלוג
     private Dialog turnDialog; // הפעלת דיאלוג עבור התורות
     private Dialog winLooseDialog; // דיאלוג עבור המנצח
 
-    public static DialogService getInstance() { return instance; }
 
     public Dialog getOpponentTurnDialog(Context context) { // שם דיאלוג לפי התורות
         if(turnDialog == null) {

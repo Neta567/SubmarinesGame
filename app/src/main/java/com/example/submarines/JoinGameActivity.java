@@ -21,7 +21,7 @@ public class JoinGameActivity extends AppCompatActivity {
 
     private ActivityJoinGameBinding binding; // ויו ביידינג
     private Context context; // קונטקסט של הקלאס הזה לשלוח לגיים אקטיביטי לאחר מכן
-    private final static FireBaseStore fireBaseStore = FireBaseStore.getInstance(); // הצבעה לפייר סטור
+    private final FireBaseStore fireBaseStore = new FireBaseStore();
     private GameActivity gameActivity;
 
     @Override
