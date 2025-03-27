@@ -1,6 +1,4 @@
-package com.example.submarines.model;
-
-import com.example.submarines.helpers.ShapeDrawingStrategy;
+package com.example.submarines;
 
 import java.util.HashMap;
 import java.util.Map;

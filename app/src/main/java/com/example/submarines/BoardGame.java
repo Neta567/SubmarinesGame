@@ -1,4 +1,4 @@
-package com.example.submarines.boards;
+package com.example.submarines;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -7,15 +7,6 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.annotation.NonNull;
-
-import com.example.submarines.helpers.FireBaseStore;
-import com.example.submarines.helpers.ShapeDrawingStrategy;
-import com.example.submarines.helpers.SquareActionCallback;
-import com.example.submarines.helpers.SquareDrawer;
-import com.example.submarines.helpers.SubmarineDrawer;
-import com.example.submarines.model.GameModel;
-import com.example.submarines.model.Square;
-import com.example.submarines.model.Submarine;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;

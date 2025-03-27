@@ -1,4 +1,4 @@
-package com.example.submarines.helpers;
+package com.example.submarines;
 
 public interface SquareActionCallback {
 

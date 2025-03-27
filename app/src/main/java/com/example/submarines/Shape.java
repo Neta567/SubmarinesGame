@@ -1,8 +1,6 @@
-package com.example.submarines.model;
+package com.example.submarines;
 
 import android.graphics.Canvas;
-
-import com.example.submarines.helpers.ShapeDrawingStrategy;
 
 public class Shape extends Location {
 

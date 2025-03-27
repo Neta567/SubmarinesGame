@@ -1,11 +1,10 @@
-package com.example.submarines.helpers;
+package com.example.submarines;
 
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.view.View;
 import android.view.Window;
-import com.example.submarines.R;
 
 public class DialogService {
 

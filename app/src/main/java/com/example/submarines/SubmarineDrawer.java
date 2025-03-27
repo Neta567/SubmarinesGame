@@ -1,12 +1,9 @@
-package com.example.submarines.helpers;
+package com.example.submarines;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import com.example.submarines.R;
-import com.example.submarines.model.Shape;
-import com.example.submarines.model.Submarine;
 
 public class SubmarineDrawer implements ShapeDrawingStrategy {
 

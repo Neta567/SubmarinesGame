@@ -1,4 +1,4 @@
-package com.example.submarines.helpers;
+package com.example.submarines;
 
 import android.graphics.Bitmap;
 import android.util.LruCache;

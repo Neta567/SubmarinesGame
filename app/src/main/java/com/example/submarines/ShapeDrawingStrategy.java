@@ -1,8 +1,6 @@
-package com.example.submarines.helpers;
+package com.example.submarines;
 
 import android.graphics.Canvas;
-
-import com.example.submarines.model.Shape;
 
 public interface ShapeDrawingStrategy {
 

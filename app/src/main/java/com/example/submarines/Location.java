@@ -1,4 +1,4 @@
-package com.example.submarines.model;
+package com.example.submarines;
 
 public class Location {
     protected int x;

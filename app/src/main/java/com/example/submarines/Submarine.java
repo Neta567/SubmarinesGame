@@ -1,7 +1,6 @@
-package com.example.submarines.model;
+package com.example.submarines;
 
-import static com.example.submarines.model.Square.SQUARE_SIZE;
-import com.example.submarines.helpers.ShapeDrawingStrategy;
+import static com.example.submarines.Square.SQUARE_SIZE;
 
 import java.util.ArrayList;
 

@@ -1,8 +1,8 @@
-package com.example.submarines.model;
+package com.example.submarines;
 
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
-import com.example.submarines.BR;
+
 import com.google.gson.Gson;
 
 import java.util.ArrayList;

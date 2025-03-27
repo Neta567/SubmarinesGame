@@ -1,8 +1,6 @@
-package com.example.submarines.helpers;
+package com.example.submarines;
 
 
-import com.example.submarines.model.GameModel;
-import com.example.submarines.model.Player;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 

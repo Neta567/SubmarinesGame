@@ -9,18 +9,12 @@ import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
-import com.example.submarines.boards.BoardGame;
+
 import com.example.submarines.databinding.ActivityGameBinding;
 import com.example.submarines.databinding.GameOverBinding;
-import com.example.submarines.helpers.DialogService;
-import com.example.submarines.helpers.FireBaseStore;
-import com.example.submarines.helpers.MusicService;
-import com.example.submarines.model.GameModel;
-import com.example.submarines.model.Player;
 import com.google.gson.Gson;
 
 import java.util.Map;
-import java.util.Objects;
 
 public class GameActivity extends AppCompatActivity {
 
