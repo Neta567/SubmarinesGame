@@ -22,12 +22,12 @@ public class DialogService {
         return turnDialog;
     }
 
-    public Dialog getWinLooseDialog(Context context, View view) {
+    public Dialog getWinLooseDialog(Context context) {
         if(winLooseDialog == null) {
             winLooseDialog = new Dialog(context);
             winLooseDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             winLooseDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-            winLooseDialog.setContentView(view);
+            winLooseDialog.setContentView(R.layout.game_over);
         }
         return winLooseDialog;
     }

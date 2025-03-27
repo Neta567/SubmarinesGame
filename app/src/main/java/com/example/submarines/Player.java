@@ -1,6 +1,6 @@
 package com.example.submarines;
 
-import static com.example.submarines.BoardGame.NUM_OF_SQUARES;
+import static com.example.submarines.BoardGameView.NUM_OF_SQUARES;
 
 import java.util.ArrayList;
 

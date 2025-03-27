@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
-    <data>
-        <variable name="viewModel" type="com.example.submarines.GameModel"/>
-    </data>
-    <RelativeLayout
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -11,10 +7,11 @@
         android:background="@drawable/submarines_background1">
 
         <TextView
+            android:id="@+id/player1NameText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
-            android:text="@{viewModel.currentPlayerName, default=Player1}"
+            android:text="Player1"
             android:textColor="#EDEFF4"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -30,10 +27,11 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/player2NameText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="end"
-            android:text="@{viewModel.otherPlayer, default=Player2}"
+            android:text="Player2"
             android:textColor="#EDEFF4"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -90,7 +88,7 @@
                 android:contentDescription="@string/todo">
             </ImageButton>
             <ImageButton
-                android:id="@+id/setup"
+                android:id="@+id/setupButton"
                 android:background="@drawable/submarines_setup2"
                 android:layout_height="60dp"
                 android:layout_width="60dp"
@@ -100,4 +98,3 @@
         </GridLayout>
 
     </RelativeLayout>
-</layout>

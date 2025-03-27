@@ -1,7 +1,5 @@
 package com.example.submarines;
 
-import androidx.databinding.BaseObservable;
-import androidx.databinding.Bindable;
 
 import com.google.gson.Gson;
 
@@ -9,7 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GameModel extends BaseObservable {
+public class GameModel {
 
     // מכיל את כל המידע הדרוש על המשחק ועל השחקנים שמשתתפים בו
 
@@ -74,12 +72,11 @@ public class GameModel extends BaseObservable {
         return gameState == GameState.STARTED;
     }
 
-    @Bindable
+
     public String getCurrentPlayerName() {
         return players[0].getName();
     } // השם של השחקן שלי
 
-    @Bindable
     public String getCurrentPlayerStatus() {
         return getCurrentPlayerGameStatus().toString();
     }
@@ -88,7 +85,6 @@ public class GameModel extends BaseObservable {
         return players[0].getGameStatus();
     }
 
-    @Bindable
     public String getOtherPlayer() {
         return players[1].getName();
     } // השם של השחקן השני
@@ -99,17 +95,14 @@ public class GameModel extends BaseObservable {
 
     public void setCurrentPlayer(String player) {
         players[0] = new Player(player);
-        notifyPropertyChanged(BR.currentPlayerName); // דרך הדטא ביינדינג נשים את השם של השחקן שלי בשורה למעלה
     }
 
     public void setCurrentPlayerGameStatus(Player.PlayerGameStatus playerGameStatus) { // לא בשימוש
         players[0].setGameStatus(playerGameStatus); // משנה את מצב השחקן שלי
-        notifyPropertyChanged(BR.currentPlayerStatus);
     }
 
     public void setOtherPlayer(String otherPlayer) {
         players[1] = new Player(otherPlayer);
-        notifyPropertyChanged(BR.otherPlayer);
     }
 
     public void setOtherPlayerGameStatus(Player.PlayerGameStatus playerGameStatus) { // לא בשימוש

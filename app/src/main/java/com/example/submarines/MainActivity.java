@@ -4,32 +4,34 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import com.example.submarines.databinding.ActivityMainBinding;
+import android.widget.Button;
+
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private ActivityMainBinding binding; //מצהיר על ביינדינג
     private JoinGameActivity joinGameActivity;
     private InstructionsActivity instructionsActivity;
+    private Button btnStart,btnInstructions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityMainBinding.inflate(getLayoutInflater()); //מעביר אלמנטים מאקסמל לביינדינג
-        setContentView(binding.getRoot());
+        setContentView(R.layout.activity_main);
 
-        binding.btnStart.setOnClickListener(this);
-        binding.btnInstructions.setOnClickListener(this);
+        btnStart = findViewById(R.id.btnStart);
+        btnInstructions = findViewById(R.id.btnInstructions);
+        btnStart.setOnClickListener(this);
+        btnInstructions.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
-        if(v == binding.btnStart)
+        if(v == btnStart)
         {
             Intent i = new Intent(this, JoinGameActivity.class);
             startActivity(i);
         }
-        if(v == binding.btnInstructions)
+        if(v == btnInstructions)
         {
 
             Intent i = new Intent(this, InstructionsActivity.class);

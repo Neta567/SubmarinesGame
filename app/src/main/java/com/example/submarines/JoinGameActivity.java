@@ -8,40 +8,47 @@ import android.os.Looper;
 import android.util.Log;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.submarines.databinding.ActivityJoinGameBinding;
 
 import java.util.Map;
 import java.util.Random;
 
 public class JoinGameActivity extends AppCompatActivity {
 
-    private ActivityJoinGameBinding binding; // ויו ביידינג
     private Context context; // קונטקסט של הקלאס הזה לשלוח לגיים אקטיביטי לאחר מכן
     private final FireBaseStore fireBaseStore = new FireBaseStore();
-    private GameActivity gameActivity;
+    private EditText editTextUsername;
+    private Button btnJoin;
+    private TextView textGameStarting,textGameStatus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityJoinGameBinding.inflate(getLayoutInflater()); // יוצר את הקשר של הביינדינג
-        setContentView(binding.getRoot()); // מראה את הנתונים על המסך
+        setContentView(R.layout.activity_join_game); // מראה את הנתונים על המסך
         this.context = this;
 
         int random = new Random().nextInt(100);
-        binding.editTextUsername.setText("Piccachu" + random);
+        editTextUsername = findViewById(R.id.editTextUsername);
+        editTextUsername.setText("Piccachu" + random);
 
-        binding.btnJoin.setOnClickListener(v -> { // אם לחצו על הכפתור של גויין
-            binding.btnJoin.setEnabled(false); // אי אפשר ללחוץ יותר עליו
-            binding.textGameStarting.setText("Joining...\n"); // מריץ על המסך את הסטרינג הזה
+        btnJoin = findViewById(R.id.btnJoin);
+        textGameStarting = findViewById(R.id.textGameStarting);
+        textGameStatus = findViewById(R.id.textGameStatus);
+
+        btnJoin.setOnClickListener(v -> { // אם לחצו על הכפתור של גויין
+            btnJoin.setEnabled(false); // אי אפשר ללחוץ יותר עליו
+            textGameStarting.setText("Joining...\n"); // מריץ על המסך את הסטרינג הזה
 
             Animation anim = AnimationUtils.loadAnimation(context, R.anim.blink); // יוצר אנימציה לסטרינג הקודם
             anim.setDuration(2000); // אורך של 2 דקות
-            binding.textGameStarting.startAnimation(anim); // מפעיל את האנימציה
+            textGameStarting.startAnimation(anim); // מפעיל את האנימציה
 
-            String player = binding.editTextUsername.getText().toString(); // לוקח את השם של השחקן שהכנסנו
+            String player = editTextUsername.getText().toString(); // לוקח את השם של השחקן שהכנסנו
             fireBaseStore.getOpenGameId(player, new FireBaseStore.Callback<Map<String, Object>>() { // פנייה לפיירבייס שמחפש לאיזה משחק להוסיף את השחקן שהתחבר ומביא האש מאפ של שם של השחקן השני ושם משחק שפתוח
                 @Override
                 public void onSuccess(Map<String, Object> result) {
@@ -66,14 +73,14 @@ public class JoinGameActivity extends AppCompatActivity {
                         GameModel.getInstance().setOtherPlayer(otherPlayer); // נעדכן גם אותו במודל
 
                         gameStatusBuilder.append("Player: ").append(otherPlayer).append(" also joined\n"); // נשרשר גם אותו
-                        binding.textGameStarting.setText("Starting..."); // נתחיל טקסט של התחלה כי הצלחנו לחבר 2 שחקנים יחד
-                        binding.textGameStarting.startAnimation(anim); // הפעלת אנימציה
+                        textGameStarting.setText("Starting..."); // נתחיל טקסט של התחלה כי הצלחנו לחבר 2 שחקנים יחד
+                        textGameStarting.startAnimation(anim); // הפעלת אנימציה
                         GameModel.getInstance().setGameState(GameModel.GameState.TWO_PLAYERS_JOINED); // מעביר את מצב המשחק ל2 שהתחברו
 
                     } else { // אם לא קיים משחק פתוח
                         gameStatusBuilder.append("No other player joined."); // מוסיף למה שכתוב על המסך את זה
-                        binding.textGameStarting.setText("Waiting..."); // רושם ממתין
-                        binding.textGameStarting.startAnimation(anim); // מפעיל על זה אנימציה
+                        textGameStarting.setText("Waiting..."); // רושם ממתין
+                        textGameStarting.startAnimation(anim); // מפעיל על זה אנימציה
                         GameModel.getInstance().setGameState(GameModel.GameState.ONE_PLAYER_JOINED); // מעדכן את מצב המשחק לשחקן אחד שהתחבר
 
                         fireBaseStore.subscribeForGameStateChange(
@@ -112,7 +119,7 @@ public class JoinGameActivity extends AppCompatActivity {
                                 });
                     }
 
-                    binding.textGameStatus.setText(gameStatusBuilder.toString()); // אם היה פתוח אז תשים את הטקסט
+                    textGameStatus.setText(gameStatusBuilder.toString()); // אם היה פתוח אז תשים את הטקסט
                     fireBaseStore.saveGame(GameModel.getInstance()); // שומר את כל הנתונים של המשחק בפייר סטור
 
                     startGame(); // מתחיל את המשחק

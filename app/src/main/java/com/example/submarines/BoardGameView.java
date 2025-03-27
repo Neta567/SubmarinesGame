@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
 
-public class BoardGame extends View {
+public class BoardGameView extends View {
 
     protected GameModel model = GameModel.getInstance(); //מקבל מודל אחד ויחיד
     protected Square[][] player1SubmarinesBoard, player2SubmarinesBoard, player1FireBoard; //לוח ספינות שלי ושל השני ולוח יריות שלי
@@ -24,7 +24,7 @@ public class BoardGame extends View {
     private final FireBaseStore fireBaseStore = new FireBaseStore();
     private Context context1;
 
-    public BoardGame(Context context) {
+    public BoardGameView(Context context) {
         super(context);
         context1 = context;
 

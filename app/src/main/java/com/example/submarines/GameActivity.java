@@ -8,54 +8,55 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.submarines.databinding.ActivityGameBinding;
-import com.example.submarines.databinding.GameOverBinding;
 import com.google.gson.Gson;
 
+import java.text.BreakIterator;
 import java.util.Map;
 
 public class GameActivity extends AppCompatActivity {
 
-    private ActivityGameBinding binding; // מייצר ביינדינג חדש
-    private GameOverBinding gameOverBinding; // ?
-    private MusicService musicService;
     private final FireBaseStore fireBaseStore = new FireBaseStore();
-
-    private MainActivity mainActivity;
-
     private DialogService dialogService = new DialogService();
     private boolean isMusicPlaying;
+    private ImageButton startGameButton,rotationButton,erasureButton, setupButton,startStopMusicButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-
         super.onCreate(savedInstanceState);
-        binding = ActivityGameBinding.inflate(getLayoutInflater()); // מקשר את ....
-        setContentView(binding.rootLayout); // מפעיל את האקסמל על המסך
-        binding.setViewModel(GameModel.getInstance()); // מתחיל קישור נתונים בין המודל לאקטיביטי
 
-        gameOverBinding = GameOverBinding.inflate(getLayoutInflater()); // ??
+        setContentView(R.layout.activity_game); // מפעיל את האקסמל על המסך
 
-        BoardGame myBoard = new BoardGame(this); // מייצר רכיב חדש המכיל את שתי הלוחות
-        myBoard.subscribeOnFireEvent(() -> { // שמים מאזין על שתי הלוחות האלה ובמידה שקרה שינוי ונלחץ משהו אז נפעיל את הדיאלוג שיחסום את המסך
+        BoardGameView boardGameView = new BoardGameView(this); // מייצר רכיב חדש המכיל את שתי הלוחות
+        boardGameView.subscribeOnFireEvent(() -> { // שמים מאזין על שתי הלוחות האלה ובמידה שקרה שינוי ונלחץ משהו אז נפעיל את הדיאלוג שיחסום את המסך
             dialogService.getOpponentTurnDialog(this).show();
             return null;
         });
-        binding.ll.addView(myBoard); // מפעילים את הרכיב על המסך ומראים את 2 הלוחות
+        LinearLayout ll = findViewById(R.id.ll);
+        ll.addView(boardGameView); // מוסיפים את הרכיב boargameview על המסך ומראים את 2 הלוחות
+
         //startMusicService(); // מפעילים את המוזיקה
 
-        binding.startGameButton.setOnClickListener(v -> { // במידה ולוחצים על הכפתור של התחילת משחק (וי) -
-            if (myBoard.validateCanStartTheGame()) { // בודק אם ברכיב הזה הלוח של הצוללות מסודר תקין וכל הצוללות על המסך
-                Toast.makeText(myBoard.getContext(), "Game Started", Toast.LENGTH_SHORT).show(); // טוסט של תחילת המסך
+        startGameButton = findViewById(R.id.startGameButton);
+        rotationButton = findViewById(R.id.rotationButton);
+        erasureButton = findViewById(R.id.erasureButton);
+        setupButton = findViewById(R.id.setupButton);
+        startStopMusicButton = findViewById(R.id.startStopMusicButton);
+
+        startGameButton.setOnClickListener(v -> { // במידה ולוחצים על הכפתור של התחילת משחק (וי) -
+            if (boardGameView.validateCanStartTheGame()) { // בודק אם ברכיב הזה הלוח של הצוללות מסודר תקין וכל הצוללות על המסך
+                Toast.makeText(boardGameView.getContext(), "Game Started", Toast.LENGTH_SHORT).show(); // טוסט של תחילת המסך
                 GameModel.getInstance().setCurrentPlayerGameStatus(Player.PlayerGameStatus.STARTED); // בגלל שהוא לחץ על וי אז הוא מוגדר כשחקן שהתחיל את המשחק
 
-                binding.rotationButton.setEnabled(false); // אי אפשר כבר ללחוץ על זה
-                binding.rotationButton.setVisibility(View.INVISIBLE); // לא רואים את הכפתור יותר
-                binding.erasureButton.setEnabled(false); // כנל על המחיקה
-                binding.erasureButton.setVisibility(View.INVISIBLE);
+                rotationButton.setEnabled(false); // אי אפשר כבר ללחוץ על זה
+                rotationButton.setVisibility(View.INVISIBLE); // לא רואים את הכפתור יותר
+                erasureButton.setEnabled(false); // כנל על המחיקה
+                erasureButton.setVisibility(View.INVISIBLE);
 
                 if (GameModel.getInstance().getOtherPlayerGameStatus() == Player.PlayerGameStatus.STARTED) { // אם גם השחקן השני התחיל את המשחק אז -
                     GameModel.getInstance().setGameState(GameModel.GameState.STARTED); // מעדכנים את מצב המשחק להתחיל
@@ -65,17 +66,17 @@ public class GameActivity extends AppCompatActivity {
                 dialogService.getOpponentTurnDialog(this).show(); // מופעלת חסימת מסך
 
             } else {
-                Toast.makeText(myBoard.getContext(), "Not all submarines are placed", Toast.LENGTH_SHORT).show(); // אם מצב הצוללות לא תקין אז תופעל הודעה
+                Toast.makeText(boardGameView.getContext(), "Not all submarines are placed", Toast.LENGTH_SHORT).show(); // אם מצב הצוללות לא תקין אז תופעל הודעה
             }
         });
-        binding.rotationButton.setOnClickListener(v -> myBoard.rotateSubmarine()); // אם לחצו על סיבוב צוללת אז היא תסתובב
-        binding.erasureButton.setOnClickListener(v -> myBoard.resetSubmarineBoard()); // כנל על מחיקה
-        binding.setup.setOnClickListener(v -> { // אם לוחצים על סידור קבוע אז זה יסדר
-                    myBoard.setupBoard();
-                    myBoard.invalidate();
+        rotationButton.setOnClickListener(v -> boardGameView.rotateSubmarine()); // אם לחצו על סיבוב צוללת אז היא תסתובב
+        erasureButton.setOnClickListener(v -> boardGameView.resetSubmarineBoard()); // כנל על מחיקה
+        setupButton.setOnClickListener(v -> { // אם לוחצים על סידור קבוע אז זה יסדר
+                    boardGameView.setupBoard();
+                    boardGameView.invalidate();
                 }
         );
-        binding.startStopMusicButton.setOnClickListener(v -> { // אם לוחצים על כפתורים המוזיקה
+        startStopMusicButton.setOnClickListener(v -> { // אם לוחצים על כפתורים המוזיקה
                     if(isMusicPlaying) { // אם מופעל
                         stopMusicService(); // יכבה
                     } else { // ולהפך
@@ -94,7 +95,7 @@ public class GameActivity extends AppCompatActivity {
                                         GameModel.GameState.valueOf((String) result.get(GameModel.GameModelFields.game_state.toString()))); // תעדכן את המצב משחק למה שהוא השתנה
 
                                 if (GameModel.getInstance().getGameState() == GameModel.GameState.STARTED) { // אם זה שונה להתחל אז -
-                                    myBoard.invalidate(); // תצייר את המסך מחדש ואז בעצם הוא ילך לאון דרו של הבורד גיים
+                                    boardGameView.invalidate(); // תצייר את המסך מחדש ואז בעצם הוא ילך לאון דרו של הבורד גיים
                                 } else if (GameModel.getInstance().getGameState() == GameModel.GameState.GAME_OVER) { // אם קרה שינוי והמשחק הסתיים
                                     String msg = result.get(GameModel.GameModelFields.game_result.toString()).toString(); // שם של מי ניצח
                                     endGame(msg); // הולך לפונקציה של סוף משחק
@@ -134,7 +135,7 @@ public class GameActivity extends AppCompatActivity {
                                         Object fireBoardJson = result.get(Player.PlayerFields.fire_board.toString()); // מקבל אובייקט של הלוח יריות של השני
                                         int[][] fireBoard = Gs.fromJson((fireBoardJson).toString(), int[][].class); // מעביר את האובייקט מסטרינג למערך
                                         GameModel.getInstance().updatePlayer1SubmarinesBoardAfterFire(fireBoard); // אחרי שקרה שינוי והלוח יריות של השני השתנה אז נעדכן את הלוח שלי
-                                        myBoard.invalidate(); // נצייר את הלוחות מחדש עם בומים ואיקסים
+                                        boardGameView.invalidate(); // נצייר את הלוחות מחדש עם בומים ואיקסים
 
                                         if (GameModel.getInstance().isGameOver()) { // אם המשחק הסתיים וכל הצוללות הרוסות אז -
                                             GameModel.getInstance().setGameState(GameModel.GameState.GAME_OVER); // נשנה את מצב במשחק לזהו
@@ -161,14 +162,15 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void endGame(String gameResult) { // מקבל את השם של מי שניצח
-        gameOverBinding.gameOverTxt.setText(gameResult); //
-        dialogService.getWinLooseDialog(this, gameOverBinding.getRoot()).show(); // יכניס לדיאלוג ויראה את מי שניצח
+        TextView gameOverTxt = findViewById(R.id.gameOverTxt);
+        gameOverTxt.setText(gameResult);
+        dialogService.getWinLooseDialog(this).show(); // יכניס לדיאלוג ויראה את מי שניצח
 
         Handler handler = new Handler(Looper.getMainLooper()); // יוצרים הנדלר שמתזמן אירועים במעבר בין מסכים
         // Create a Runnable to start the new Activity
         Runnable startNewActivityRunnable = () -> { // אחרי יצירת הדיליי של ה3 שניות מגדירים אינטנט למעבר חזרה למאיין אקטיביטי
             try {
-                Intent intent = new Intent(binding.getRoot().getContext(), MainActivity.class);
+                Intent intent = new Intent(this, MainActivity.class);
                 startActivity(intent);
             } catch (Exception e) {
                 e.printStackTrace();
