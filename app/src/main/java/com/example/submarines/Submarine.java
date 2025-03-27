@@ -14,7 +14,6 @@ public class Submarine extends Shape {
     private final int initialY;
     private boolean isVertical = true;
     ArrayList<Square> occupiedSquares = new ArrayList<>(); // מערך של כל הריבועים שהצוללת תופסת
-    private final BitmapCache bitmapCache = new BitmapCache();
 
 
     public Submarine(int x, int y, int width, int height) {
@@ -92,15 +91,9 @@ public class Submarine extends Shape {
                 width = this.getHeight();
                 height = this.getWidth();
             }
-
-            if (bitmapCache.getBitmapFromMemCache(key) == null) {
-                Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), resId);
-                Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap,width, height, true);
-                bitmapCache.addBitmapToMemoryCache(key, scaledBitmap);
-            }
-
-            Bitmap submarineBitmap = bitmapCache.getBitmapFromMemCache(key);
-            canvas.drawBitmap(submarineBitmap, this.getX(), this.getY(), null);
+            Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), resId);
+            Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap,width, height, true);
+            canvas.drawBitmap(scaledBitmap, this.getX(), this.getY(), null);
         }
     }
 

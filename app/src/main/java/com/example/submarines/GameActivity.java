@@ -45,7 +45,7 @@ public class GameActivity extends AppCompatActivity {
             return null;
         });
         binding.ll.addView(myBoard); // מפעילים את הרכיב על המסך ומראים את 2 הלוחות
-        startMusicService(); // מפעילים את המוזיקה
+        //startMusicService(); // מפעילים את המוזיקה
 
         binding.startGameButton.setOnClickListener(v -> { // במידה ולוחצים על הכפתור של התחילת משחק (וי) -
             if (myBoard.validateCanStartTheGame()) { // בודק אם ברכיב הזה הלוח של הצוללות מסודר תקין וכל הצוללות על המסך

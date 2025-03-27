@@ -45,7 +45,6 @@ public class Square extends Shape {
     public static int SQUARE_SIZE;
     private Submarine submarine;
     private SquareState state = SquareState.EMPTY; // בהתחלה כולם ריקים
-    private final BitmapCache bitmapCache = new BitmapCache();
 
 
 
@@ -106,14 +105,9 @@ public class Square extends Shape {
                 break;
         }
         if (hitMissKey != null) { // אם צריך לצייר בום או איקס -
-            if (bitmapCache.getBitmapFromMemCache(hitMissKey) == null) { // אם אין ביטמאפ כזה עוד -
-                Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), resId); // תכניס לביטמאפ את מה שנכון לפי האידי
-                Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, Square.SQUARE_SIZE - 80, Square.SQUARE_SIZE - 80, true); // תיצור אותו בגודל נכון
-                bitmapCache.addBitmapToMemoryCache(hitMissKey, scaledBitmap); // תוסיף אותו כמשהו קיים כבר לפעם הבאה
-            }
-            // אם קיים כבר ביטמאפ כזה אז -
-            Bitmap boomBitmap = bitmapCache.getBitmapFromMemCache(hitMissKey); //אותו הדבר
-            canvas.drawBitmap(boomBitmap, this.getX() + 40, this.getY() + 40, p);
+            Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), resId); // תכניס לביטמאפ את מה שנכון לפי האידי
+            Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, Square.SQUARE_SIZE - 80, Square.SQUARE_SIZE - 80, true); // תיצור אותו בגודל נכון
+            canvas.drawBitmap(scaledBitmap, this.getX() + 40, this.getY() + 40, p);
         } else { //אם סתם צריך לצייר ריבוע -
             canvas.drawRect(this.getX(), this.getY(),
                             this.getX() + this.getWidth(), this.getY() + this.getHeight(), p);
