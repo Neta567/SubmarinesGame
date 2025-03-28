@@ -2,12 +2,17 @@ package com.example.submarines;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -22,9 +27,13 @@ import java.util.Map;
 public class GameActivity extends AppCompatActivity {
 
     private final FireBaseStore fireBaseStore = new FireBaseStore();
-    private DialogService dialogService = new DialogService();
     private boolean isMusicPlaying;
     private ImageButton startGameButton,rotationButton,erasureButton, setupButton,startStopMusicButton;
+    private MediaPlayer mediaPlayer;
+    private Dialog turnDialog; // הפעלת דיאלוג עבור התורות
+    private Dialog winLooseDialog; // דיאלוג עבור המנצח
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +43,8 @@ public class GameActivity extends AppCompatActivity {
 
         BoardGameView boardGameView = new BoardGameView(this); // מייצר רכיב חדש המכיל את שתי הלוחות
         boardGameView.subscribeOnFireEvent(() -> { // שמים מאזין על שתי הלוחות האלה ובמידה שקרה שינוי ונלחץ משהו אז נפעיל את הדיאלוג שיחסום את המסך
-            dialogService.getOpponentTurnDialog(this).show();
+            //dialogService.getOpponentTurnDialog(this).show();
+            getOpponentTurnDialog(this).show();
             return null;
         });
         LinearLayout ll = findViewById(R.id.ll);
@@ -63,7 +73,7 @@ public class GameActivity extends AppCompatActivity {
                 }
 
                 fireBaseStore.saveGame(GameModel.getInstance()); // שומרים את הנתונים החדשים בפייק סטור
-                dialogService.getOpponentTurnDialog(this).show(); // מופעלת חסימת מסך
+                getOpponentTurnDialog(this).show(); // מופעלת חסימת מסך
 
             } else {
                 Toast.makeText(boardGameView.getContext(), "Not all submarines are placed", Toast.LENGTH_SHORT).show(); // אם מצב הצוללות לא תקין אז תופעל הודעה
@@ -124,7 +134,7 @@ public class GameActivity extends AppCompatActivity {
 
                                 if (gameStatus == Player.PlayerGameStatus.STARTED &&
                                         GameModel.getInstance().getCurrentPlayerGameStatus() == Player.PlayerGameStatus.STARTED) { // אם שני השחקנים התחילו את המשחק
-                                    dialogService.getOpponentTurnDialog(GameActivity.this).dismiss(); // מורידים את החסימה של המסך
+                                    getOpponentTurnDialog(GameActivity.this).dismiss(); // מורידים את החסימה של המסך
 
                                     Gson Gs = new Gson();
                                     if (result.containsKey(Player.PlayerFields.submarines_board.toString())) { // אם קיים בסנפשוט לוח של צוללות של השחקן השני אז -
@@ -162,9 +172,10 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void endGame(String gameResult) { // מקבל את השם של מי שניצח
-        TextView gameOverTxt = findViewById(R.id.gameOverTxt);
+        Dialog winLooseDialog = getWinLooseDialog(this);
+        TextView gameOverTxt = winLooseDialog.findViewById(R.id.gameOverTxt);
         gameOverTxt.setText(gameResult);
-        dialogService.getWinLooseDialog(this).show(); // יכניס לדיאלוג ויראה את מי שניצח
+        winLooseDialog.show(); // יכניס לדיאלוג ויראה את מי שניצח
 
         Handler handler = new Handler(Looper.getMainLooper()); // יוצרים הנדלר שמתזמן אירועים במעבר בין מסכים
         // Create a Runnable to start the new Activity
@@ -183,15 +194,34 @@ public class GameActivity extends AppCompatActivity {
 
     private void startMusicService() { // מפעילים את המוזיקה כשאר עוברים לאקטיביטי הזה
         isMusicPlaying = true; // הופכים את המצב של המוזיקה לאמת
-        Intent serviceIntent = new Intent(this, MusicService.class); // עוברים לשרת של מוזיקה - בעקרון הוא אקטיביטי גם כן
-        serviceIntent.setAction("PLAY");  //
-        startService(serviceIntent); //
+        mediaPlayer = MediaPlayer.create(this, R.raw.submarine);
+        mediaPlayer.start();
+        mediaPlayer.setLooping(true);
     }
 
     private void stopMusicService() {
         isMusicPlaying = false;
-        Intent serviceIntent = new Intent(this, MusicService.class);
-        serviceIntent.setAction("STOP");
-        startService(serviceIntent);
+        mediaPlayer.stop();
+        mediaPlayer.release();
+        mediaPlayer = null;
     }
+    public Dialog getOpponentTurnDialog(Context context) { // שם דיאלוג לפי התורות
+        if(turnDialog == null) {
+            turnDialog = new Dialog(context); // מגדיר דיאלוג
+            turnDialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // מביא לו את המסך שעליו הוא צריך להפעיל את הדיאלוג
+            turnDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT)); // הולך למסך והופך את המסגרת לשקופה
+            turnDialog.setContentView(R.layout.game_turn); // מפעיל את הדיאלוג שהוגדר באקסמל
+        }
+        return turnDialog;
+    }
+    public Dialog getWinLooseDialog(Context context) {
+        if(winLooseDialog == null) {
+            winLooseDialog = new Dialog(context);
+            winLooseDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            winLooseDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+            winLooseDialog.setContentView(R.layout.game_over);
+        }
+        return winLooseDialog;
+    }
+
 }
