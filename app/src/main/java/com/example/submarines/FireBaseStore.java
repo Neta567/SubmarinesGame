@@ -9,7 +9,6 @@ import java.util.Map;
 
 public class FireBaseStore {
 
-    public final String GAMES = "Games";
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     public void saveGame(int gameId, int gameScore) {
@@ -18,7 +17,9 @@ public class FireBaseStore {
         game.put("gameScore", gameScore);
 
         try {
-            db.collection(GAMES).add(game);
+            db.collection("Games")
+                    .document(String.valueOf(gameId))
+                    .set(game);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
