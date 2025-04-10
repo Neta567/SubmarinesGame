@@ -72,9 +72,12 @@ public class Submarine extends Shape {
     }
 
     public boolean isDestroyed() { // בודק האם הצוללת הרוסה - האם כל הריבועים שהיא תופסת הם תפוסים והרוסים?
-        return occupiedSquares.stream()
-                .allMatch(square ->
-                        square.getState() == Square.SquareState.OCCUPIED_BY_SUBMARINE_AND_HIT);
+        for(int i = 0; i < occupiedSquares.size(); i++) {
+            if(occupiedSquares.get(i).getState() != Square.SquareState.OCCUPIED_BY_SUBMARINE_AND_HIT) {
+                return false;
+            }
+        }
+        return true;
     }
     public void draw(Canvas canvas, Context context) {
             String key; // שם של ביטמאפ

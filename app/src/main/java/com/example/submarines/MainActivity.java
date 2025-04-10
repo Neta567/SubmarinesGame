@@ -9,8 +9,6 @@ import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private JoinGameActivity joinGameActivity;
-    private InstructionsActivity instructionsActivity;
     private Button btnStart,btnInstructions;
 
     @Override
@@ -28,7 +26,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         if(v == btnStart)
         {
-            Intent i = new Intent(this, JoinGameActivity.class);
+            Intent i = new Intent(this, GameActivity.class);
             startActivity(i);
         }
         if(v == btnInstructions)

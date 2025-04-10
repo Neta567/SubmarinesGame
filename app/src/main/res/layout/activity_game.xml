@@ -6,37 +6,6 @@
         android:id="@+id/rootLayout"
         android:background="@drawable/submarines_background1">
 
-        <TextView
-            android:id="@+id/player1NameText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="start"
-            android:text="Player1"
-            android:textColor="#EDEFF4"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:layout_marginStart="80sp"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:text="@string/vs"
-            android:textColor="#EDEFF4"
-            android:textSize="20sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/player2NameText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="end"
-            android:text="Player2"
-            android:textColor="#EDEFF4"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:layout_marginEnd="80sp"/>
-
         <LinearLayout
             android:id="@+id/ll"
             android:layout_width="match_parent"
