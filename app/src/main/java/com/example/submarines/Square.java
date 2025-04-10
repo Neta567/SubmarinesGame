@@ -46,8 +46,6 @@ public class Square extends Shape {
     private Submarine submarine;
     private SquareState state = SquareState.EMPTY; // בהתחלה כולם ריקים
 
-
-
     public Square(int x, int y, int w, int h) {
         super(x, y, w, h);
     }
