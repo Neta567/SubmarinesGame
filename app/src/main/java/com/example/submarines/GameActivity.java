@@ -13,6 +13,7 @@ import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -25,14 +26,15 @@ import java.text.BreakIterator;
 import java.util.Map;
 import java.util.Random;
 
-public class GameActivity extends AppCompatActivity {
+public class GameActivity extends AppCompatActivity implements View.OnClickListener {
 
     private final FireBaseStore fireBaseStore = new FireBaseStore();
-    private boolean isMusicPlaying;
-    private ImageButton startGameButton,rotationButton,erasureButton, setupButton,startStopMusicButton;
+    private boolean isMusicPlaying, isFirstTime = true;
+    private ImageButton startGameButton, setupButton, startStopMusicButton;
     private MediaPlayer mediaPlayer;
     private Dialog winLooseDialog; // דיאלוג עבור המנצח
-
+    private int opption;
+    private BoardGameView boardGameView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,52 +42,58 @@ public class GameActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_game); // מפעיל את האקסמל על המסך
 
-        BoardGameView boardGameView = new BoardGameView(this); // מייצר רכיב חדש המכיל את שתי הלוחות
+        boardGameView = new BoardGameView(this); // מייצר רכיב חדש המכיל את שתי הלוחות
         LinearLayout ll = findViewById(R.id.ll);
         ll.addView(boardGameView); // מוסיפים את הרכיב boargameview על המסך ומראים את 2 הלוחות
 
         //startMusicService(); // מפעילים את המוזיקה
 
         startGameButton = findViewById(R.id.startGameButton);
-        rotationButton = findViewById(R.id.rotationButton);
-        erasureButton = findViewById(R.id.erasureButton);
         setupButton = findViewById(R.id.setupButton);
         startStopMusicButton = findViewById(R.id.startStopMusicButton);
 
-        startGameButton.setOnClickListener(v -> { // במידה ולוחצים על הכפתור של התחילת משחק (וי) -
-            if (boardGameView.validateCanStartTheGame()) { // בודק אם ברכיב הזה הלוח של הצוללות מסודר תקין וכל הצוללות על המסך
+        startGameButton.setOnClickListener(this);
+        setupButton.setOnClickListener(this);
+        startStopMusicButton.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v == startGameButton) {
+            if (isFirstTime == true) {
                 Toast.makeText(boardGameView.getContext(), "Game Started", Toast.LENGTH_SHORT).show(); // טוסט של תחילת המסך
 
                 boardGameView.isGameStarted = true;
                 boardGameView.gameId = new Random().nextInt(100);
                 boardGameView.invalidate();
 
-                rotationButton.setEnabled(false); // אי אפשר כבר ללחוץ על זה
-                rotationButton.setVisibility(View.INVISIBLE); // לא רואים את הכפתור יותר
-                erasureButton.setEnabled(false); // כנל על המחיקה
-                erasureButton.setVisibility(View.INVISIBLE);
-
                 fireBaseStore.saveGame(boardGameView.gameId, boardGameView.gameScore); // שומרים את הנתונים החדשים בפייק סטור
 
+                isFirstTime = false;
             } else {
-                Toast.makeText(boardGameView.getContext(), "Not all submarines are placed", Toast.LENGTH_SHORT).show(); // אם מצב הצוללות לא תקין אז תופעל הודעה
+                if (boardGameView.isGameOver() == true) {
+                    Dialog dialog = getWinLooseDialog(boardGameView.getContext());
+                    dialog.show();
+                } else {
+                    Toast.makeText(boardGameView.getContext(), "try more", Toast.LENGTH_SHORT).show(); // אם מצב הצוללות לא תקין אז תופעל הודעה
+                }
             }
-        });
-        rotationButton.setOnClickListener(v -> boardGameView.rotateSubmarine()); // אם לחצו על סיבוב צוללת אז היא תסתובב
-        erasureButton.setOnClickListener(v -> boardGameView.resetSubmarineBoard()); // כנל על מחיקה
-        setupButton.setOnClickListener(v -> { // אם לוחצים על סידור קבוע אז זה יסדר
-                    boardGameView.setupBoard();
-                    boardGameView.invalidate();
-                }
-        );
-        startStopMusicButton.setOnClickListener(v -> { // אם לוחצים על כפתורים המוזיקה
-                    if(isMusicPlaying) { // אם מופעל
-                        stopMusicService(); // יכבה
-                    } else { // ולהפך
-                        startMusicService();
-                    }
-                }
-        );
+        }
+
+        if (v == setupButton) {
+            opption = new Random().nextInt(4);
+            boardGameView.setupBoard(opption);
+            boardGameView.invalidate();
+        }
+
+        if (v == startStopMusicButton) {
+            if (isMusicPlaying) { // אם מופעל
+                stopMusicService(); // יכבה
+            } else { // ולהפך
+                startMusicService();
+            }
+        }
+
     }
 
     private void startMusicService() { // מפעילים את המוזיקה כשאר עוברים לאקטיביטי הזה
@@ -101,14 +109,21 @@ public class GameActivity extends AppCompatActivity {
         mediaPlayer.release();
         mediaPlayer = null;
     }
-    public Dialog getWinLooseDialog(Context context) {
-        if(winLooseDialog == null) {
+
+    private Dialog getWinLooseDialog(Context context) {
+        if (winLooseDialog == null) {
             winLooseDialog = new Dialog(context);
             winLooseDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             winLooseDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
             winLooseDialog.setContentView(R.layout.game_over);
+            Button btn = winLooseDialog.findViewById(R.id.close_btn);
+            btn.setOnClickListener(v -> {
+                winLooseDialog.dismiss();
+                Intent intent = new Intent(context, MainActivity.class);
+                startActivity(intent);
+            });
+
         }
         return winLooseDialog;
     }
-
 }

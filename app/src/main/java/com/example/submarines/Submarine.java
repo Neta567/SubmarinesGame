@@ -13,6 +13,8 @@ public class Submarine extends Shape {
     private final int initialX;
     private final int initialY;
     private boolean isVertical = true;
+
+    private boolean visibale = true;
     ArrayList<Square> occupiedSquares = new ArrayList<>(); // מערך של כל הריבועים שהצוללת תופסת
 
 
@@ -70,6 +72,14 @@ public class Submarine extends Shape {
     public void updateOccupiedSquares(ArrayList<Square> squares) {
         occupiedSquares = squares;
     }
+    public boolean isVisibale() {
+        return visibale;
+    }
+
+    public void setVisibale(boolean visibale) {
+        this.visibale = visibale;
+    }
+
 
     public boolean isDestroyed() { // בודק האם הצוללת הרוסה - האם כל הריבועים שהיא תופסת הם תפוסים והרוסים?
         for(int i = 0; i < occupiedSquares.size(); i++) {

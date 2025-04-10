@@ -11,41 +11,36 @@ import android.view.View;
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
-import java.util.concurrent.Callable;
 
 public class BoardGameView extends View {
 
-    protected Square[][] player1SubmarinesBoard, player1FireBoard; //לוח ספינות שלי ושל השני ולוח יריות שלי
+    protected Square[][] submarinesBoard, fireBoard; //לוח ספינות שלי ושל השני ולוח יריות שלי
     protected ArrayList<Submarine> submarineArrayList;
     public static final int NUM_OF_SQUARES = 6;
-    private boolean firstTimeBoard = true;
-    private boolean firstTimeSubmarine = true;
+    private boolean firstTimeBoard = true, firstTimeSubmarine = true;
     protected Submarine s1, s2, s3, s4;
-    private final FireBaseStore fireBaseStore = new FireBaseStore();
-    private Context context1;
+    private Context context;
     public boolean isGameStarted = false;
     private boolean isGameOver = false;
-    private Submarine currentSubmarine;
     public int gameId;
     public int gameScore;
 
     public BoardGameView(Context context) {
         super(context);
-        context1 = context;
-
+        this.context = context;
     }
 
     @Override
     public void onDraw(@NonNull Canvas canvas) {
         initBoards(canvas);
-        drawBoard(player1SubmarinesBoard, canvas);
-        drawSubmarines(canvas);
+        drawBoard(submarinesBoard, canvas);
 
         if(isGameStarted == true)
         {
-            drawBoard(player1FireBoard, canvas); // אם המשחק התחיל או נגמר תצייר את הלוח יריות שלי
-            drawFiredSquares(player1SubmarinesBoard, canvas); //מצייר את הבומים והאיקסים מעל ללוח
+            drawBoard(fireBoard, canvas); // אם המשחק התחיל או נגמר תצייר את הלוח יריות שלי
+            drawFiredSquares(submarinesBoard, canvas); //מצייר את הבומים והאיקסים מעל ללוח
         }
+        drawSubmarines(canvas);
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -54,86 +49,21 @@ public class BoardGameView extends View {
         int x = (int) event.getX();
         int y = (int) event.getY();
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            handleActionDownEvent(x, y); //אם לחצנו על המסך עוברים לפעול הזאת
-        }
-        if (event.getAction() == MotionEvent.ACTION_MOVE) {
-            handleActionMoveEvent(x, y); // אם הזיזו משהו אז עוברים לפעולה הזאת
+            if (isGameStarted == true) { // אם המשחק התחיל הפעולה היחידה שאפשר לעשות זה יריות אז נקרא לפעולה של היריות
+                fireOnSubmarineAt(x, y);
+            }
         }
         if (event.getAction() == MotionEvent.ACTION_UP) {
-            handleActionUpEvent(x, y); // אם הרימו את הלחיצה עוברים לפעולה הזאת
+            invalidate();
         }
         return true;
     }
-
-    private void handleActionUpEvent(int x, int y) {
-        if (currentSubmarine != null) {
-            updateSubmarineAndBoard(currentSubmarine, x, y); // מעדכנים את המיקום הסופי של הצוללת על המסך
-        }
-        invalidate();
-    }
-
-    private void handleActionMoveEvent(int x, int y) {
-        if (currentSubmarine != null) {
-            currentSubmarine.updateLocation(x, y); // מעדכנים את המיקום שלה על המסך
-        }
-        invalidate();
-    }
-
-    protected void handleActionDownEvent(int x, int y) {
-        if (isGameStarted == true) { // אם המשחק התחיל הפעולה היחידה שאפשר לעשות זה יריות אז נקרא לפעולה של היריות
-            fireOnSubmarineAt(x, y);
-        } else { // אם המשחק לא התחיל אז נשמור את הצוללות האחרונה שנגעו בה
-            if (s1.didUserTouchedMe(x, y)) {
-                currentSubmarine = s1;
-            }
-            if (s2.didUserTouchedMe(x, y)) {
-                currentSubmarine = s2;
-            }
-            if (s3.didUserTouchedMe(x, y)) {
-                currentSubmarine = s3;
-            }
-            if (s4.didUserTouchedMe(x, y)) {
-                currentSubmarine = s4;
-            }
-        }
-    }
-
-    public boolean validateCanStartTheGame() {
-        boolean check = true;
-        for (Submarine submarine : submarineArrayList) { // עובר על כל הצוללות ובודק אם הן מסודרות על הלוח ומחזיר ערך בולאני
-            check &= submarine.isPlacedOnBoard();
-        }
-        return check;
-    }
-
-    public void resetSubmarineBoard() {
-        for (int i = 0; i < player1SubmarinesBoard.length; i++) { // עובר על הלוח הדו מימדי של הצוללות
-            for (int j = 0; j < player1SubmarinesBoard.length; j++) {
-                player1SubmarinesBoard[i][j].setState(EMPTY);// הולך למודל ואז לשחקן שנמצא בו ומעדכן את כל הריבועים בלוח שלו לריקים
-            }
-        }
-        for (Submarine submarine : submarineArrayList) { // עובר על כל הצוללות ומחזיר אותן למצבן ההתחלתי
-            submarine.reset();
-        }
-        invalidate();
-    }
-
-    public void rotateSubmarine() {
-        if (currentSubmarine != null) {
-            currentSubmarine.rotateShape(); // מעביר אותה מאנכי לאופקי או להפך
-            updateSubmarineAndBoard(currentSubmarine, currentSubmarine.getX(), currentSubmarine.getY()); // בעקבות הסיבוב צריך לעדכן את המיקום של הצוללת ואת הריבועים שנתפסים בהתאם
-            invalidate();
-        }
-    }
-
     private void updateSubmarineAndBoard(Submarine submarine, int x, int y) {
         if (isInsideSubmarinesBoard(x, y)) { // אם הצוללת מונחת בתוך הלוח אז -
-            for (int i = 0; i < player1SubmarinesBoard.length; i++) {
-                for (int j = 0; j < player1SubmarinesBoard.length; j++) {
-                    if (player1SubmarinesBoard[i][j].didUserTouchMe(x, y)) {
-                        Square square = player1SubmarinesBoard[i][j];
-                        //TODO: Fix bug when moving submarine to adjacent square it overrides occupied submarines
-                        // and creates an ability for forbidden move - may be need to manage list of occupied submarines per square
+            for (int i = 0; i < submarinesBoard.length; i++) {
+                for (int j = 0; j < submarinesBoard.length; j++) {
+                    if (submarinesBoard[i][j].didUserTouchMe(x, y)) {
+                        Square square = submarinesBoard[i][j];
                         if (square.getState() == EMPTY ||
                                 square.getState() != Square.SquareState.OCCUPIED_BY_SUBMARINE
                                         && square.getOccupiedSubmarine() == submarine) { // אם שמו את הצוללת על ריבוע ריק או על ריבוע שאין בו צוללת אחרת והצוללת שיש שם זאת הצוללת הנוכחית אז -
@@ -151,11 +81,11 @@ public class BoardGameView extends View {
     }
 
     private boolean isInsideSubmarinesBoard(int x, int y) { // לוקח את המיקום ובודק אם הצוללת בתוך הלוח
-        return isInsideBoard(player1SubmarinesBoard, x, y);
+        return isInsideBoard(submarinesBoard, x, y);
     }
 
     private boolean isInsideFireBoard(int x, int y) { // לוקח את המיקום של הירייה ובודק אם זה בתוך לוח היריות
-        return isInsideBoard(player1FireBoard, x, y);
+        return isInsideBoard(fireBoard, x, y);
     }
 
     private boolean isInsideBoard(Square[][] boardPlayer, int x, int y) { // הפעולה שבודקת את הגבולות של הלוח יחד עם המיקום שהיא מקבלת
@@ -166,19 +96,18 @@ public class BoardGameView extends View {
 
     private void updateOccupiedSquares(Submarine submarine) {
         ArrayList<Square> occupiedSquares = new ArrayList<>(); // יוצרים אריי ליסט של ריבועים תפוסים
-        for (int i = 0; i < player1SubmarinesBoard.length; i++) { // עוברים על הלוח של הצוללות
-            for (int j = 0; j < player1SubmarinesBoard.length; j++) {
-                if (submarine.strictIntersectsWith(player1SubmarinesBoard[i][j])) { // אם הריבוע מוכל בצוללת שעליו אז -
-                    player1SubmarinesBoard[i][j].setState(Square.SquareState.OCCUPIED_BY_SUBMARINE);
-                    occupiedSquares.add(player1SubmarinesBoard[i][j]); // תוסיף אותו למערך הריבועים התפוסים
-                    player1SubmarinesBoard[i][j].setOccupiedSubmarine(submarine); // כל ריבוע יודע איזה צוללת יש עליו אז זה מגדיר אותה
-                } else if (submarine.intersectsWith(player1SubmarinesBoard[i][j])) { // אם הריבוע הוא מסביב לצוללת אז -
-                    player1SubmarinesBoard[i][j].setState(Square.SquareState.OCCUPIED_BY_SUBMARINE_SURROUND);
-                    occupiedSquares.add(player1SubmarinesBoard[i][j]);
-                    player1SubmarinesBoard[i][j].setOccupiedSubmarine(submarine); // גם אם הריבוע מסביב לצוללת נגדיר שהצוללת על הריבוע הנל
+        for (int i = 0; i < submarinesBoard.length; i++) { // עוברים על הלוח של הצוללות
+            for (int j = 0; j < submarinesBoard.length; j++) {
+                if (submarine.strictIntersectsWith(submarinesBoard[i][j])) { // אם הריבוע מוכל בצוללת שעליו אז -
+                    submarinesBoard[i][j].setState(Square.SquareState.OCCUPIED_BY_SUBMARINE);
+                    occupiedSquares.add(submarinesBoard[i][j]); // תוסיף אותו למערך הריבועים התפוסים
+                    submarinesBoard[i][j].setOccupiedSubmarine(submarine); // כל ריבוע יודע איזה צוללת יש עליו אז זה מגדיר אותה
+                } else if (submarine.intersectsWith(submarinesBoard[i][j])) { // אם הריבוע הוא מסביב לצוללת אז -
+                    submarinesBoard[i][j].setState(Square.SquareState.OCCUPIED_BY_SUBMARINE_SURROUND);
+                    submarinesBoard[i][j].setOccupiedSubmarine(submarine); // גם אם הריבוע מסביב לצוללת נגדיר שהצוללת על הריבוע הנל
                 } else {
-                    if (player1SubmarinesBoard[i][j].getOccupiedSubmarine() == submarine) { // אם הזזנו את הצוללת אז את הריבוע הקודם שהיא הייתה עליו נעביר לריק
-                        player1SubmarinesBoard[i][j].setState(EMPTY);
+                    if (submarinesBoard[i][j].getOccupiedSubmarine() == submarine) { // אם הזזנו את הצוללת אז את הריבוע הקודם שהיא הייתה עליו נעביר לריק
+                        submarinesBoard[i][j].setState(EMPTY);
                     }
                 }
             }
@@ -188,19 +117,19 @@ public class BoardGameView extends View {
 
     protected void initSubmarines() {
         submarineArrayList = new ArrayList<>(4);
-        s1 = new Submarine(player1SubmarinesBoard[5][1].getX(), player1SubmarinesBoard[5][1].getY() + Square.SQUARE_SIZE * 2,
+        s1 = new Submarine(submarinesBoard[5][1].getX(), submarinesBoard[5][1].getY() + Square.SQUARE_SIZE * 2,
                 Square.SQUARE_SIZE, Square.SQUARE_SIZE * 2);
         submarineArrayList.add(s1);
 
-        s2 = new Submarine(player1SubmarinesBoard[5][2].getX(), player1SubmarinesBoard[5][2].getY() + Square.SQUARE_SIZE * 2,
+        s2 = new Submarine(submarinesBoard[5][2].getX(), submarinesBoard[5][2].getY() + Square.SQUARE_SIZE * 2,
                 Square.SQUARE_SIZE, Square.SQUARE_SIZE * 2);
         submarineArrayList.add(s2);
 
-        s3 = new Submarine(player1SubmarinesBoard[5][3].getX(), player1SubmarinesBoard[5][3].getY() + Square.SQUARE_SIZE * 2,
+        s3 = new Submarine(submarinesBoard[5][3].getX(), submarinesBoard[5][3].getY() + Square.SQUARE_SIZE * 2,
                 Square.SQUARE_SIZE, Square.SQUARE_SIZE * 3);
         submarineArrayList.add(s3);
 
-        s4 = new Submarine(player1SubmarinesBoard[5][4].getX(), player1SubmarinesBoard[5][4].getY() + Square.SQUARE_SIZE * 2,
+        s4 = new Submarine(submarinesBoard[5][4].getX(), submarinesBoard[5][4].getY() + Square.SQUARE_SIZE * 2,
                 Square.SQUARE_SIZE, Square.SQUARE_SIZE * 4);
         submarineArrayList.add(s4);
     }
@@ -218,7 +147,7 @@ public class BoardGameView extends View {
     protected void drawBoard(Square[][] boardPlayer, Canvas canvas) {
         for (Square[] squares : boardPlayer) {
             for (int j = 0; j < boardPlayer.length; j++) {
-                squares[j].draw(canvas,context1);
+                squares[j].draw(canvas, context);
             }
         }
     }
@@ -227,15 +156,15 @@ public class BoardGameView extends View {
         for (Square[] squares : boardPlayer) {
             for (int j = 0; j < boardPlayer.length; j++) {
                 if (squares[j].getState() == Square.SquareState.OCCUPIED_BY_SUBMARINE_AND_HIT) {
-                    squares[j].draw(canvas,context1);
+                    squares[j].draw(canvas, context);
                 }
             }
         }
     }
 
     public void initPlayer1SubmarinesBoard() {
-        player1SubmarinesBoard = new Square[NUM_OF_SQUARES][NUM_OF_SQUARES];
-        initSubmarinesBoard(player1SubmarinesBoard); // מאתחל את הלוח
+        submarinesBoard = new Square[NUM_OF_SQUARES][NUM_OF_SQUARES];
+        initSubmarinesBoard(submarinesBoard); // מאתחל את הלוח
     }
 
     private void initSubmarinesBoard(Square[][] board) {
@@ -254,14 +183,14 @@ public class BoardGameView extends View {
     }
 
     private void initPlayer1FireBoard() {
-        player1FireBoard = new Square[NUM_OF_SQUARES][NUM_OF_SQUARES];
+        fireBoard = new Square[NUM_OF_SQUARES][NUM_OF_SQUARES];
         int x2 = 0;
-        int y2 = player1SubmarinesBoard[5][5].getY() + 250;
+        int y2 = submarinesBoard[5][5].getY() + 250;
         int w2 = Square.SQUARE_SIZE;
 
-        for (int i = 0; i < player1FireBoard.length; i++) {
+        for (int i = 0; i < fireBoard.length; i++) {
             for (int j = 0; j < NUM_OF_SQUARES; j++) {
-                player1FireBoard[i][j] = new Square(x2, y2, w2, w2);
+                fireBoard[i][j] = new Square(x2, y2, w2, w2);
                 x2 = x2 + w2;
             }
             x2 = 0;
@@ -275,23 +204,30 @@ public class BoardGameView extends View {
             firstTimeSubmarine = false;
         }
         for (int i = 0; i < submarineArrayList.size(); i++) {
-            submarineArrayList.get(i).draw(layout,context1);
+            if(submarineArrayList.get(i).isVisibale()==true)
+                submarineArrayList.get(i).draw(layout, context);
         }
     }
 
     public void fireOnSubmarineAt(int x, int y) {
         if(!isGameOver) { // אם המשחק לא נגמר עדיין
             if (isInsideFireBoard(x, y)) { // אם לחצנו בתוך לוח היריות ולא בחוץ
-                for (int i = 0; i < player1FireBoard.length; i++) {
-                    for (int j = 0; j < player1FireBoard.length; j++) {
-                        if (player1FireBoard[i][j].didUserTouchMe(x, y)) {
-                            if(player1FireBoard[i][j].getState() == EMPTY) { // אם לא ירו לריבוע הזה כבר אז -
-                                if (player1SubmarinesBoard[i][j].getState() == Square.SquareState.OCCUPIED_BY_SUBMARINE) { // אם יש צוללת בלוח צוללות של היריב
-                                    player1FireBoard[i][j].setState(Square.SquareState.OCCUPIED_BY_SUBMARINE_AND_HIT);
-                                    player1SubmarinesBoard[i][j].setState(Square.SquareState.OCCUPIED_BY_SUBMARINE_AND_HIT);
+                for (int i = 0; i < fireBoard.length; i++) {
+                    for (int j = 0; j < fireBoard.length; j++) {
+                        if (fireBoard[i][j].didUserTouchMe(x, y)) {
+                            if(fireBoard[i][j].getState() == EMPTY) { // אם לא ירו לריבוע הזה כבר אז -
+                                if (submarinesBoard[i][j].getState() == Square.SquareState.OCCUPIED_BY_SUBMARINE) { // אם יש צוללת בלוח צוללות של היריב
+                                    fireBoard[i][j].setState(Square.SquareState.OCCUPIED_BY_SUBMARINE_AND_HIT);
+                                    submarinesBoard[i][j].setState(Square.SquareState.OCCUPIED_BY_SUBMARINE_AND_HIT);
+
+                                    for (int k = 0; k < submarineArrayList.size(); k++) {
+                                        if (submarineArrayList.get(k).isDestroyed()) {
+                                            submarineArrayList.get(k).setVisibale(true);
+                                        }
+                                    }
                                 } else { // אם אין שם צוללות -
-                                    player1FireBoard[i][j].setState(Square.SquareState.MISS);
-                                    player1SubmarinesBoard[i][j].setState(Square.SquareState.MISS);
+                                    fireBoard[i][j].setState(Square.SquareState.MISS);
+                                    submarinesBoard[i][j].setState(Square.SquareState.MISS);
                                 }
                             }
                         }
@@ -301,10 +237,44 @@ public class BoardGameView extends View {
         }
     }
 
-    public void setupBoard() { // הכפתור המוזר ששם את הצוללות ישר על הלוח
-        updateSubmarineAndBoard(s1, player1SubmarinesBoard[0][0].getX(), player1SubmarinesBoard[0][0].getY());
-        updateSubmarineAndBoard(s2, player1SubmarinesBoard[3][0].getX(), player1SubmarinesBoard[3][0].getY());
-        updateSubmarineAndBoard(s3, player1SubmarinesBoard[3][3].getX(), player1SubmarinesBoard[3][3].getY());
-        updateSubmarineAndBoard(s4, player1SubmarinesBoard[0][5].getX(), player1SubmarinesBoard[0][5].getY());
+    public void setupBoard(int num) { // הכפתור המוזר ששם את הצוללות ישר על הלוח
+        if(num==0) {
+            updateSubmarineAndBoard(s1, submarinesBoard[0][0].getX(), submarinesBoard[0][0].getY());
+            updateSubmarineAndBoard(s2, submarinesBoard[3][0].getX(), submarinesBoard[3][0].getY());
+            updateSubmarineAndBoard(s3, submarinesBoard[3][3].getX(), submarinesBoard[3][3].getY());
+            updateSubmarineAndBoard(s4, submarinesBoard[0][5].getX(), submarinesBoard[0][5].getY());
+        }
+        if(num==1) {
+            updateSubmarineAndBoard(s1, submarinesBoard[0][0].getX(), submarinesBoard[0][0].getY());
+            updateSubmarineAndBoard(s2, submarinesBoard[3][1].getX(), submarinesBoard[3][1].getY());
+            updateSubmarineAndBoard(s3, submarinesBoard[3][3].getX(), submarinesBoard[3][3].getY());
+            updateSubmarineAndBoard(s4, submarinesBoard[0][5].getX(), submarinesBoard[0][5].getY());
+        }
+        if (num==2) {
+            updateSubmarineAndBoard(s1, submarinesBoard[0][0].getX(), submarinesBoard[0][0].getY());
+            updateSubmarineAndBoard(s2, submarinesBoard[3][1].getX(), submarinesBoard[3][1].getY());
+            updateSubmarineAndBoard(s3, submarinesBoard[0][3].getX(), submarinesBoard[0][3].getY());
+            updateSubmarineAndBoard(s4, submarinesBoard[0][5].getX(), submarinesBoard[0][5].getY());
+        }
+        if (num==3) {
+            updateSubmarineAndBoard(s1, submarinesBoard[0][0].getX(), submarinesBoard[0][0].getY());
+            updateSubmarineAndBoard(s2, submarinesBoard[4][2].getX(), submarinesBoard[4][2].getY());
+            updateSubmarineAndBoard(s3, submarinesBoard[0][3].getX(), submarinesBoard[0][3].getY());
+            updateSubmarineAndBoard(s4, submarinesBoard[2][5].getX(), submarinesBoard[2][5].getY());
+        }
+        // set all submarines to be invisible
+        for (int i = 0; i < submarineArrayList.size(); i++) {
+            submarineArrayList.get(i).setVisibale(false);
+        }
+    }
+    public boolean isGameOver() {
+
+        for (int i = 0; i < submarineArrayList.size(); i++) {
+            if (submarineArrayList.get(i).isDestroyed() == false) {
+                return false;
+            }
+        }
+        return true;
+
     }
 }
