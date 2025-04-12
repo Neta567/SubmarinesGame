@@ -13,7 +13,8 @@ public class InstructionsActivity extends AppCompatActivity implements View.OnCl
     private Button btnReturn;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_instructions);
         btnReturn = findViewById(R.id.btnReturn);
@@ -21,7 +22,8 @@ public class InstructionsActivity extends AppCompatActivity implements View.OnCl
     }
 
     @Override
-    public void onClick(View v) {
+    public void onClick(View v)
+    {
         if(v == btnReturn)
         {
             Intent i = new Intent(this, MainActivity.class);

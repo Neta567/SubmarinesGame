@@ -12,7 +12,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button btnStart,btnInstructions;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -23,7 +24,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public void onClick(View v) {
+    public void onClick(View v)
+    {
         if(v == btnStart)
         {
             Intent i = new Intent(this, GameActivity.class);
