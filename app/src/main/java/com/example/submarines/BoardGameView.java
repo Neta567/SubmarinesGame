@@ -12,6 +12,7 @@ import java.util.ArrayList;
 
 public class BoardGameView extends View {
 
+    public float bestScore;
     private Square[][] submarinesBoard, fireBoard; //לוח ספינות שלי ושל השני ולוח יריות שלי
     private ArrayList<Submarine> submarineArrayList;
     private final int NUM_OF_SQUARES = 6;

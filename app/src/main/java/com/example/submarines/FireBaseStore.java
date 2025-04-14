@@ -12,6 +12,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -41,42 +42,45 @@ public class FireBaseStore {
             ex.printStackTrace();
         }
     }
-    public float returnBestScore() {
+    public void returnBestScore(Callback<Float> callback) {
         ArrayList<Float> bestScore = new ArrayList<>();;
         try {
             db.collection("Games")
                     //.whereGreaterThanOrEqualTo("gameScore", 0)
-                    //.orderBy("gameScore")
-                    //.limit(1)
+                    .orderBy("gameScore", Query.Direction.DESCENDING)
+                    .limit(1)
                     //.count()
                     .get()
-//                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//                        @Override
-//                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                            if (task.isSuccessful()) {
-//                                Log.d("error", "e.getMessage()");
-//                            } else {
-//                                Log.d("error", "e.getMessage()");
-//                            }
-//                        }
-//                    });
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>()
                 {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         bestScore.add(queryDocumentSnapshots.getDocuments().get(0).getDouble("gameScore").floatValue());
+                        callback.onSuccess(bestScore.get(0));
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
-                    public void onFailure(@NonNull Exception e) {
+                    public void onFailure(Exception e) {
                         Log.d("error", e.getMessage());
+                        callback.onFailure(null);
                     }
                 });
         } catch (Exception e) {
             Log.d("error", e.getMessage());
         }
-        while(bestScore.isEmpty()) {}
+//        while(bestScore.isEmpty()) {
+//            try {
+//                Thread.sleep(2000);
+//            } catch (InterruptedException e) {
+//                throw new RuntimeException(e);
+//            }
+//        }
 
-        return bestScore.get(0);
+    }
+
+    public interface Callback<T> {
+        void onSuccess(T result);
+
+        void onFailure(Exception e);
     }
 }

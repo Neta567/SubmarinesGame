@@ -64,9 +64,18 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             if (isFirstTime == true)
             {
                 Toast.makeText(boardGameView.getContext(), "Game Started", Toast.LENGTH_SHORT).show(); // טוסט של תחילת המסך
-                float bestScore = fireBaseStore.returnBestScore();
-                Toast.makeText(boardGameView.getContext(), String.valueOf(bestScore), Toast.LENGTH_SHORT).show(); // טוסט של תחילת המסך
+                fireBaseStore.returnBestScore(new FireBaseStore.Callback<Float>() {
+                    @Override
+                    public void onSuccess(Float result) {
+                        boardGameView.bestScore = result;
+                        //Toast.makeText(GameActivity.this, result.toString(), Toast.LENGTH_LONG);
+                    }
 
+                    @Override
+                    public void onFailure(Exception e) {
+
+                    }
+                });
 
                 boardGameView.isGameStarted = true;
                 boardGameView.gameId = new Random().nextInt(100);
