@@ -21,7 +21,10 @@ public class BoardGameView extends View {
     public boolean isGameStarted = false;
     private boolean isGameOver = false;
     public int gameId;
-    public int gameScore;
+    public float gameScore;
+    public String name;
+    private float hitted;
+    private float misses;
 
     public BoardGameView(Context context)
     {
@@ -212,6 +215,8 @@ public class BoardGameView extends View {
                                     fireBoard[i][j].setState(Square.OCCUPIED_BY_SUBMARINE_AND_HIT);
                                     submarinesBoard[i][j].setState(Square.OCCUPIED_BY_SUBMARINE_AND_HIT);
 
+                                    hitted++;
+
                                     for (int k = 0; k < submarineArrayList.size(); k++)
                                     {
                                         if (submarineArrayList.get(k).isDestroyed())
@@ -224,6 +229,7 @@ public class BoardGameView extends View {
                                 { // אם אין שם צוללות -
                                     fireBoard[i][j].setState(Square.MISS);
                                     submarinesBoard[i][j].setState(Square.MISS);
+                                    misses++;
                                 }
                             }
                         }
@@ -281,6 +287,13 @@ public class BoardGameView extends View {
             }
         }
         return true;
+
+    }
+    public void makeAGameScore()
+    {
+        gameScore = (hitted/(hitted+misses))*100;
+        hitted = 0;
+        misses = 0;
 
     }
 }

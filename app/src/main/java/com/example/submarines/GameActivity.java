@@ -27,6 +27,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private int opption;
     private BoardGameView boardGameView;
     private Button endGameButton;
+    private Context context;
 
 
     @Override
@@ -39,6 +40,10 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         boardGameView = new BoardGameView(this); // מייצר רכיב חדש המכיל את שתי הלוחות
         LinearLayout boardPlace = findViewById(R.id.boardsPlace);
         boardPlace.addView(boardGameView); // מוסיפים את הרכיב boargameview על המסך ומראים את 2 הלוחות
+
+        Intent intent = getIntent();
+        String name = intent.getStringExtra("name");
+        boardGameView.name = name;
 
         //startMusicService(); // מפעילים את המוזיקה
 
@@ -59,12 +64,15 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             if (isFirstTime == true)
             {
                 Toast.makeText(boardGameView.getContext(), "Game Started", Toast.LENGTH_SHORT).show(); // טוסט של תחילת המסך
+                float bestScore = fireBaseStore.returnBestScore();
+                Toast.makeText(boardGameView.getContext(), String.valueOf(bestScore), Toast.LENGTH_SHORT).show(); // טוסט של תחילת המסך
+
 
                 boardGameView.isGameStarted = true;
                 boardGameView.gameId = new Random().nextInt(100);
                 boardGameView.invalidate();
 
-                fireBaseStore.saveGame(boardGameView.gameId, boardGameView.gameScore); // שומרים את הנתונים החדשים בפייק סטור
+                fireBaseStore.saveGame(boardGameView.gameId, boardGameView.gameScore,boardGameView.name); // שומרים את הנתונים החדשים בפייק סטור
 
                 isFirstTime = false;
             }
@@ -72,6 +80,9 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             {
                 if (boardGameView.isGameOver() == true)
                 {
+                    boardGameView.makeAGameScore();
+                    fireBaseStore.saveGame(boardGameView.gameId, boardGameView.gameScore,boardGameView.name);
+                    boardGameView.gameScore=0;
                     Dialog dialog = getWinLooseDialog(boardGameView.getContext());
                     dialog.show();
                 }
