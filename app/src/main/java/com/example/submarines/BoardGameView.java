@@ -17,7 +17,7 @@ public class BoardGameView extends View {
     private final int NUM_OF_SQUARES = 6;
     private boolean firstTimeBoard = true, firstTimeSubmarine = true;
     private Submarine s1, s2, s3, s4;
-    private Context context;
+    private Context context; // מהגיים אקטיביטי
     public boolean isGameStarted = false;
     private boolean isGameOver = false;
     public int gameId;
@@ -43,6 +43,7 @@ public class BoardGameView extends View {
             drawBoard(fireBoard, canvas); // אם המשחק התחיל או נגמר תצייר את הלוח יריות שלי
             drawFiredSquares(submarinesBoard, canvas); //מצייר את הבומים והאיקסים מעל ללוח
         }
+
         drawSubmarines(canvas);
     }
 

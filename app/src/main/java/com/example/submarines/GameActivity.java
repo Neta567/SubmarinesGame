@@ -13,8 +13,10 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class GameActivity extends AppCompatActivity implements View.OnClickListener {
@@ -28,6 +30,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private BoardGameView boardGameView;
     private Button endGameButton;
     private Context context;
+    private ArrayList<Float> bestScore = new ArrayList<>();
 
 
     @Override
@@ -64,12 +67,10 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             if (isFirstTime == true)
             {
                 Toast.makeText(boardGameView.getContext(), "Game Started", Toast.LENGTH_SHORT).show(); // טוסט של תחילת המסך
-                float bestScore = fireBaseStore.returnBestScore();
-                Toast.makeText(boardGameView.getContext(), String.valueOf(bestScore), Toast.LENGTH_SHORT).show(); // טוסט של תחילת המסך
-
+                //fireBaseStore.returnBestScore(bestScore);
 
                 boardGameView.isGameStarted = true;
-                boardGameView.gameId = new Random().nextInt(100);
+                boardGameView.gameId = new Random().nextInt(10000);
                 boardGameView.invalidate();
 
                 fireBaseStore.saveGame(boardGameView.gameId, boardGameView.gameScore,boardGameView.name); // שומרים את הנתונים החדשים בפייק סטור
@@ -81,9 +82,14 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 if (boardGameView.isGameOver() == true)
                 {
                     boardGameView.makeAGameScore();
-                    fireBaseStore.saveGame(boardGameView.gameId, boardGameView.gameScore,boardGameView.name);
-                    boardGameView.gameScore=0;
+
                     Dialog dialog = getWinLooseDialog(boardGameView.getContext());
+                    fireBaseStore.updateScoresInDailog(dialog.findViewById(R.id.best_score));
+
+                    TextView textView = dialog.findViewById(R.id.your_score);
+                    textView.setText(String.valueOf(boardGameView.gameScore));
+                    boardGameView.gameScore=0;
+
                     dialog.show();
                 }
                 else

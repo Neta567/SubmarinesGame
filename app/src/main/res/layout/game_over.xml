@@ -5,17 +5,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/gameOver"
     android:layout_width="350dp"
-    android:layout_height="800dp"
+    android:layout_height="400dp"
     android:layout_gravity="center"
-    android:layout_margin="10dp">
+    android:background="@drawable/background_mainphoto">
 
     <TextView
         android:id="@+id/gameOverTxt"
-        android:text="Game Over"
         android:layout_width="300dp"
         android:layout_height="100dp"
-        android:background="@drawable/background_mainphoto"
-        android:paddingTop="20dp"
+        android:text="Game Over"
         android:textAlignment="center"
         android:textColor="#FFFFFF"
         android:textSize="35sp"
@@ -23,7 +21,43 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.053" />
+
+    <TextView
+        android:id="@+id/best_score"
+        android:layout_width="302dp"
+        android:layout_height="68dp"
+        android:layout_marginTop="80dp"
+        android:paddingTop="20dp"
+        android:text="Best Score"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
+        android:textSize="35sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.142" />
+
+
+    <TextView
+        android:id="@+id/your_score"
+        android:layout_width="302dp"
+        android:layout_height="68dp"
+        android:layout_marginTop="80dp"
+        android:paddingTop="20dp"
+        android:text="Your Score"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
+        android:textSize="35sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.412" />
 
     <Button
         android:id="@+id/close_btn"
@@ -34,6 +68,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/gameOverTxt"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="1.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -15,7 +15,7 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Button btnStart,btnInstructions;
-    private ActivityResultLauncher<Intent> activityOnResult;
+    private ActivityResultLauncher <Intent> activityOnResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)

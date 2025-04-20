@@ -16,7 +16,6 @@ public class Square extends Shape {
     public static int OCCUPIED_BY_SUBMARINE_AND_HIT = 3;
     public static int MISS = 4;
     public static int SQUARE_SIZE;
-    private Submarine submarine;
     private int state = EMPTY; // בהתחלה כולם ריקים
 
     public Square(int x, int y, int w, int h) {
@@ -49,6 +48,9 @@ public class Square extends Shape {
         p.setStrokeWidth(10);
         p.setColor(Color.BLACK);
 
+        canvas.drawRect(this.getX(), this.getY(),
+                this.getX() + this.getWidth(), this.getY() + this.getHeight(), p);
+
         if(state == OCCUPIED_BY_SUBMARINE_AND_HIT)
         {
             Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.boom); // תכניס לביטמאפ את מה שנכון לפי האידי
@@ -60,11 +62,6 @@ public class Square extends Shape {
             Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.miss_icon); // תכניס לביטמאפ את מה שנכון לפי האידי
             Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, SQUARE_SIZE - 80, SQUARE_SIZE - 80, true); // תיצור אותו בגודל נכון
             canvas.drawBitmap(scaledBitmap, this.getX() + 40, this.getY() + 40, p);
-        }
-        else
-        { //אם סתם צריך לצייר ריבוע -
-            canvas.drawRect(this.getX(), this.getY(),
-                            this.getX() + this.getWidth(), this.getY() + this.getHeight(), p);
         }
     }
 
