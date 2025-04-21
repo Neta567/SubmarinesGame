@@ -37,14 +37,13 @@ public class BoardGameView extends View {
     {
         initBoards(canvas);
         drawBoard(submarinesBoard, canvas);
+        drawSubmarines(canvas);
 
         if (isGameStarted == true)
         {
             drawBoard(fireBoard, canvas); // אם המשחק התחיל או נגמר תצייר את הלוח יריות שלי
-            drawFiredSquares(submarinesBoard, canvas); //מצייר את הבומים והאיקסים מעל ללוח
         }
 
-        drawSubmarines(canvas);
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -130,19 +129,6 @@ public class BoardGameView extends View {
         }
     }
 
-    private void drawFiredSquares(Square[][] board, Canvas canvas)
-    { // מצייר את הבומים מעל לצוללת
-        for(int i = 0; i < board.length; i++)
-        {
-            for (int j = 0; j < board.length; j++)
-            {
-                if (board[i][j].getState() == Square.OCCUPIED_BY_SUBMARINE_AND_HIT)
-                {
-                    board[i][j].draw(canvas, context);
-                }
-            }
-        }
-    }
 
     private void initSubmarinesBoard()
     {
@@ -270,7 +256,6 @@ public class BoardGameView extends View {
             updateSubmarineAndBoard(s3, 0,3, 3);
             updateSubmarineAndBoard(s4, 2,5, 4);
         }
-        // make all submarines invisible
         for (int i = 0; i < submarineArrayList.size(); i++)
         {
             submarineArrayList.get(i).setVisibale(false);
