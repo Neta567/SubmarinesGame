@@ -141,6 +141,7 @@ GameActivity647413438[
 	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
 <TR><TD ALIGN="LEFT" >(C)GameActivity</TD></TR>
 <HR/>
+<TR><TD ALIGN="LEFT" >-   bestScore: ArrayList&lt;Float&gt; [0..*]</TD></TR>
 <TR><TD ALIGN="LEFT" >-   boardGameView: BoardGameView [0..1]</TD></TR>
 <TR><TD ALIGN="LEFT" >-   context: Context [0..1]</TD></TR>
 <TR><TD ALIGN="LEFT" >-   endGameButton: Button [0..1]</TD></TR>
@@ -191,7 +192,6 @@ Square647413438[
 <TR><TD ALIGN="LEFT" >(C)Square</TD></TR>
 <HR/>
 <TR><TD ALIGN="LEFT" >-   state: int [1]</TD></TR>
-<TR><TD ALIGN="LEFT" >-   submarine: Submarine [0..1]</TD></TR>
 </TABLE>>
 	style=filled
 	margin=0
