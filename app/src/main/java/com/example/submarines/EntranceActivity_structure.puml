@@ -45,8 +45,8 @@ config=StructureConfiguration;
     "cutConstructors": true
   },
   "graphTraversal": {
-    "forwardDepth": 5,
-    "backwardDepth": 5,
+    "forwardDepth": 999,
+    "backwardDepth": 0,
     "classPackageExcludeFilter": "",
     "classPackageIncludeFilter": "",
     "classNameExcludeFilter": "",
@@ -55,13 +55,13 @@ config=StructureConfiguration;
     "methodNameIncludeFilter": "",
     "hideMappings": false,
     "hideDataStructures": false,
-    "hidePrivateMethods": true,
-    "hideInterfaceCalls": true, // indirection: implementation -> interface (is hidden) -> implementation
+    "hidePrivateMethods": false,
+    "hideInterfaceCalls": false, // indirection: implementation -> interface (is hidden) -> implementation
     "onlyShowApplicationEntryPoints": false, // root node is included
     "useMethodCallsForStructureDiagram": "ForwardOnly" // ForwardOnly, BothDirections, No
   },
   "details": {
-    "aggregation": "GroupByClass", // ByClass, GroupByClass, None
+    "aggregation": "None", // ByClass, GroupByClass, None
     "showClassGenericTypes": false,
     "showMethods": false,
     "showMethodParameterNames": false,
@@ -83,19 +83,7 @@ digraph g {
     
 
 'nodes 
-subgraph cluster_1322970774 { 
-   	label=example
-	labeljust=l
-	fillcolor="#ececec"
-	style=filled
-   
-   subgraph cluster_925250635 { 
-   	label=submarines
-	labeljust=l
-	fillcolor="#d8d8d8"
-	style=filled
-   
-   EntranceActivity647413438[
+EntranceActivity647413438[
 	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
 <TR><TD ALIGN="LEFT" >(C)EntranceActivity</TD></TR>
 <HR/>
@@ -108,8 +96,6 @@ subgraph cluster_1322970774 {
 	shape=plaintext
 	fillcolor="#FFFFFF"
 ];
-} 
-} 
 
 'edges    
 
