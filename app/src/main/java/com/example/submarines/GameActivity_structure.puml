@@ -1,0 +1,230 @@
+@startuml
+
+/' diagram meta data start
+config=StructureConfiguration;
+{
+  "projectClassification": {
+    "searchMode": "OpenProject", // OpenProject, AllProjects
+    "includedProjects": "",
+    "pathEndKeywords": "*.impl",
+    "isClientPath": "",
+    "isClientName": "",
+    "isTestPath": "",
+    "isTestName": "",
+    "isMappingPath": "",
+    "isMappingName": "",
+    "isDataAccessPath": "",
+    "isDataAccessName": "",
+    "isDataStructurePath": "",
+    "isDataStructureName": "",
+    "isInterfaceStructuresPath": "",
+    "isInterfaceStructuresName": "",
+    "isEntryPointPath": "",
+    "isEntryPointName": "",
+    "treatFinalFieldsAsMandatory": false
+  },
+  "graphRestriction": {
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "removeByInheritance": "", // inheritance/annotation based filtering is done in a second step
+    "removeByAnnotation": "",
+    "removeByClassPackage": "", // cleanup the graph after inheritance/annotation based filtering is done
+    "removeByClassName": "",
+    "cutMappings": false,
+    "cutEnum": true,
+    "cutTests": true,
+    "cutClient": true,
+    "cutDataAccess": false,
+    "cutInterfaceStructures": false,
+    "cutDataStructures": false,
+    "cutGetterAndSetter": true,
+    "cutConstructors": true
+  },
+  "graphTraversal": {
+    "forwardDepth": 999,
+    "backwardDepth": 0,
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "hideMappings": false,
+    "hideDataStructures": false,
+    "hidePrivateMethods": false,
+    "hideInterfaceCalls": false, // indirection: implementation -> interface (is hidden) -> implementation
+    "onlyShowApplicationEntryPoints": false, // root node is included
+    "useMethodCallsForStructureDiagram": "ForwardOnly" // ForwardOnly, BothDirections, No
+  },
+  "details": {
+    "aggregation": "None", // ByClass, GroupByClass, None
+    "showClassGenericTypes": false,
+    "showMethods": false,
+    "showMethodParameterNames": false,
+    "showMethodParameterTypes": false,
+    "showMethodReturnType": false,
+    "showPackageLevels": 4,
+    "showDetailedClassStructure": true
+  },
+  "rootClass": "com.example.submarines.GameActivity",
+  "extensionCallbackMethod": "" // qualified.class.name#methodName - signature: public static String method(String)
+}
+diagram meta data end '/
+
+
+
+digraph g {
+    rankdir="TB"
+    splines=polyline
+    
+
+'nodes 
+BoardGameView647413438[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)BoardGameView</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   NUM_OF_SQUARES: int [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >+   bestScore: float [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   context: Context [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   fireBoard: Square[][] [0..*]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   firstTimeBoard: boolean [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   firstTimeSubmarine: boolean [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >+   gameId: int [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >+   gameScore: float [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   hitted: float [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   isGameOver: boolean [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >+   isGameStarted: boolean [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   misses: float [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >+   name: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   s1: Submarine [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   s2: Submarine [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   s3: Submarine [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   s4: Submarine [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   submarineArrayList: ArrayList&lt;Submarine&gt; [0..*]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   submarinesBoard: Square[][] [0..*]</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+FireBaseStore647413438[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)FireBaseStore</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   db: FirebaseFirestore [0..1]</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+GameActivity647413438[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)GameActivity</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   bestScore: ArrayList&lt;Float&gt; [0..*]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   boardGameView: BoardGameView [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   context: Context [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   endGameButton: Button [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   fireBaseStore: FireBaseStore [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   isFirstTime: boolean [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   isMusicPlaying: boolean [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   mediaPlayer: MediaPlayer [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   opption: int [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   setupButton: ImageButton [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   startGameButton: ImageButton [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   startStopMusicButton: ImageButton [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   winLooseDialog: Dialog [0..1]</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+Location647413438[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)Location</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >#   x: int [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >#   y: int [1]</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+Shape647413438[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)Shape</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >#   height: int [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >#   width: int [1]</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+Square647413438[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)Square</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   state: int [1]</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+Submarine647413438[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)Submarine</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   occupiedSquares: ArrayList&lt;Square&gt; [0..*]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   visibale: boolean [1]</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+'edges    
+BoardGameView647413438 -> Location647413438[label="updateSubmarineAndBoard() -> updateLocation()"];
+BoardGameView647413438 -> Square647413438[label="fireBoard
+[0..*]"];
+BoardGameView647413438 -> Square647413438[label="submarinesBoard
+[0..*]"];
+BoardGameView647413438 -> Submarine647413438[label="s1
+[0..1]"];
+BoardGameView647413438 -> Submarine647413438[label="s2
+[0..1]"];
+BoardGameView647413438 -> Submarine647413438[label="s3
+[0..1]"];
+BoardGameView647413438 -> Submarine647413438[label="s4
+[0..1]"];
+BoardGameView647413438 -> Submarine647413438[label="submarineArrayList
+[0..*]"];
+GameActivity647413438 -> BoardGameView647413438[label="boardGameView
+[0..1]"];
+GameActivity647413438 -> FireBaseStore647413438[label="fireBaseStore
+[0..1]"];
+Location647413438 -> Shape647413438[arrowhead=none, arrowtail=empty, dir=both];
+Shape647413438 -> Square647413438[arrowhead=none, arrowtail=empty, dir=both];
+Shape647413438 -> Submarine647413438[arrowhead=none, arrowtail=empty, dir=both];
+Submarine647413438 -> Square647413438[label="occupiedSquares
+[0..*]"];
+    
+}
+@enduml
