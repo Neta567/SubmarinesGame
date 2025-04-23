@@ -31,6 +31,16 @@
         android:backgroundTint="#FFFFFF"
         android:textColor="#000000"
         android:id="@+id/btn_done"></Button>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:gravity="center"
+        android:textStyle="bold"
+        android:layout_marginTop="40dp"
+        android:textColor="#FFFFFF"
+        android:id="@+id/anim_starting"
+        android:textSize="40dp"></TextView>
 
 
 </LinearLayout>
