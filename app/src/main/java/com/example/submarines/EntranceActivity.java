@@ -50,7 +50,6 @@ public class EntranceActivity extends AppCompatActivity implements View.OnClickL
             textView = findViewById(R.id.anim_starting);
             textView.setText("Starting...");
             animation = AnimationUtils.loadAnimation(this, R.anim.blink);
-            //animation.setDuration(2000);
             textView.startAnimation(animation);
 
             Runnable stopAnimationRunnable = new Runnable() {

@@ -33,7 +33,7 @@ public class Submarine extends Shape {
     }
 
 
-    public boolean isDestroyed() { // בודק האם הצוללת הרוסה - האם כל הריבועים שהיא תופסת הם תפוסים והרוסים?
+    public boolean isDestroyed() { // בודק האם הצוללת הרוסה - האם כל הריבועים שהיא תופסת הם תפוסים והרוסים
         for (int i = 0; i < occupiedSquares.size(); i++)
         {
             if (occupiedSquares.get(i).getState() != Square.OCCUPIED_BY_SUBMARINE_AND_HIT) {

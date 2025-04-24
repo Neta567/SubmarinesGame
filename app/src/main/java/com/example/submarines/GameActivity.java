@@ -25,12 +25,10 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private boolean isMusicPlaying, isFirstTime = true;
     private ImageButton startGameButton, setupButton, startStopMusicButton;
     private MediaPlayer mediaPlayer;
-    private Dialog winLooseDialog; // דיאלוג עבור המנצח
+    private Dialog winLooseDialog;
     private int opption;
     private BoardGameView boardGameView;
     private Button endGameButton;
-    private Context context;
-    private ArrayList<Float> bestScore = new ArrayList<>();
 
 
     @Override
@@ -38,17 +36,16 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_game); // מפעיל את האקסמל על המסך
+        setContentView(R.layout.activity_game);
 
-        boardGameView = new BoardGameView(this); // מייצר רכיב חדש המכיל את שתי הלוחות
+        boardGameView = new BoardGameView(this);
         LinearLayout boardPlace = findViewById(R.id.boardsPlace);
-        boardPlace.addView(boardGameView); // מוסיפים את הרכיב boargameview על המסך ומראים את 2 הלוחות
+        boardPlace.addView(boardGameView);
 
         Intent intent = getIntent();
         String name = intent.getStringExtra("name");
         boardGameView.name = name;
 
-        //startMusicService(); // מפעילים את המוזיקה
 
         startGameButton = findViewById(R.id.startGameButton);
         setupButton = findViewById(R.id.setupButton);
@@ -66,14 +63,13 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         {
             if (isFirstTime == true)
             {
-                Toast.makeText(boardGameView.getContext(), "Game Started", Toast.LENGTH_SHORT).show(); // טוסט של תחילת המסך
-                //fireBaseStore.returnBestScore(bestScore);
+                Toast.makeText(boardGameView.getContext(), "Game Started", Toast.LENGTH_SHORT).show();
 
                 boardGameView.isGameStarted = true;
                 boardGameView.gameId = new Random().nextInt(10000);
                 boardGameView.invalidate();
 
-                fireBaseStore.saveGame(boardGameView.gameId, boardGameView.gameScore,boardGameView.name); // שומרים את הנתונים החדשים בפייק סטור
+                fireBaseStore.saveGame(boardGameView.gameId, boardGameView.gameScore,boardGameView.name);
 
                 isFirstTime = false;
             }
@@ -94,7 +90,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 else
                 {
-                    Toast.makeText(boardGameView.getContext(), "try more", Toast.LENGTH_SHORT).show(); // אם מצב הצוללות לא תקין אז תופעל הודעה
+                    Toast.makeText(boardGameView.getContext(), "try more", Toast.LENGTH_SHORT).show();
                 }
             }
         }
@@ -128,8 +124,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void startMusic()
-    { // מפעילים את המוזיקה כשאר עוברים לאקטיביטי הזה
-        isMusicPlaying = true; // הופכים את המצב של המוזיקה לאמת
+    {
+        isMusicPlaying = true;
         mediaPlayer = MediaPlayer.create(this, R.raw.submarine);
         mediaPlayer.start();
         mediaPlayer.setLooping(true);

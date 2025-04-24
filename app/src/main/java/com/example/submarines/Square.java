@@ -12,11 +12,10 @@ public class Square extends Shape {
 
     public static int EMPTY = 0;
     public static int OCCUPIED_BY_SUBMARINE = 1;
-    public static int OCCUPIED_BY_SUBMARINE_SURROUND = 2;
-    public static int OCCUPIED_BY_SUBMARINE_AND_HIT = 3;
-    public static int MISS = 4;
+    public static int OCCUPIED_BY_SUBMARINE_AND_HIT = 2;
+    public static int MISS = 3;
     public static int SQUARE_SIZE;
-    private int state = EMPTY; // בהתחלה כולם ריקים
+    private int state = EMPTY;
 
     public Square(int x, int y, int w, int h) {
         super(x, y, w, h);
@@ -53,14 +52,14 @@ public class Square extends Shape {
 
         if(state == OCCUPIED_BY_SUBMARINE_AND_HIT)
         {
-            Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.boom); // תכניס לביטמאפ את מה שנכון לפי האידי
-            Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, SQUARE_SIZE - 80, SQUARE_SIZE - 80, true); // תיצור אותו בגודל נכון
+            Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.boom);
+            Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, SQUARE_SIZE - 80, SQUARE_SIZE - 80, true);
             canvas.drawBitmap(scaledBitmap, this.getX() + 40, this.getY() + 40, p);
         }
         else if(state == MISS)
         {
-            Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.miss_icon); // תכניס לביטמאפ את מה שנכון לפי האידי
-            Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, SQUARE_SIZE - 80, SQUARE_SIZE - 80, true); // תיצור אותו בגודל נכון
+            Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.miss_icon);
+            Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, SQUARE_SIZE - 80, SQUARE_SIZE - 80, true);
             canvas.drawBitmap(scaledBitmap, this.getX() + 40, this.getY() + 40, p);
         }
     }

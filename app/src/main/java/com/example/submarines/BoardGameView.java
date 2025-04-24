@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class BoardGameView extends View {
 
     public float bestScore;
-    private Square[][] submarinesBoard, fireBoard; //לוח ספינות שלי ושל השני ולוח יריות שלי
+    private Square[][] submarinesBoard, fireBoard;
     private ArrayList<Submarine> submarineArrayList;
     private final int NUM_OF_SQUARES = 6;
     private boolean firstTimeBoard = true, firstTimeSubmarine = true;
@@ -42,7 +42,7 @@ public class BoardGameView extends View {
 
         if (isGameStarted == true)
         {
-            drawBoard(fireBoard, canvas); // אם המשחק התחיל או נגמר תצייר את הלוח יריות שלי
+            drawBoard(fireBoard, canvas);
         }
 
     }
