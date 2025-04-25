@@ -1,0 +1,25 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+start
+repeat :Enter MainActivity;
+:MainActivity Button Click;
+
+if(Button Click) then (Start)
+  :Launch EntranceActivity;
+  :Get Player Name;
+  :Go Back To MainActivity;
+  :Launch GameActivity;
+  :Play Game;
+  :Game Over;
+else (Instructions)
+    :Enter InstructionsActivity;
+    :Button Return Click;
+endif
+backward:Return To MainActivity;
+repeat while (Game Running) is (yes)
+->no;
+
+stop
+
+@enduml
