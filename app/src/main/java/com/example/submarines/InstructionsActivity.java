@@ -35,8 +35,7 @@ public class InstructionsActivity extends AppCompatActivity implements View.OnCl
         if(v == btnReturn)
         {
             speakText("Returning to the main menu");
-            Intent i = new Intent(this, MainActivity.class);
-            startActivity(i);
+            finish();
         }
     }
 

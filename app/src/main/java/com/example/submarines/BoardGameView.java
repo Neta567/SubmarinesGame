@@ -12,7 +12,6 @@ import java.util.ArrayList;
 
 public class BoardGameView extends View {
 
-    public float bestScore;
     private Square[][] submarinesBoard, fireBoard;
     private ArrayList<Submarine> submarineArrayList;
     private final int NUM_OF_SQUARES = 6;
@@ -21,7 +20,7 @@ public class BoardGameView extends View {
     private Context context; // מהגיים אקטיביטי
     public boolean isGameStarted = false;
     private boolean isGameOver = false;
-    public int gameId;
+    public String gameId;
     public float gameScore;
     public String name;
     private float hitted;
@@ -141,7 +140,7 @@ public class BoardGameView extends View {
 
         for (int i = 0; i < submarinesBoard.length; i++)
         {
-            for (int j = 0; j < NUM_OF_SQUARES; j++)
+            for (int j = 0; j < submarinesBoard.length; j++)
             {
                 submarinesBoard[i][j] = new Square(x1, y1, w1, w1);
                 x1 = x1 + w1;
@@ -155,12 +154,12 @@ public class BoardGameView extends View {
     {
         fireBoard = new Square[NUM_OF_SQUARES][NUM_OF_SQUARES];
         int x2 = 0;
-        int y2 = submarinesBoard[5][5].getY() + 250;
+        int y2 = submarinesBoard[5][0].getY() + 250;
         int w2 = Square.SQUARE_SIZE;
 
         for (int i = 0; i < fireBoard.length; i++)
         {
-            for (int j = 0; j < NUM_OF_SQUARES; j++)
+            for (int j = 0; j < fireBoard.length; j++)
             {
                 fireBoard[i][j] = new Square(x2, y2, w2, w2);
                 x2 = x2 + w2;

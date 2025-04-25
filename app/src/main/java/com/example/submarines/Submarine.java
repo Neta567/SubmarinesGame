@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class Submarine extends Shape {
 
     private boolean visibale = true;
-    private ArrayList<Square> occupiedSquares = new ArrayList<>(); // מערך של כל הריבועים שהצוללת תופסת
+    private ArrayList<Square> occupiedSquares = new ArrayList<>();
 
     public Submarine(int x, int y, int width, int height)
     {
@@ -33,7 +33,7 @@ public class Submarine extends Shape {
     }
 
 
-    public boolean isDestroyed() { // בודק האם הצוללת הרוסה - האם כל הריבועים שהיא תופסת הם תפוסים והרוסים
+    public boolean isDestroyed() {
         for (int i = 0; i < occupiedSquares.size(); i++)
         {
             if (occupiedSquares.get(i).getState() != Square.OCCUPIED_BY_SUBMARINE_AND_HIT) {

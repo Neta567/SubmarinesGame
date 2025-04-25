@@ -1,5 +1,7 @@
 package com.example.submarines;
 
+import java.util.UUID;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Dialog;
@@ -16,7 +18,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 public class GameActivity extends AppCompatActivity implements View.OnClickListener {
@@ -66,7 +67,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 Toast.makeText(boardGameView.getContext(), "Game Started", Toast.LENGTH_SHORT).show();
 
                 boardGameView.isGameStarted = true;
-                boardGameView.gameId = new Random().nextInt(10000);
+                boardGameView.gameId = UUID.randomUUID().toString();
                 boardGameView.invalidate();
 
                 fireBaseStore.saveGame(boardGameView.gameId, boardGameView.gameScore,boardGameView.name);
@@ -84,6 +85,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
                     TextView textView = dialog.findViewById(R.id.your_score);
                     textView.setText(String.valueOf(boardGameView.gameScore));
+                    fireBaseStore.saveGame(boardGameView.gameId, boardGameView.gameScore,boardGameView.name);
+
                     boardGameView.gameScore=0;
 
                     dialog.show();

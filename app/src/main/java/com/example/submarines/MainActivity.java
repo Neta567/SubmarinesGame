@@ -34,7 +34,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             @Override
                             public void onActivityResult(ActivityResult o) {
                                 String name = o.getData().getExtras().get("name").toString();
-                                Toast.makeText(MainActivity.this, name, Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(MainActivity.this, GameActivity.class);
                                 intent.putExtra("name",name);
                                 startActivity(intent);

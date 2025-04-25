@@ -12,11 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 public class EntranceActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -60,7 +56,7 @@ public class EntranceActivity extends AppCompatActivity implements View.OnClickL
                 }
             };
             Handler handler = new Handler(Looper.getMainLooper());
-            handler.postDelayed(stopAnimationRunnable, 20000);
+            handler.postDelayed(stopAnimationRunnable, 2000);
 
         }
     }

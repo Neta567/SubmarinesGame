@@ -10,7 +10,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/instructions2"
+        android:text="Instractions"
         android:textSize="60sp"
         android:layout_marginTop="20dp"
         android:layout_marginLeft="15dp"
@@ -35,7 +35,7 @@
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:layout_marginTop="20dp"
-        android:contentDescription="@string/todo"
+        android:contentDescription=""
         android:src="@drawable/battleship_game" />
 
     <Button
@@ -44,7 +44,7 @@
         android:layout_marginTop="30dp"
         android:backgroundTint="#F8F9FA"
         android:layout_marginStart="50dp"
-        android:text="@string/Go_back"
+        android:text="Go back"
         android:textColor="#020825"
         android:textSize="40sp"
         android:id="@+id/btnReturn" />

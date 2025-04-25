@@ -24,7 +24,7 @@ public class FireBaseStore {
 
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-    public void saveGame(int gameId, float gameScore, String name)
+    public void saveGame(String gameId, float gameScore, String name)
     {
         HashMap<String, Object> game = new HashMap<>();
         game.put("gameId", gameId);
