@@ -45,8 +45,8 @@ config=StructureConfiguration;
     "cutConstructors": true
   },
   "graphTraversal": {
-    "forwardDepth": 999,
-    "backwardDepth": 0,
+    "forwardDepth": 5,
+    "backwardDepth": 5,
     "classPackageExcludeFilter": "",
     "classPackageIncludeFilter": "",
     "classNameExcludeFilter": "",
@@ -55,19 +55,19 @@ config=StructureConfiguration;
     "methodNameIncludeFilter": "",
     "hideMappings": false,
     "hideDataStructures": false,
-    "hidePrivateMethods": false,
-    "hideInterfaceCalls": false, // indirection: implementation -> interface (is hidden) -> implementation
+    "hidePrivateMethods": true,
+    "hideInterfaceCalls": true, // indirection: implementation -> interface (is hidden) -> implementation
     "onlyShowApplicationEntryPoints": false, // root node is included
     "useMethodCallsForStructureDiagram": "ForwardOnly" // ForwardOnly, BothDirections, No
   },
   "details": {
     "aggregation": "None", // ByClass, GroupByClass, None
-    "showClassGenericTypes": false,
+    "showClassGenericTypes": true,
     "showMethods": false,
     "showMethodParameterNames": false,
     "showMethodParameterTypes": false,
     "showMethodReturnType": false,
-    "showPackageLevels": 4,
+    "showPackageLevels": 2,
     "showDetailedClassStructure": true
   },
   "rootClass": "com.example.submarines.EntranceActivity",
@@ -87,9 +87,11 @@ EntranceActivity647413438[
 	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
 <TR><TD ALIGN="LEFT" >(C)EntranceActivity</TD></TR>
 <HR/>
+<TR><TD ALIGN="LEFT" >-   animation: Animation [0..1]</TD></TR>
 <TR><TD ALIGN="LEFT" >-   btnDone: Button [0..1]</TD></TR>
 <TR><TD ALIGN="LEFT" >-   editTextName: EditText [0..1]</TD></TR>
 <TR><TD ALIGN="LEFT" >+   name: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   textView: TextView [0..1]</TD></TR>
 </TABLE>>
 	style=filled
 	margin=0

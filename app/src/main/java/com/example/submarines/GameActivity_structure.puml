@@ -45,8 +45,8 @@ config=StructureConfiguration;
     "cutConstructors": true
   },
   "graphTraversal": {
-    "forwardDepth": 999,
-    "backwardDepth": 0,
+    "forwardDepth": 5,
+    "backwardDepth": 5,
     "classPackageExcludeFilter": "",
     "classPackageIncludeFilter": "",
     "classNameExcludeFilter": "",
@@ -55,19 +55,19 @@ config=StructureConfiguration;
     "methodNameIncludeFilter": "",
     "hideMappings": false,
     "hideDataStructures": false,
-    "hidePrivateMethods": false,
-    "hideInterfaceCalls": false, // indirection: implementation -> interface (is hidden) -> implementation
+    "hidePrivateMethods": true,
+    "hideInterfaceCalls": true, // indirection: implementation -> interface (is hidden) -> implementation
     "onlyShowApplicationEntryPoints": false, // root node is included
     "useMethodCallsForStructureDiagram": "ForwardOnly" // ForwardOnly, BothDirections, No
   },
   "details": {
     "aggregation": "None", // ByClass, GroupByClass, None
-    "showClassGenericTypes": false,
+    "showClassGenericTypes": true,
     "showMethods": false,
     "showMethodParameterNames": false,
     "showMethodParameterTypes": false,
     "showMethodReturnType": false,
-    "showPackageLevels": 4,
+    "showPackageLevels": 2,
     "showDetailedClassStructure": true
   },
   "rootClass": "com.example.submarines.GameActivity",
@@ -88,12 +88,11 @@ BoardGameView647413438[
 <TR><TD ALIGN="LEFT" >(C)BoardGameView</TD></TR>
 <HR/>
 <TR><TD ALIGN="LEFT" >-   NUM_OF_SQUARES: int [1]</TD></TR>
-<TR><TD ALIGN="LEFT" >+   bestScore: float [1]</TD></TR>
 <TR><TD ALIGN="LEFT" >-   context: Context [0..1]</TD></TR>
 <TR><TD ALIGN="LEFT" >-   fireBoard: Square[][] [0..*]</TD></TR>
 <TR><TD ALIGN="LEFT" >-   firstTimeBoard: boolean [1]</TD></TR>
 <TR><TD ALIGN="LEFT" >-   firstTimeSubmarine: boolean [1]</TD></TR>
-<TR><TD ALIGN="LEFT" >+   gameId: int [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >+   gameId: String [0..1]</TD></TR>
 <TR><TD ALIGN="LEFT" >+   gameScore: float [1]</TD></TR>
 <TR><TD ALIGN="LEFT" >-   hitted: float [1]</TD></TR>
 <TR><TD ALIGN="LEFT" >-   isGameOver: boolean [1]</TD></TR>
@@ -129,9 +128,7 @@ GameActivity647413438[
 	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
 <TR><TD ALIGN="LEFT" >(C)GameActivity</TD></TR>
 <HR/>
-<TR><TD ALIGN="LEFT" >-   bestScore: ArrayList&lt;Float&gt; [0..*]</TD></TR>
 <TR><TD ALIGN="LEFT" >-   boardGameView: BoardGameView [0..1]</TD></TR>
-<TR><TD ALIGN="LEFT" >-   context: Context [0..1]</TD></TR>
 <TR><TD ALIGN="LEFT" >-   endGameButton: Button [0..1]</TD></TR>
 <TR><TD ALIGN="LEFT" >-   fireBaseStore: FireBaseStore [0..1]</TD></TR>
 <TR><TD ALIGN="LEFT" >-   isFirstTime: boolean [1]</TD></TR>
@@ -223,8 +220,6 @@ GameActivity647413438 -> FireBaseStore647413438[label="fireBaseStore
 Location647413438 -> Shape647413438[arrowhead=none, arrowtail=empty, dir=both];
 Shape647413438 -> Square647413438[arrowhead=none, arrowtail=empty, dir=both];
 Shape647413438 -> Submarine647413438[arrowhead=none, arrowtail=empty, dir=both];
-Submarine647413438 -> Square647413438[label="occupiedSquares
-[0..*]"];
     
 }
 @enduml
