@@ -2,12 +2,12 @@ package com.example.submarines;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import java.util.Locale;
 
@@ -47,7 +47,7 @@ public class InstructionsActivity extends AppCompatActivity implements View.OnCl
             int result = textToSpeech.setLanguage(Locale.US);
             if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED)
             {
-                Log.e("TTS", "Language not supported");
+                Toast.makeText(this, "Language not supported", Toast.LENGTH_SHORT).show();
             }
             else
             {
@@ -55,7 +55,7 @@ public class InstructionsActivity extends AppCompatActivity implements View.OnCl
             }
         } else
         {
-            Log.e("TTS", "Initialization failed");
+            Toast.makeText(this, "Initialization failed", Toast.LENGTH_SHORT).show();
         }
     }
 

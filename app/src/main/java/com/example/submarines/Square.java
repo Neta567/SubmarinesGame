@@ -17,7 +17,8 @@ public class Square extends Shape {
     public static int SQUARE_SIZE;
     private int state = EMPTY;
 
-    public Square(int x, int y, int w, int h) {
+    public Square(int x, int y, int w, int h)
+    {
         super(x, y, w, h);
     }
 
